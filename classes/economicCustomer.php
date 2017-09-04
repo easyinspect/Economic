@@ -19,8 +19,7 @@ class economicCustomer {
         foreach ($response->body->collection as $key => $value) {
 
             $array = get_object_vars($value);
-            var_dump($array);
+            echo '#. ' . $array['customerNumber'] . ' - ' . $array['name'] . '<br/>';
         }
-
     }
 }
