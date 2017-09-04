@@ -6,9 +6,4 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Unirest\\Exception' => $vendorDir . '/mashape/unirest-php/src/Unirest/Exception.php',
-    'Unirest\\Method' => $vendorDir . '/mashape/unirest-php/src/Unirest/Method.php',
-    'Unirest\\Request' => $vendorDir . '/mashape/unirest-php/src/Unirest/Request.php',
-    'Unirest\\Request\\Body' => $vendorDir . '/mashape/unirest-php/src/Unirest/Request/Body.php',
-    'Unirest\\Response' => $vendorDir . '/mashape/unirest-php/src/Unirest/Response.php',
 );

@@ -16,19 +16,10 @@ class ComposerStaticInit455276063acb45622d5542799a67bcf1
         ),
     );
 
-    public static $classMap = array (
-        'Unirest\\Exception' => __DIR__ . '/..' . '/mashape/unirest-php/src/Unirest/Exception.php',
-        'Unirest\\Method' => __DIR__ . '/..' . '/mashape/unirest-php/src/Unirest/Method.php',
-        'Unirest\\Request' => __DIR__ . '/..' . '/mashape/unirest-php/src/Unirest/Request.php',
-        'Unirest\\Request\\Body' => __DIR__ . '/..' . '/mashape/unirest-php/src/Unirest/Request/Body.php',
-        'Unirest\\Response' => __DIR__ . '/..' . '/mashape/unirest-php/src/Unirest/Response.php',
-    );
-
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixesPsr0 = ComposerStaticInit455276063acb45622d5542799a67bcf1::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit455276063acb45622d5542799a67bcf1::$classMap;
 
         }, null, ClassLoader::class);
     }
