@@ -16,10 +16,12 @@ class economicCustomer {
         $headers = array('Content-Type' => 'application/json', 'X-AppSecretToken' => $this->appSecretToken, 'X-AgreementGrantToken' => $this->agreementGrantToken);
         $response = Unirest\Request::get('https://restapi.e-conomic.com/customers', $headers);
 
-        foreach ($response->body->collection as $key => $value) {
+        return $response->body->collection;
+    }
 
-            $array = get_object_vars($value);
-            echo '#. ' . $array['customerNumber'] . ' - ' . $array['name'] . '<br/>';
-        }
+    public function customerDelete($id) {
+
+        $headers = array('Content-Type' => 'application/json', 'X-AppSecretToken' => $this->appSecretToken, 'X-AgreementGrantToken' => $this->agreementGrantToken);
+        Unirest\Request::delete('https://restapi.e-conomic.com/customers/'.$id.'', $headers);
     }
 }
