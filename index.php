@@ -61,6 +61,57 @@ require 'vendor/autoload.php';
 
         ?>
     </div>
+    <?php
+
+        if(isset($_GET['newCustomer'])) {
+            ?>
+
+            <form>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Navn</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                           placeholder="Navn">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Vælg valuta</label>
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Vælg hvilken gruppe denne kunde skal tilknyttes til</label>
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Vælg hvilken betalingsbetingelse du vil benytte</label>
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Vælg hvilken moms zone du vil tilknyttes til</label>
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <?php
+        }
+        else {
+            ?>
+            <a href="?newCustomer">Ny kunde?</a>
+            <?php
+        }
+    ?>
 </div> <!-- /container -->
 
 <!-- Optional JavaScript -->
@@ -69,4 +120,5 @@ require 'vendor/autoload.php';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
-</body></html>
+</body>
+</html>
