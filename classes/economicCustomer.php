@@ -6,15 +6,14 @@
  * Time: 11:31
  */
 
-class economicCustomer {
+require 'economicUrls.php';
 
-    protected $appSecretToken = "tsf8fJFBD6B0b3VxkOPUTcoetTaMorbTsb8Xgtej9l81";
-    protected $agreementGrantToken = "OtZCNMYv1VXEvcwGLUN6kVAmjzp4cNxR1D1b8yIeea41";
+class economicCustomer extends economicUrls {
 
     public function customerShow() {
 
         $headers = array('Content-Type' => 'application/json', 'X-AppSecretToken' => $this->appSecretToken, 'X-AgreementGrantToken' => $this->agreementGrantToken);
-        $response = Unirest\Request::get('https://restapi.e-conomic.com/customers', $headers);
+        $response = Unirest\Request::get($this->customerUrl, $headers);
 
         return $response->body->collection;
     }
@@ -22,6 +21,6 @@ class economicCustomer {
     public function customerDelete($id) {
 
         $headers = array('Content-Type' => 'application/json', 'X-AppSecretToken' => $this->appSecretToken, 'X-AgreementGrantToken' => $this->agreementGrantToken);
-        Unirest\Request::delete('https://restapi.e-conomic.com/customers/'.$id.'', $headers);
+        Unirest\Request::delete($this->customerUrl . $id, $headers);
     }
 }
