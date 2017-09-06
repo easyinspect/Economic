@@ -35,8 +35,8 @@ require 'vendor/autoload.php';
 
     <h1>Economic Library</h1>
 
-    <h3>Kunder</h3>
-    <p>I denne sektion kan du tilføje, redigere og fjerne dine nuværende E-conomic kunder ved hjælp af deres API.</p>
+    <h3>Units</h3>
+    <p>I denne sektion kan du tilføje, redigere og fjerne dine nuværende E-conomic Units ved hjælp af deres API.</p>
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4"></div>
@@ -46,72 +46,47 @@ require 'vendor/autoload.php';
     <div class="row">
         <?php
 
-            $economicCustomer = new economicCustomer();
+            $economicApi = new economicApi();
 
-            foreach ($economicCustomer->customerShow() as $key => $value) {
+            /*if(isset($_GET['deleteUnit'])) {
+                $economicApi->Delete('https://restapi.e-conomic.com/units/', $_GET['deleteUnit']);
+            }*/
 
-                $array = get_object_vars($value);
-                $id = $array['customerNumber'];
-                echo $array['customerNumber']. ' - ' . $array['name'] . ' <a href="?deleteCustomer='.$id.'">Slet</a><br/>';
+            foreach($economicApi->Show('https://restapi.e-conomic.com/units/') as $key => $value) {
+
+                $data = get_object_vars($value);
+                $id = $data['unitNumber'];
+                echo $data['unitNumber']. ' - ' . $data['name'] . ' <a href="?deleteUnit='.$id.'">Slet</a><br/>';
             }
 
-            if(isset($_GET['deleteCustomer'])) {
-                $economicCustomer->customerDelete($_GET['deleteCustomer']);
-            }
 
+            if(isset($_GET['newUnit'])) {
+                ?>
+                <form method="POST" action="">
+                    <div class="form-group">
+                        <label>Navn</label>
+                        <input type="text" name="name" class="form-control" placeholder="Navn">
+                    </div>
+                    <div class="form-group">
+                        <label>Navn</label>
+                        <input type="text" name="name" class="form-control" placeholder="Navn">
+                    </div>
+                    <div class="form-group">
+                        <label>Navn</label>
+                        <input type="text" name="name" class="form-control" placeholder="Navn">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                <?php
+            }
+            else {
+                ?>
+                <a href="?newUnit">Ny enhed?</a>
+                <?php
+            }
         ?>
     </div>
-    <?php
 
-        if(isset($_GET['newCustomer'])) {
-            ?>
-
-            <form>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Navn</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                           placeholder="Navn">
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.
-                    </small>
-                </div>
-                <div class="form-group">
-                    <label for="exampleFormControlSelect1">Vælg valuta</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option>1</option>
-                        <option>2</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="exampleFormControlSelect1">Vælg hvilken gruppe denne kunde skal tilknyttes til</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option>1</option>
-                        <option>2</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="exampleFormControlSelect1">Vælg hvilken betalingsbetingelse du vil benytte</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option>1</option>
-                        <option>2</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="exampleFormControlSelect1">Vælg hvilken moms zone du vil tilknyttes til</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option>1</option>
-                        <option>2</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-            <?php
-        }
-        else {
-            ?>
-            <a href="?newCustomer">Ny kunde?</a>
-            <?php
-        }
-    ?>
 </div> <!-- /container -->
 
 <!-- Optional JavaScript -->
