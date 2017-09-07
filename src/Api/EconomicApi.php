@@ -1,26 +1,20 @@
 <?php
 
-namespace EconomicPHPWrapper\Api;
+namespace Economic\Api;
 
 class EconomicApi {
 
-    protected $userResource;
+    protected $customerResource;
 
     public function __construct()
     {
-        $this->userResource = new UserResource();
+        $this->customerResource = new CustomerResource();
     }
 
-    public function user() : UserResource
-    {
-        return $this->userResource;
-    }
-
-
-    /*public function customer():CustomerResource
+    public function customer() : CustomerResource
     {
         return $this->customerResource;
-    }*/
+    }
 
     /**
     public function a($url) {
