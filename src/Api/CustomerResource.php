@@ -6,8 +6,12 @@ use Economic\Models\Customer;
 
 class CustomerResource extends Resource {
 
-    public function all() : array {
+    /**
+     * @return array
+     */
 
+    public function all() : array
+    {
         $customers = $this->apiGet('/customers');
 
         $return = [];
@@ -20,23 +24,47 @@ class CustomerResource extends Resource {
         return $return;
     }
 
-    public function get($id) : Customer {
-
+    /**
+     * @param int $id
+     * @return Customer
+     */
+    public function get($id) : Customer
+    {
         $customer = $this->apiGetItem('/customers/' . $id);
         return new Customer($customer);
-
     }
+
+    /**
+     * @param array $parameters
+     * @return void
+     */
 
     public function save($parameters)
     {
        $this->apiSave('/customers', $parameters);
+       header('Location: test.php');
     }
 
-    public function update($id)
+    /**
+     * @param int $id
+     * @param array $parameters
+     * @return void
+     */
+
+    public function update($id, $parameters)
     {
-
+        $this->apiUpdate('/customers/' . $id, $parameters);
+        header('Location: test.php');
     }
-    public function delete($id) {
+
+    /**
+     * @param int $id
+     * @return void
+     */
+
+    public function delete($id)
+    {
         $this->apiDelete('/customers/' . $id);
+        header('Location: test.php');
     }
 }

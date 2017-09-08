@@ -33,7 +33,7 @@ abstract class Resource
         throw new \BadMethodCallException('Not implemented');
     }
 
-    public function update($id)
+    public function update($id, $parameters)
     {
         throw new \BadMethodCallException('Not implemented');
     }
@@ -43,12 +43,22 @@ abstract class Resource
         throw new \BadMethodCallException('Not implemented');
     }
 
+    /**
+     * @param string $url
+     * @return array
+     */
+
     protected function apiGet($url): array
     {
         $headers = array('Content-Type' => $this->contentType, 'X-AppSecretToken' => $this->appSecretToken, 'X-AgreementGrantToken' => $this->agreementGrantToken);
         $response = Request::get($this->economicUrl.$url, $headers);
         return $response->body->collection;
     }
+
+    /**
+     * @param string $route
+     * @return object
+     */
 
     protected function apiGetItem($route)
     {
@@ -57,19 +67,36 @@ abstract class Resource
         return $response->body;
     }
 
+    /**
+     * @param string $url
+     * @param array $data
+     * @return void
+     */
+
     protected function apiSave($url, $data)
     {
         $headers = array('Content-Type' => $this->contentType, 'X-AppSecretToken' => $this->appSecretToken, 'X-AgreementGrantToken' => $this->agreementGrantToken);
         $body = Request\Body::json($data);
-
-        $response = Request::post($this->economicUrl.$url, $headers, $body);
-        var_dump($response);
+        Request::post($this->economicUrl.$url, $headers, $body);
     }
 
-    protected function apiUpdate()
+    /**
+     * @param string $url
+     * @param array $data
+     * @return void
+     */
+
+    protected function apiUpdate($url, $data)
     {
-
+        $headers = array('Content-Type' => $this->contentType, 'X-AppSecretToken' => $this->appSecretToken, 'X-AgreementGrantToken' => $this->agreementGrantToken);
+        $body = Request\Body::json($data);
+        Request::put($this->economicUrl.$url, $headers, $body);
     }
+
+    /**
+     * @param string $route
+     * @return void
+     */
 
     protected function apiDelete($route)
     {

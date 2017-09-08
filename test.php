@@ -15,7 +15,7 @@ require 'vendor/autoload.php';
 
 $api = new Economic\Api\EconomicApi();
 
-if(isset($_GET['addCustomer'])) {
+if(isset($_GET['customerAdd'])) {
 
     $array = array(
         'currency' => 'DKK',
@@ -23,7 +23,7 @@ if(isset($_GET['addCustomer'])) {
             'customerGroupNumber' => 1,
             'self' => 'https://restapi.e-conomic.com/customer-groups/1'
         ),
-        'name' => 'Mathias er mega sej',
+        'name' => 'Thomas startede idag',
         'paymentTerms' => array(
             'paymentTermsNumber' => 1,
             'self' => 'https://restapi.e-conomic.com/payment-terms/1'
@@ -36,6 +36,27 @@ if(isset($_GET['addCustomer'])) {
     $api->customer()->save($array);
 }
 
+if(isset($_GET['customerUpdate'])) {
+
+    $array = array( //
+        'currency' => 'DKK',
+        'customerGroup' => array(
+            'customerGroupNumber' => 1,
+            'self' => 'https://restapi.e-conomic.com/customer-groups/1'
+        ),
+        'name' => 'Thomas er ikke nice mere',
+        'paymentTerms' => array(
+            'paymentTermsNumber' => 1,
+            'self' => 'https://restapi.e-conomic.com/payment-terms/1'
+        ),
+        'vatZone' => array(
+            'vatZoneNumber' => 1,
+            'self' => 'https://restapi.e-conomic.com/vat-zones/1'
+        )
+    );
+    $api->customer()->update($_GET['customerUpdate'], $array);
+}
+
 if(isset($_GET['customerDelete'])) {
     $api->customer()->delete($_GET['customerDelete']);
 }
@@ -43,11 +64,21 @@ if(isset($_GET['customerDelete'])) {
 if(isset($_GET['customerNumber'])) {
 
     $customer = $api->customer()->get($_GET['customerNumber']);
-    //var_dump($customer);
+    var_dump($customer);
 }
 else {
     $customer = $api->customer()->all();
-    //var_dump($customer);
+    var_dump($customer);
 }
+
+/*$customers = $api->customer();
+
+unset($api);
+
+foreach ($customers as $customer){
+    $customer->param1 = 'opdateret';
+    $customer->save();
+
+}*/
 
 ?>
