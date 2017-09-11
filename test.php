@@ -17,7 +17,7 @@ $api = new Economic\Api\EconomicApi();
 
 if(isset($_GET['customerAdd'])) {
 
-    $array = array(
+    $data = array(
         'currency' => 'DKK',
         'customerGroup' => array(
             'customerGroupNumber' => 1,
@@ -33,12 +33,12 @@ if(isset($_GET['customerAdd'])) {
             'self' => 'https://restapi.e-conomic.com/vat-zones/1'
         )
     );
-    $api->customer()->save($array);
+    $api->customer()->save($data);
 }
 
 if(isset($_GET['customerUpdate'])) {
 
-    $array = array( //
+    $data = array(
         'currency' => 'DKK',
         'customerGroup' => array(
             'customerGroupNumber' => 1,
@@ -54,7 +54,7 @@ if(isset($_GET['customerUpdate'])) {
             'self' => 'https://restapi.e-conomic.com/vat-zones/1'
         )
     );
-    $api->customer()->update($_GET['customerUpdate'], $array);
+    $api->customer()->update($_GET['customerUpdate'], $data);
 }
 
 if(isset($_GET['customerDelete'])) {
@@ -63,22 +63,18 @@ if(isset($_GET['customerDelete'])) {
 
 if(isset($_GET['customerNumber'])) {
 
-    $customer = $api->customer()->get($_GET['customerNumber']);
+    $customer = $api->customer()->get($_GET['customerNumber'])
+        $customer = $api
+            ->customer()
+            ->setName('ytlg')
+            ->update();
     var_dump($customer);
+
 }
 else {
     $customer = $api->customer()->all();
     var_dump($customer);
 }
 
-/*$customers = $api->customer();
-
-unset($api);
-
-foreach ($customers as $customer){
-    $customer->param1 = 'opdateret';
-    $customer->save();
-
-}*/
 
 ?>
