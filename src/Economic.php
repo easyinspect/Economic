@@ -2,130 +2,74 @@
 /**
  * Created by PhpStorm.
  * User: mbs
- * Date: 11-09-2017
- * Time: 16:12
+ * Date: 13-09-2017
+ * Time: 12:09
  */
+
 namespace Economic;
 
-use Unirest\Request;
-use Economic\Models\Customer;
+use GuzzleHttp\Client;
 
-class Economic
+class Economic implements RespondToSchema
 {
+
+    /* AppSecretToken - tsf8fJFBD6B0b3VxkOPUTcoetTaMorbTsb8Xgtej9l81
+     * AgreementGrantToken - OtZCNMYv1VXEvcwGLUN6kVAmjzp4cNxR1D1b8yIeea41
+     * ContentType - application/json
+     */
 
     private $appSecretToken;
     private $agreementGrantToken;
-    private $contentType = 'application/json';
-    private $economicUrl = 'https://restapi.e-conomic.com';
+    private $contentType;
+    private $baseUrl;
 
-    public function __construct($appSecretToken, $agreementGrantToken)
-    {
-        $this->setAppSecretToken($appSecretToken);
-        $this->setAgreementGrantToken($agreementGrantToken);
-    }
-
-    /**
-     * @return string
-     */
-    public function getAppSecretToken()
-    {
-        return $this->appSecretToken;
-    }
-
-    /**
-     * @param string $appSecretToken
-     */
-    public function setAppSecretToken($appSecretToken)
+    public function __construct($appSecretToken, $agreementGrantToken, $contentType, $baseUrl)
     {
         $this->appSecretToken = $appSecretToken;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAgreementGrantToken()
-    {
-        return $this->agreementGrantToken;
-    }
-
-    /**
-     * @param string $agreementGrantToken
-     */
-    public function setAgreementGrantToken($agreementGrantToken)
-    {
         $this->agreementGrantToken = $agreementGrantToken;
+        $this->contentType = $contentType;
+        $this->baseUrl = $baseUrl;
     }
 
-    /**
-     * @param string $url
-     */
-
-    public function getCollection($url)
+    public function retrieve($url)
     {
-        $headers = array('Content-Type' => $this->contentType, 'X-AppSecretToken' => $this->getAppSecretToken(), 'X-AgreementGrantToken' => $this->getAgreementGrantToken());
-        $response = Request::get($this->economicUrl.$url, $headers);
-        return $response->body;
+        $client = new Client([
+            'headers' => [
+                'X-AppSecretToken' => $this->appSecretToken,
+                'X-AgreementGrantToken' => $this->agreementGrantToken,
+                'Content-Type' => $this->baseUrl
+            ]
+        ]);
+
+        $response = $client->request('GET', $this->baseUrl . $url);
+        $data = json_decode($response->getBody()->getContents());
+
+        return $data;
+
     }
 
-    /**
-     * @param string $route
-     * @return object
-     */
-
-    public function getItem($route)
+    public function create()
     {
-        $headers = array('Content-Type' => $this->contentType, 'X-AppSecretToken' => $this->getAppSecretToken(), 'X-AgreementGrantToken' => $this->getAgreementGrantToken());
-        $response = Request::get($this->economicUrl.$route, $headers);
-        return $response->body;
+
     }
 
-    /**
-     * @param string $url
-     * @param array $data
-     */
-
-    public function save($url, $data)
+    public function update()
     {
-        $headers = array('Content-Type' => $this->contentType, 'X-AppSecretToken' => $this->getAppSecretToken(), 'X-AgreementGrantToken' => $this->getAgreementGrantToken());
-        $body = Request\Body::json($data);
-        Request::post($this->economicUrl.$url, $headers, $body);
+
     }
 
-    /**
-     * @param string $url
-     * @param array $data
-     */
-
-    public function update($url, $data)
+    public function delete()
     {
-        $headers = array('Content-Type' => $this->contentType, 'X-AppSecretToken' => $this->getAppSecretToken(), 'X-AgreementGrantToken' => $this->getAgreementGrantToken());
-        $body = Request\Body::json($data);
-        Request::put($this->economicUrl.$url, $headers, $body);
-    }
 
-    /**
-     * @param string $route
-     */
-
-    public function delete($route)
-    {
-        $headers = array('Content-Type' => $this->contentType, 'X-AppSecretToken' => $this->getAppSecretToken(), 'X-AgreementGrantToken' => $this->getAgreementGrantToken());
-        $response = Request::delete($this->economicUrl.$route, $headers);
     }
 
     /**
      * @return Customer
      */
-    public function customer()
+
+    public function customer() : Customer
     {
         return new Customer($this);
     }
 
-    /**
-     * @return \Economic\Models\CustomerCollection
-     */
-    public function customerCollection()
-    {
-        return new \Economic\Models\CustomerCollection($this);
-    }
 }
