@@ -13,8 +13,8 @@ use GuzzleHttp\Client;
 class Economic implements RespondToSchema
 {
 
-    /* AppSecretToken - tsf8fJFBD6B0b3VxkOPUTcoetTaMorbTsb8Xgtej9l81
-     * AgreementGrantToken - OtZCNMYv1VXEvcwGLUN6kVAmjzp4cNxR1D1b8yIeea41
+    /* AppSecretToken - IBDTsO7n5FmWF4ms7YlBKScXJV14sqp14mYw3OxbAqU1
+     * AgreementGrantToken - UBBtI0nDfUz2lLBMOFvDGdvpjVMkmZgH3SsBu01n5KY1
      * ContentType - application/json
      */
 
@@ -58,8 +58,17 @@ class Economic implements RespondToSchema
 
     }
 
-    public function delete()
+    public function delete($url)
     {
+        $client = new Client([
+            'headers' => [
+                'X-AppSecretToken' => $this->appSecretToken,
+                'X-AgreementGrantToken' => $this->agreementGrantToken,
+                'Content-Type' => $this->baseUrl
+            ]
+        ]);
+
+        $client->request('DELETE', $this->baseUrl . $url);
 
     }
 

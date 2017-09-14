@@ -41,12 +41,54 @@ class Customer
         $this->listener = $listener;
     }
 
-    public function all() {
-        $customers = $this->listener->retrieve('/customers');
+    protected function processObject($object)
+    {
+        foreach ($object as $key => $value)
+        {
+            if (method_exists($this, 'set'.ucfirst($key)))
+            {
+                $this->{'set' . ucfirst($key)}($value);
+            }
+        }
+
+        return $this;
     }
 
-    public function get($id) {
+    public function all()
+    {
+        $customers = $this->listener->retrieve('/customers');
+
+        return $customers;
+    }
+
+    public function get($id)
+    {
         $customer = $this->listener->retrieve('/customers/' . $id);
+        $this->processObject($customer);
+
+        return $this;
+    }
+
+    public function delete()
+    {
+        $this->listener->delete('/customers/' . $this->getCustomerNumber());
+    }
+
+    public function save()
+    {
+
+        foreach ($this->all()->collection as $key => $value)
+        {
+
+            if ($value->customerNumber === $this->getCustomerNumber())
+            {
+                echo $this->getCustomerNumber() . 'findes allerede i API kaldet';
+
+            } else {
+
+                echo $this->getCustomerNumber() . 'findes ikke i API kaldet';
+            }
+        }
     }
 
 
@@ -63,26 +105,32 @@ class Customer
 
     /**
      * @param int $customerNumber
+     * @return mixed
      */
     public function setCustomerNumber(int $customerNumber)
     {
         $this->customerNumber = $customerNumber;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getCurrency()
+    public function getCurrency() : string
     {
         return $this->currency;
     }
 
     /**
      * @param string $currency
+     * @return mixed
      */
     public function setCurrency($currency)
     {
         $this->currency = $currency;
+
+        return $this;
     }
 
     /**
@@ -95,10 +143,13 @@ class Customer
 
     /**
      * @param mixed $paymentTerms
+     * @return mixed
      */
     public function setPaymentTerms($paymentTerms)
     {
         $this->paymentTerms = $paymentTerms;
+
+        return $this;
     }
 
     /**
@@ -111,26 +162,32 @@ class Customer
 
     /**
      * @param mixed $customerGroup
+     * @return mixed
      */
     public function setCustomerGroup($customerGroup)
     {
         $this->customerGroup = $customerGroup;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getAddress()
+    public function getAddress() : string
     {
         return $this->address;
     }
 
     /**
      * @param string $address
+     * @return string
      */
     public function setAddress($address)
     {
         $this->address = $address;
+
+        return $this;
     }
 
     /**
@@ -168,81 +225,96 @@ class Customer
     /**
      * @return string
      */
-    public function getCity()
+    public function getCity() : string
     {
         return $this->city;
     }
 
     /**
      * @param string $city
+     * @return string
      */
     public function setCity($city)
     {
         $this->city = $city;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getCountry()
+    public function getCountry() : string
     {
         return $this->country;
     }
 
     /**
      * @param string $country
+     * @return string
      */
     public function setCountry($country)
     {
         $this->country = $country;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getEmail()
+    public function getEmail() : string
     {
         return $this->email;
     }
 
     /**
      * @param string $email
+     * @return string
      */
     public function setEmail($email)
     {
         $this->email = $email;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
     /**
      * @param string $name
+     * @return string
      */
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getZip()
+    public function getZip() : string
     {
         return $this->zip;
     }
 
     /**
      * @param string $zip
+     * @return string
      */
     public function setZip($zip)
     {
         $this->zip = $zip;
+
+        return $this;
     }
 
     /**
@@ -255,26 +327,32 @@ class Customer
 
     /**
      * @param mixed $telephoneAndFaxNumber
+     * @return mixed
      */
     public function setTelephoneAndFaxNumber($telephoneAndFaxNumber)
     {
         $this->telephoneAndFaxNumber = $telephoneAndFaxNumber;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getWebsite()
+    public function getWebsite() : string
     {
         return $this->website;
     }
 
     /**
      * @param string $website
+     * @return string
      */
     public function setWebsite($website)
     {
         $this->website = $website;
+
+        return $this;
     }
 
     /**
@@ -287,10 +365,13 @@ class Customer
 
     /**
      * @param mixed $vatZone
+     * @return mixed
      */
     public function setVatZone($vatZone)
     {
         $this->vatZone = $vatZone;
+
+        return $this;
     }
 
     /**
@@ -303,42 +384,51 @@ class Customer
 
     /**
      * @param mixed $attention
+     * @return mixed
      */
     public function setAttention($attention)
     {
         $this->attention = $attention;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getLastUpdated()
+    public function getLastUpdated() : string
     {
         return $this->lastUpdated;
     }
 
     /**
-     * @param mixed $lastUpdated
+     * @param string $lastUpdated
+     * @return string
      */
     public function setLastUpdated($lastUpdated)
     {
         $this->lastUpdated = $lastUpdated;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getContacts()
+    public function getContacts() : string
     {
         return $this->contacts;
     }
 
     /**
-     * @param mixed $contacts
+     * @param string $contacts
+     * @return string
      */
     public function setContacts($contacts)
     {
         $this->contacts = $contacts;
+
+        return $this;
     }
 
     /**
@@ -351,10 +441,13 @@ class Customer
 
     /**
      * @param mixed $templates
+     * @return mixed
      */
     public function setTemplates($templates)
     {
         $this->templates = $templates;
+
+        return $this;
     }
 
     /**
@@ -367,26 +460,32 @@ class Customer
 
     /**
      * @param mixed $totals
+     * @return mixed
      */
     public function setTotals($totals)
     {
         $this->totals = $totals;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getDeliveryLocations()
+    public function getDeliveryLocations() : string
     {
         return $this->deliveryLocations;
     }
 
     /**
-     * @param mixed $deliveryLocations
+     * @param string $deliveryLocations
+     * @return string
      */
     public function setDeliveryLocations($deliveryLocations)
     {
         $this->deliveryLocations = $deliveryLocations;
+
+        return $this;
     }
 
     /**
@@ -399,10 +498,12 @@ class Customer
 
     /**
      * @param mixed $invoices
+     * @return mixed
      */
     public function setInvoices($invoices)
     {
         $this->invoices = $invoices;
-    }
 
+        return $this;
+    }
 }

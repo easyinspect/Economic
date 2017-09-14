@@ -10,6 +10,7 @@ use Economic\Economic;
 
 require 'vendor/autoload.php';
 
-$economic = new Economic('tsf8fJFBD6B0b3VxkOPUTcoetTaMorbTsb8Xgtej9l81', 'OtZCNMYv1VXEvcwGLUN6kVAmjzp4cNxR1D1b8yIeea41', 'application/json', 'https://restapi.e-conomic.com');
-$test = $economic->customer()->setCustomerNumber(1);
-var_dump($test);
+$economic = new Economic('IBDTsO7n5FmWF4ms7YlBKScXJV14sqp14mYw3OxbAqU1', 'UBBtI0nDfUz2lLBMOFvDGdvpjVMkmZgH3SsBu01n5KY1', 'application/json', 'https://restapi.e-conomic.com');
+$test = $economic->customer()->get(1001);
+
+

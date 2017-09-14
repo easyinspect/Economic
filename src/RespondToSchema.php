@@ -14,6 +14,6 @@ interface RespondToSchema
     public function retrieve($url);
     public function create();
     public function update();
-    public function delete();
+    public function delete($url);
 
 }
