@@ -20,56 +20,75 @@ class Economic implements RespondToSchema
 
     private $appSecretToken;
     private $agreementGrantToken;
-    private $contentType;
-    private $baseUrl;
+    private $contentType = 'application/json';
+    private $baseUrl = 'https://restapi.e-conomic.com/';
 
-    public function __construct($appSecretToken, $agreementGrantToken, $contentType, $baseUrl)
+    private $client;
+
+    public function __construct($appSecretToken, $agreementGrantToken)
     {
         $this->appSecretToken = $appSecretToken;
         $this->agreementGrantToken = $agreementGrantToken;
-        $this->contentType = $contentType;
-        $this->baseUrl = $baseUrl;
+        $this->client = new Client(['base_uri' => $this->baseUrl]);
     }
 
     public function retrieve($url)
     {
-        $client = new Client([
+        $headers = [
             'headers' => [
                 'X-AppSecretToken' => $this->appSecretToken,
                 'X-AgreementGrantToken' => $this->agreementGrantToken,
-                'Content-Type' => $this->baseUrl
+                'Content-Type' => $this->contentType
             ]
-        ]);
+        ];
 
-        $response = $client->request('GET', $this->baseUrl . $url);
+        $response = $this->client->get($url, $headers);
         $data = json_decode($response->getBody()->getContents());
 
         return $data;
-
     }
 
-    public function create()
+    public function create($url, $body)
     {
 
+        $data = [
+            'headers' => [
+                'X-AppSecretToken' => $this->appSecretToken,
+                'X-AgreementGrantToken' => $this->agreementGrantToken,
+                'Content-Type' => $this->contentType
+            ],
+            'body' => \GuzzleHttp\json_encode($body)
+        ];
+
+        $this->client->post($url, $data);
     }
 
-    public function update()
+    public function update($url, $body)
     {
 
+        $data = [
+            'headers' => [
+                'X-AppSecretToken' => $this->appSecretToken,
+                'X-AgreementGrantToken' => $this->agreementGrantToken,
+                'Content-Type' => $this->contentType
+            ],
+            'body' => \GuzzleHttp\json_encode($body)
+        ];
+
+        $this->client->put($url, $data);
     }
 
     public function delete($url)
     {
-        $client = new Client([
+        $data = [
             'headers' => [
                 'X-AppSecretToken' => $this->appSecretToken,
                 'X-AgreementGrantToken' => $this->agreementGrantToken,
-                'Content-Type' => $this->baseUrl
+                'Content-Type' => $this->contentType
             ]
-        ]);
+        ];
 
-        $client->request('DELETE', $this->baseUrl . $url);
-
+        $this->client->delete($url, $data);
     }
 
     /**

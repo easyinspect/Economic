@@ -12,8 +12,8 @@ namespace Economic;
 interface RespondToSchema
 {
     public function retrieve($url);
-    public function create();
-    public function update();
+    public function create($url, $body);
+    public function update($url, $body);
     public function delete($url);
 
 }
