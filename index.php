@@ -16,14 +16,13 @@ $economic = new Economic(
 );
 $test = $economic
     ->customer()
-    ->setName('Thomas submarine club '. rand())
+    ->setName('The Fish Club Sandwich ')
     ->setCurrency('DKK')
     ->setVatZone(1)
     ->setPaymentTerms(1)
     ->setCustomerGroup(1)
-    ->setCustomerNumber(1004)
-    ->update()
-    ->delete();
+    ->setCustomerNumber(113)
+    ->update();
 
 //$test = $economic->customer()->get(1001);
 var_dump($test);

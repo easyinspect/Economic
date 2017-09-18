@@ -8,6 +8,15 @@
 
 namespace Economic;
 
+use Economic\Models\Components\CustomerGroup;
+use Economic\Models\Components\VatZone;
+use Economic\Models\Components\PaymentTerms;
+use Economic\Models\Components\CustomerContact;
+use Economic\Models\Components\DefaultDeliveryLocations;
+use Economic\Models\Components\Attention;
+use Economic\Models\Components\Layout;
+use Economic\Models\Components\SalesPerson;
+
 class Customer
 {
 
@@ -33,6 +42,16 @@ class Customer
     private $totals;
     private $deliveryLocations;
     private $invoices;
+    private $barred;
+    private $corporateIdentificationNumber;
+    private $creditLimit;
+    private $customerContact;
+    private $defaultDeliveryLocations;
+    private $ean;
+    private $layout;
+    private $publicEntryNumber;
+    private $salesPerson;
+    private $vatNumber;
 
     private $listener;
 
@@ -78,21 +97,12 @@ class Customer
 
     public function create()
     {
-        $vatZone = new \stdClass();
-        $vatZone->vatZoneNumber = $this->getVatZone();
-
-        $customerGroup = new \stdClass();
-        $customerGroup->customerGroupNumber = $this->getCustomerGroup();
-
-        $paymentTerms = new \stdClass();
-        $paymentTerms->paymentTermsNumber = $this->getPaymentTerms();
-
         $data = [
             'name' => $this->getName(),
             'currency' => $this->getCurrency(),
-            'customerGroup' => $customerGroup,
-            'vatZone' => $vatZone,
-            'paymentTerms' => $paymentTerms
+            'customerGroup' => $this->getCustomerGroup(),
+            'vatZone' => $this->getVatZone(),
+            'paymentTerms' => $this->getVatZone()
         ];
 
        $this->listener->create('/customers', $data);
@@ -102,21 +112,30 @@ class Customer
 
     public function update()
     {
-        $vatZone = new \stdClass();
-        $vatZone->vatZoneNumber = $this->getVatZone();
-
-        $customerGroup = new \stdClass();
-        $customerGroup->customerGroupNumber = $this->getCustomerGroup();
-
-        $paymentTerms = new \stdClass();
-        $paymentTerms->paymentTermsNumber = $this->getPaymentTerms();
-
         $data = [
             'name' => $this->getName(),
             'currency' => $this->getCurrency(),
-            'customerGroup' => $customerGroup,
-            'vatZone' => $vatZone,
-            'paymentTerms' => $paymentTerms
+            'customerGroup' => $this->getCustomerGroup(),
+            'vatZone' => $this->getVatZone(),
+            'paymentTerms' => $this->getPaymentTerms(),
+            'website' => $this->getWebsite(),
+            /*'address' => $this->getAddress(),
+            'barred' => $this->getBarred(),
+            'city' => $this->getCity(),
+            'corporateIdentificationNumber' => $this->getCorporateIdentificationNumber(),
+            'country' => $this->getCountry(),
+            'creditLimit' => $this->getCreditLimit(),
+            //1. Før at man kan tilknytte en kundekontakt, skal de være oprettet 'customerContact' => $this->getCustomerContact(),
+            'customerNumber' => $this->getCustomerNumber(),
+            'ean' => $this->getEan(),
+            'email' => $this->getEmail(),
+            //2. Error'layout' => $this->getLayout(),
+            'publicEntryNumber' => $this->getPublicEntryNumber(),
+            //3. Error'salesPerson' => $this->getSalesPerson(),
+            'telephoneAndFaxNumber' => $this->getTelephoneAndFaxNumber(),
+            'vatNumber' => $this->getVatNumber(),
+            'zip' => $this->getZip()
+            */
         ];
 
         $this->listener->update('/customers/' . $this->getCustomerNumber(), $data);
@@ -152,9 +171,9 @@ class Customer
         return $this;
     }
 
-    public function getPaymentTerms()
+    public function getPaymentTerms() : PaymentTerms
     {
-        return $this->paymentTerms;
+        return new PaymentTerms($this->paymentTerms);
     }
 
     public function setPaymentTerms($paymentTerms)
@@ -164,9 +183,9 @@ class Customer
         return $this;
     }
 
-    public function getCustomerGroup()
+    public function getCustomerGroup() : CustomerGroup
     {
-        return $this->customerGroup;
+        return new CustomerGroup($this->customerGroup);
     }
 
     public function setCustomerGroup($customerGroup)
@@ -292,9 +311,9 @@ class Customer
         return $this;
     }
 
-    public function getVatZone()
+    public function getVatZone() : VatZone
     {
-        return $this->vatZone;
+        return new VatZone($this->vatZone);
     }
 
     public function setVatZone($vatZone)
@@ -304,9 +323,9 @@ class Customer
         return $this;
     }
 
-    public function getAttention()
+    public function getAttention() : Attention
     {
-        return $this->attention;
+        return new Attention($this->attention);
     }
 
     public function setAttention($attention)
@@ -387,4 +406,123 @@ class Customer
 
         return $this;
     }
+
+    public function getBarred()
+    {
+        return $this->barred;
+    }
+
+    public function setBarred($barred)
+    {
+        $this->barred = $barred;
+
+        return $this;
+    }
+
+    public function getCorporateIdentificationNumber()
+    {
+        return $this->corporateIdentificationNumber;
+    }
+
+    public function setCorporateIdentificationNumber($corporateIdentificationNumber)
+    {
+        $this->corporateIdentificationNumber = $corporateIdentificationNumber;
+
+        return $this;
+    }
+
+    public function getCreditLimit()
+    {
+        return $this->creditLimit;
+    }
+
+    public function setCreditLimit($creditLimit)
+    {
+        $this->creditLimit = $creditLimit;
+
+        return $this;
+    }
+
+    public function getCustomerContact() : CustomerContact
+    {
+        return new CustomerContact($this->customerContact);
+    }
+
+    public function setCustomerContact($customerContact)
+    {
+        $this->customerContact = $customerContact;
+
+        return $this;
+    }
+
+    public function getDefaultDeliveryLocations() : DefaultDeliveryLocations
+    {
+        return new DefaultDeliveryLocations($this->defaultDeliveryLocations);
+    }
+
+    public function setDefaultDeliveryLocations($defaultDeliveryLocations)
+    {
+        $this->defaultDeliveryLocations = $defaultDeliveryLocations;
+
+        return $this;
+    }
+
+    public function getEan()
+    {
+        return $this->ean;
+    }
+
+    public function setEan($ean)
+    {
+        $this->ean = $ean;
+
+        return $this;
+    }
+
+    public function getLayout() : Layout
+    {
+        return new Layout($this->layout);
+    }
+
+    public function setLayout($layout)
+    {
+        $this->layout = $layout;
+
+        return $this;
+    }
+
+    public function getPublicEntryNumber()
+    {
+        return $this->publicEntryNumber;
+    }
+
+    public function setPublicEntryNumber($publicEntryNumber)
+    {
+        $this->publicEntryNumber = $publicEntryNumber;
+
+        return $this;
+    }
+
+    public function getSalesPerson() : SalesPerson
+    {
+        return new SalesPerson($this->salesPerson);
+    }
+
+    public function setSalesPerson($salesPerson)
+    {
+        $this->salesPerson = $salesPerson;
+    }
+
+    public function getVatNumber()
+    {
+        return $this->vatNumber;
+    }
+
+    public function setVatNumber($vatNumber)
+    {
+        $this->vatNumber = $vatNumber;
+
+        return $this;
+    }
+
 }

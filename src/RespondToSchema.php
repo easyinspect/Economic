@@ -8,7 +8,6 @@
 
 namespace Economic;
 
-
 interface RespondToSchema
 {
     public function retrieve($url);

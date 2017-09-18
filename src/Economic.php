@@ -65,7 +65,6 @@ class Economic implements RespondToSchema
 
     public function update($url, $body)
     {
-
         $data = [
             'headers' => [
                 'X-AppSecretToken' => $this->appSecretToken,
