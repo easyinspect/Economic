@@ -16,12 +16,8 @@ $economic = new Economic(
 );
 $test = $economic
     ->customer()
-    ->setName('The Fish Club Sandwich ')
-    ->setCurrency('DKK')
-    ->setVatZone(1)
-    ->setPaymentTerms(1)
-    ->setCustomerGroup(1)
-    ->setCustomerNumber(113)
+    ->get(113)
+    ->setWebsite('www.martinharødelagtminhjerne.dk')
     ->update();
 
 //$test = $economic->customer()->get(1001);

@@ -14,9 +14,9 @@ class PaymentTerms
 
     public $paymentTermsNumber;
 
-    public function __construct($paymentTerms)
+    public function __construct(int $paymentTermsNumber)
     {
-        $this->paymentTermsNumber = $paymentTerms;
+        $this->paymentTermsNumber = $paymentTermsNumber;
     }
 
 }

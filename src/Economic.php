@@ -57,7 +57,7 @@ class Economic implements RespondToSchema
                 'X-AgreementGrantToken' => $this->agreementGrantToken,
                 'Content-Type' => $this->contentType
             ],
-            'body' => \GuzzleHttp\json_encode($body)
+            'body' => json_encode($body)
         ];
 
         $this->client->post($url, $data);
@@ -65,13 +65,14 @@ class Economic implements RespondToSchema
 
     public function update($url, $body)
     {
+
         $data = [
             'headers' => [
                 'X-AppSecretToken' => $this->appSecretToken,
                 'X-AgreementGrantToken' => $this->agreementGrantToken,
                 'Content-Type' => $this->contentType
             ],
-            'body' => \GuzzleHttp\json_encode($body)
+            'body' => json_encode($body)
         ];
 
         $this->client->put($url, $data);

@@ -12,9 +12,9 @@ class VatZone
 {
     public $vatZoneNumber;
 
-    public function __construct($vatZone)
+    public function __construct(int $vatZoneNumber)
     {
-        $this->vatZoneNumber = $vatZone;
+        $this->vatZoneNumber = $vatZoneNumber;
     }
 
 }

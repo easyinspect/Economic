@@ -19,40 +19,64 @@ use Economic\Models\Components\SalesPerson;
 
 class Customer
 {
-
+    /** @var int $customerNumber*/
     private $customerNumber;
+    /** @var string $currency*/
     private $currency;
+    /** @var PaymentTerms*/
     private $paymentTerms;
+    /** @var CustomerGroup*/
     private $customerGroup;
+    /** @var string $address*/
     private $address;
+    /** @var float $balance*/
     private $balance;
+    /** @var float $dueAmount*/
     private $dueAmount;
+    /** @var string $city*/
     private $city;
+    /** @var string $country*/
     private $country;
+    /** @var string $email*/
     private $email;
+    /** @var string $name*/
     private $name;
+    /** @var int $zip*/
     private $zip;
+    /** @var int $telephoneAndFaxNumber*/
     private $telephoneAndFaxNumber;
+    /** @var string $website*/
     private $website;
+    /** @var VatZone*/
     private $vatZone;
+    /** @var Attention*/
     private $attention;
+    /** @var string $lastUpdated*/
     private $lastUpdated;
+    /** @var string $contacts*/
     private $contacts;
-    private $templates;
-    private $totals;
-    private $deliveryLocations;
-    private $invoices;
+    /** @var boolean $barred*/
     private $barred;
+    /** @var string $customerNumber*/
     private $corporateIdentificationNumber;
+    /** @var int $creditLimit*/
     private $creditLimit;
+    /** @var CustomerContact*/
     private $customerContact;
+    /** @var DefaultDeliveryLocations*/
     private $defaultDeliveryLocations;
+    /** @var string $ean*/
     private $ean;
+    /** @var Layout*/
     private $layout;
+    /** @var string $publicEntryNumber*/
     private $publicEntryNumber;
+    /** @var SalesPerson*/
     private $salesPerson;
+    /** @var string $vatNumber*/
     private $vatNumber;
 
+    /** @var Economic*/
     private $listener;
 
     public function __construct(RespondToSchema $listener)
@@ -119,7 +143,7 @@ class Customer
             'vatZone' => $this->getVatZone(),
             'paymentTerms' => $this->getPaymentTerms(),
             'website' => $this->getWebsite(),
-            /*'address' => $this->getAddress(),
+            'address' => $this->getAddress(),
             'barred' => $this->getBarred(),
             'city' => $this->getCity(),
             'corporateIdentificationNumber' => $this->getCorporateIdentificationNumber(),
@@ -135,8 +159,9 @@ class Customer
             'telephoneAndFaxNumber' => $this->getTelephoneAndFaxNumber(),
             'vatNumber' => $this->getVatNumber(),
             'zip' => $this->getZip()
-            */
         ];
+
+
 
         $this->listener->update('/customers/' . $this->getCustomerNumber(), $data);
 
@@ -173,24 +198,24 @@ class Customer
 
     public function getPaymentTerms() : PaymentTerms
     {
-        return new PaymentTerms($this->paymentTerms);
+        return $this->paymentTerms;
     }
 
     public function setPaymentTerms($paymentTerms)
     {
-        $this->paymentTerms = $paymentTerms;
+        $this->paymentTerms = new PaymentTerms($paymentTerms->paymentTermsNumber);
 
         return $this;
     }
 
     public function getCustomerGroup() : CustomerGroup
     {
-        return new CustomerGroup($this->customerGroup);
+        return $this->customerGroup;
     }
 
     public function setCustomerGroup($customerGroup)
     {
-        $this->customerGroup = $customerGroup;
+        $this->customerGroup = new CustomerGroup($customerGroup->customerGroupNumber);
 
         return $this;
     }
@@ -313,13 +338,35 @@ class Customer
 
     public function getVatZone() : VatZone
     {
-        return new VatZone($this->vatZone);
+        return $this->vatZone;
     }
 
+    /**
+     * @param \stdClass|object $vatZone
+     * @return $this
+     */
     public function setVatZone($vatZone)
     {
-        $this->vatZone = $vatZone;
+        $this->vatZone = new VatZone($vatZone->vatZoneNumber);
 
+        return $this;
+    }
+
+    public function getVatZoneNumber()
+    {
+        if (isset($this->vatZone)) {
+            return $this->vatZone->vatZoneNumber;
+        }
+        return null;
+    }
+
+    public function setVatZoneNumber(int $vatZoneNumber)
+    {
+        if (isset($this->vatZone)) {
+            $this->vatZone->vatZoneNumber = $vatZoneNumber;
+        } else {
+            $this->vatZone = new VatZone($vatZoneNumber);
+        }
         return $this;
     }
 
@@ -355,54 +402,6 @@ class Customer
     public function setContacts($contacts)
     {
         $this->contacts = $contacts;
-
-        return $this;
-    }
-
-    public function getTemplates()
-    {
-        return $this->templates;
-    }
-
-    public function setTemplates($templates)
-    {
-        $this->templates = $templates;
-
-        return $this;
-    }
-
-    public function getTotals()
-    {
-        return $this->totals;
-    }
-
-    public function setTotals($totals)
-    {
-        $this->totals = $totals;
-
-        return $this;
-    }
-
-    public function getDeliveryLocations()
-    {
-        return $this->deliveryLocations;
-    }
-
-    public function setDeliveryLocations($deliveryLocations)
-    {
-        $this->deliveryLocations = $deliveryLocations;
-
-        return $this;
-    }
-
-    public function getInvoices()
-    {
-        return $this->invoices;
-    }
-
-    public function setInvoices($invoices)
-    {
-        $this->invoices = $invoices;
 
         return $this;
     }
