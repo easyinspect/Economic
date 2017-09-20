@@ -6,7 +6,7 @@
  * Time: 14:05
  */
 
-namespace Economic;
+namespace Economic\Models;
 
 interface RespondToSchema
 {

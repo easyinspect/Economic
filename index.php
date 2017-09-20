@@ -15,10 +15,7 @@ $economic = new Economic(
     'UBBtI0nDfUz2lLBMOFvDGdvpjVMkmZgH3SsBu01n5KY1'
 );
 $test = $economic
-    ->customer()
-    ->get(113)
-    ->setWebsite('www.martinharødelagtminhjerne.dk')
-    ->update();
+    ->customerCollection()->sortByName('Thomas');
 
 //$test = $economic->customer()->get(1001);
 var_dump($test);

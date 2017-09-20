@@ -6,14 +6,12 @@
  * Time: 13:15
  */
 
-namespace Economic;
+namespace Economic\Models;
 
 use Economic\Models\Components\CustomerGroup;
 use Economic\Models\Components\VatZone;
 use Economic\Models\Components\PaymentTerms;
 use Economic\Models\Components\CustomerContact;
-use Economic\Models\Components\DefaultDeliveryLocations;
-use Economic\Models\Components\Attention;
 use Economic\Models\Components\Layout;
 use Economic\Models\Components\SalesPerson;
 
@@ -49,8 +47,6 @@ class Customer
     private $website;
     /** @var VatZone*/
     private $vatZone;
-    /** @var Attention*/
-    private $attention;
     /** @var string $lastUpdated*/
     private $lastUpdated;
     /** @var string $contacts*/
@@ -63,8 +59,6 @@ class Customer
     private $creditLimit;
     /** @var CustomerContact*/
     private $customerContact;
-    /** @var DefaultDeliveryLocations*/
-    private $defaultDeliveryLocations;
     /** @var string $ean*/
     private $ean;
     /** @var Layout*/
@@ -97,13 +91,6 @@ class Customer
         return $this;
     }
 
-    public function all()
-    {
-        $customers = $this->listener->retrieve('/customers');
-
-        return $customers;
-    }
-
     public function get($id)
     {
         $customer = $this->listener->retrieve('/customers/' . $id);
@@ -126,10 +113,27 @@ class Customer
             'currency' => $this->getCurrency(),
             'customerGroup' => $this->getCustomerGroup(),
             'vatZone' => $this->getVatZone(),
-            'paymentTerms' => $this->getVatZone()
+            'paymentTerms' => $this->getPaymentTerms(),
+            'website' => $this->getWebsite(),
+            'address' => $this->getAddress(),
+            'barred' => $this->getBarred(),
+            'city' => $this->getCity(),
+            'corporateIdentificationNumber' => $this->getCorporateIdentificationNumber(),
+            'country' => $this->getCountry(),
+            'creditLimit' => $this->getCreditLimit(),
+            //1. Før at man kan tilknytte en kundekontakt, skal de være oprettet 'customerContact' => $this->getCustomerContact(),
+            'customerNumber' => $this->getCustomerNumber(),
+            'ean' => $this->getEan(),
+            'email' => $this->getEmail(),
+            //2. Error'layout' => $this->getLayout(),
+            'publicEntryNumber' => $this->getPublicEntryNumber(),
+            //3. Error'salesPerson' => $this->getSalesPerson(),
+            'telephoneAndFaxNumber' => $this->getTelephoneAndFaxNumber(),
+            'vatNumber' => $this->getVatNumber(),
+            'zip' => $this->getZip()
         ];
 
-       $this->listener->create('/customers', $data);
+       $this->listener->create('/customers', array_filter($data));
 
        return $this;
     }
@@ -208,6 +212,28 @@ class Customer
         return $this;
     }
 
+    public function getPaymentTermsNumber() {
+
+        if (isset($this->paymentTerms))
+        {
+            return $this->paymentTerms->paymentTermsNumber;
+        }
+
+        return null;
+    }
+
+    public function setPaymentTermsNumber(int $paymentTermsNumber)
+    {
+        if (isset($this->paymentTerms))
+        {
+            $this->paymentTerms->paymentTermsNumber = $paymentTermsNumber;
+        } else {
+            $this->paymentTerms = new PaymentTerms($paymentTermsNumber);
+        }
+
+        return $this;
+    }
+
     public function getCustomerGroup() : CustomerGroup
     {
         return $this->customerGroup;
@@ -216,6 +242,28 @@ class Customer
     public function setCustomerGroup($customerGroup)
     {
         $this->customerGroup = new CustomerGroup($customerGroup->customerGroupNumber);
+
+        return $this;
+    }
+
+    public function getCustomerGroupNumber()
+    {
+        if (isset($this->customerGroup))
+        {
+            return $this->customerGroup->customerGroupNumber;
+        }
+
+        return null;
+    }
+
+    public function setCustomerGroupNumber(int $customerGroupNumber)
+    {
+        if (isset($this->customerGroup))
+        {
+            $this->customerGroup->customerGroupNumber = $customerGroupNumber;
+        } else {
+            $this->customerGroup = new CustomerGroup($customerGroupNumber);
+        }
 
         return $this;
     }
@@ -354,7 +402,8 @@ class Customer
 
     public function getVatZoneNumber()
     {
-        if (isset($this->vatZone)) {
+        if (isset($this->vatZone))
+        {
             return $this->vatZone->vatZoneNumber;
         }
         return null;
@@ -362,23 +411,12 @@ class Customer
 
     public function setVatZoneNumber(int $vatZoneNumber)
     {
-        if (isset($this->vatZone)) {
+        if (isset($this->vatZone))
+        {
             $this->vatZone->vatZoneNumber = $vatZoneNumber;
         } else {
             $this->vatZone = new VatZone($vatZoneNumber);
         }
-        return $this;
-    }
-
-    public function getAttention() : Attention
-    {
-        return new Attention($this->attention);
-    }
-
-    public function setAttention($attention)
-    {
-        $this->attention = $attention;
-
         return $this;
     }
 
@@ -450,18 +488,6 @@ class Customer
     public function setCustomerContact($customerContact)
     {
         $this->customerContact = $customerContact;
-
-        return $this;
-    }
-
-    public function getDefaultDeliveryLocations() : DefaultDeliveryLocations
-    {
-        return new DefaultDeliveryLocations($this->defaultDeliveryLocations);
-    }
-
-    public function setDefaultDeliveryLocations($defaultDeliveryLocations)
-    {
-        $this->defaultDeliveryLocations = $defaultDeliveryLocations;
 
         return $this;
     }

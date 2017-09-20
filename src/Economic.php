@@ -9,6 +9,9 @@
 namespace Economic;
 
 use GuzzleHttp\Client;
+use Economic\Models\RespondToSchema;
+use Economic\Models\Customer;
+use Economic\Models\CustomerCollection;
 
 class Economic implements RespondToSchema
 {
@@ -98,6 +101,11 @@ class Economic implements RespondToSchema
     public function customer() : Customer
     {
         return new Customer($this);
+    }
+
+    public function customerCollection() : CustomerCollection
+    {
+        return new CustomerCollection($this);
     }
 
 }
