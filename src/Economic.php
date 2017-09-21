@@ -8,6 +8,7 @@
 
 namespace Economic;
 
+use Economic\Models\Units;
 use GuzzleHttp\Client;
 use Economic\Models\RespondToSchema;
 use Economic\Models\Customer;
@@ -106,6 +107,11 @@ class Economic implements RespondToSchema
     public function customerCollection() : CustomerCollection
     {
         return new CustomerCollection($this);
+    }
+
+    public function units() : Units
+    {
+        return new Units($this);
     }
 
 }

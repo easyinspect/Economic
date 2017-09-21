@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db95447a-63ac-4044-ad5f-a55d24418eeb" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Models/Components/Attention.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Models/Components/DefaultDeliveryLocations.php" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/Customer.php" afterPath="$PROJECT_DIR$/src/Models/Customer.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/RespondToSchema.php" afterPath="$PROJECT_DIR$/src/Models/RespondToSchema.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Economic.php" afterPath="$PROJECT_DIR$/src/Economic.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Models/CustomerCollection.php" afterPath="$PROJECT_DIR$/src/Models/CustomerCollection.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,31 +25,41 @@
       <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="13" column="4" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="4" />
+            <state relative-caret-position="255">
+              <caret line="20" column="16" lean-forward="true" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Economic.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Units.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Models/Units.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="24" column="4" lean-forward="true" selection-start-line="24" selection-start-column="4" selection-end-line="34" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Economic.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Economic.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="19" column="41" lean-forward="false" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
+            <state relative-caret-position="311">
+              <caret line="80" column="0" lean-forward="true" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
               <folding>
                 <element signature="e#6#85#0#PHP" expanded="true" />
-                <element signature="e#108#130#0#PHP" expanded="true" />
+                <element signature="e#108#134#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CustomerCollection.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CustomerCollection.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Models/CustomerCollection.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="30" column="5" lean-forward="false" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+            <state relative-caret-position="255">
+              <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -145,10 +152,11 @@
         <option value="$PROJECT_DIR$/src/Customer.php" />
         <option value="$PROJECT_DIR$/src/RespondToSchema.php" />
         <option value="$PROJECT_DIR$/src/Models/RespondToSchema.php" />
+        <option value="$PROJECT_DIR$/src/Models/CustomerCollection.php" />
         <option value="$PROJECT_DIR$/src/Models/Customer.php" />
+        <option value="$PROJECT_DIR$/src/Models/Units.php" />
         <option value="$PROJECT_DIR$/index.php" />
         <option value="$PROJECT_DIR$/src/Economic.php" />
-        <option value="$PROJECT_DIR$/src/Models/CustomerCollection.php" />
       </list>
     </option>
   </component>
@@ -290,7 +298,8 @@
       <workItem from="1505808722012" duration="19730000" />
       <workItem from="1505835911721" duration="1632000" />
       <workItem from="1505895864084" duration="12693000" />
-      <workItem from="1505914402006" duration="3549000" />
+      <workItem from="1505914402006" duration="4145000" />
+      <workItem from="1505981121753" duration="7520000" />
     </task>
     <task id="LOCAL-00001" summary="Dette er en test">
       <created>1504263381999</created>
@@ -303,7 +312,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="258265000" />
+    <option name="totallyTimeSpent" value="266381000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -372,12 +381,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="3" />
+      <option name="time" value="4" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/classes/economicCustomer.php" />
     <entry file="file://$PROJECT_DIR$/classes/economicUrls.php" />
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
@@ -547,40 +555,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/CustomerCollection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Models/Customer.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1530">
-          <caret line="95" column="57" lean-forward="false" selection-start-line="95" selection-start-column="48" selection-end-line="95" selection-end-column="57" />
+        <state relative-caret-position="-714">
+          <caret line="85" column="13" lean-forward="true" selection-start-line="85" selection-start-column="13" selection-end-line="85" selection-end-column="13" />
           <folding>
             <element signature="e#115#160#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/Units.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="24" column="4" lean-forward="true" selection-start-line="24" selection-start-column="4" selection-end-line="34" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="13" column="4" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="4" />
+        <state relative-caret-position="255">
+          <caret line="20" column="16" lean-forward="true" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Economic.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="19" column="41" lean-forward="false" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
+        <state relative-caret-position="311">
+          <caret line="80" column="0" lean-forward="true" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
           <folding>
             <element signature="e#6#85#0#PHP" expanded="true" />
-            <element signature="e#108#130#0#PHP" expanded="true" />
+            <element signature="e#108#134#0#PHP" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Models/CustomerCollection.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="30" column="5" lean-forward="false" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
