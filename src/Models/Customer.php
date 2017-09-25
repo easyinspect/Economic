@@ -70,7 +70,7 @@ class Customer
     /** @var string $vatNumber*/
     private $vatNumber;
 
-    /** @var Economic*/
+    /** @var RespondToSchema*/
     private $listener;
 
     public function __construct(RespondToSchema $listener)
@@ -78,31 +78,16 @@ class Customer
         $this->listener = $listener;
     }
 
-    protected function processObject($object)
-    {
-        foreach ($object as $key => $value)
-        {
-            if (method_exists($this, 'set'.ucfirst($key)))
-            {
-                $this->{'set' . ucfirst($key)}($value);
-            }
-        }
-
-        return $this;
-    }
-
     public function get($id)
     {
         $customer = $this->listener->retrieve('/customers/' . $id);
         $this->processObject($customer);
-
         return $this;
     }
 
     public function delete()
     {
         $this->listener->delete('/customers/' . $this->getCustomerNumber());
-
         return $this;
     }
 
@@ -134,7 +119,6 @@ class Customer
         ];
 
        $this->listener->create('/customers', array_filter($data));
-
        return $this;
     }
 
@@ -168,7 +152,18 @@ class Customer
 
 
         $this->listener->update('/customers/' . $this->getCustomerNumber(), $data);
+        return $this;
+    }
 
+    public function processObject($object)
+    {
+        foreach ($object as $key => $value)
+        {
+            if (method_exists($this, 'set'.ucfirst($key)))
+            {
+                $this->{'set' . ucfirst($key)}($value);
+            }
+        }
         return $this;
     }
 
@@ -184,7 +179,6 @@ class Customer
     public function setCustomerNumber($customerNumber)
     {
         $this->customerNumber = $customerNumber;
-
         return $this;
     }
 
@@ -196,7 +190,6 @@ class Customer
     public function setCurrency($currency)
     {
         $this->currency = $currency;
-
         return $this;
     }
 
@@ -208,7 +201,6 @@ class Customer
     public function setPaymentTerms($paymentTerms)
     {
         $this->paymentTerms = new PaymentTerms($paymentTerms->paymentTermsNumber);
-
         return $this;
     }
 
@@ -242,7 +234,6 @@ class Customer
     public function setCustomerGroup($customerGroup)
     {
         $this->customerGroup = new CustomerGroup($customerGroup->customerGroupNumber);
-
         return $this;
     }
 
@@ -276,7 +267,6 @@ class Customer
     public function setAddress($address)
     {
         $this->address = $address;
-
         return $this;
     }
 
@@ -288,6 +278,7 @@ class Customer
     public function setBalance($balance)
     {
         $this->balance = $balance;
+        return $this;
     }
 
     public function getDueAmount()
@@ -298,6 +289,7 @@ class Customer
     public function setDueAmount($dueAmount)
     {
         $this->dueAmount = $dueAmount;
+        return $this;
     }
 
     public function getCity()
@@ -308,7 +300,6 @@ class Customer
     public function setCity($city)
     {
         $this->city = $city;
-
         return $this;
     }
 
@@ -320,7 +311,6 @@ class Customer
     public function setCountry($country)
     {
         $this->country = $country;
-
         return $this;
     }
 
@@ -332,7 +322,6 @@ class Customer
     public function setEmail($email)
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -344,7 +333,6 @@ class Customer
     public function setName($name)
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -356,7 +344,6 @@ class Customer
     public function setZip($zip)
     {
         $this->zip = $zip;
-
         return $this;
     }
 
@@ -368,7 +355,6 @@ class Customer
     public function setTelephoneAndFaxNumber($telephoneAndFaxNumber)
     {
         $this->telephoneAndFaxNumber = $telephoneAndFaxNumber;
-
         return $this;
     }
 
@@ -380,7 +366,6 @@ class Customer
     public function setWebsite($website)
     {
         $this->website = $website;
-
         return $this;
     }
 
@@ -396,7 +381,6 @@ class Customer
     public function setVatZone($vatZone)
     {
         $this->vatZone = new VatZone($vatZone->vatZoneNumber);
-
         return $this;
     }
 
@@ -428,7 +412,6 @@ class Customer
     public function setLastUpdated($lastUpdated)
     {
         $this->lastUpdated = $lastUpdated;
-
         return $this;
     }
 
@@ -440,7 +423,6 @@ class Customer
     public function setContacts($contacts)
     {
         $this->contacts = $contacts;
-
         return $this;
     }
 
@@ -452,7 +434,6 @@ class Customer
     public function setBarred($barred)
     {
         $this->barred = $barred;
-
         return $this;
     }
 
@@ -464,7 +445,6 @@ class Customer
     public function setCorporateIdentificationNumber($corporateIdentificationNumber)
     {
         $this->corporateIdentificationNumber = $corporateIdentificationNumber;
-
         return $this;
     }
 
@@ -476,7 +456,6 @@ class Customer
     public function setCreditLimit($creditLimit)
     {
         $this->creditLimit = $creditLimit;
-
         return $this;
     }
 
@@ -488,7 +467,6 @@ class Customer
     public function setCustomerContact($customerContact)
     {
         $this->customerContact = $customerContact;
-
         return $this;
     }
 
@@ -500,7 +478,6 @@ class Customer
     public function setEan($ean)
     {
         $this->ean = $ean;
-
         return $this;
     }
 
@@ -512,7 +489,6 @@ class Customer
     public function setLayout($layout)
     {
         $this->layout = $layout;
-
         return $this;
     }
 
@@ -524,7 +500,6 @@ class Customer
     public function setPublicEntryNumber($publicEntryNumber)
     {
         $this->publicEntryNumber = $publicEntryNumber;
-
         return $this;
     }
 
@@ -546,7 +521,6 @@ class Customer
     public function setVatNumber($vatNumber)
     {
         $this->vatNumber = $vatNumber;
-
         return $this;
     }
 

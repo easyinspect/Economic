@@ -15,7 +15,7 @@ $economic = new Economic(
     'UBBtI0nDfUz2lLBMOFvDGdvpjVMkmZgH3SsBu01n5KY1'
 );
 $test = $economic
-    ->units()->get(1)->update();
+    ->products()->get(11);
 
 //$test = $economic->customer()->get(1001);
 var_dump($test);

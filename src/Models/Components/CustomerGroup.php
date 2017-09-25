@@ -14,7 +14,7 @@ class CustomerGroup
 
     public $customerGroupNumber;
 
-    public function __construct($customerGroupNumber)
+    public function __construct(int $customerGroupNumber)
     {
         $this->customerGroupNumber = $customerGroupNumber;
     }

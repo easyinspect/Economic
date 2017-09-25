@@ -8,7 +8,6 @@
 
 namespace Economic\Models;
 
-
 class Units
 {
 
@@ -20,18 +19,6 @@ class Units
     public function __construct(RespondToSchema $listener)
     {
         $this->listener = $listener;
-    }
-
-    protected function processObject($object)
-    {
-        foreach ($object as $key => $value)
-        {
-            if (method_exists($this, 'set'.ucfirst($key)))
-            {
-                $this->{'set' . ucfirst($key)}($value);
-            }
-        }
-        return $this;
     }
 
     public function all()
@@ -56,10 +43,33 @@ class Units
     public function update()
     {
         $data = [
-          'name' => $this->getName()
+          'name' => $this->getName(),
+          'unitNumber' => $this->getUnitNumber()
         ];
 
         $this->listener->update('/units/' . $this->getUnitNumber(), array_filter($data));
+        return $this;
+    }
+
+    public function create()
+    {
+        $data = [
+            'name' => $this->getName()
+        ];
+
+        $this->listener->create('/units', $data);
+        return $this;
+    }
+
+    public function processObject($object)
+    {
+        foreach ($object as $key => $value)
+        {
+            if (method_exists($this, 'set'.ucfirst($key)))
+            {
+                $this->{'set' . ucfirst($key)}($value);
+            }
+        }
         return $this;
     }
 

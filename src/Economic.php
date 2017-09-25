@@ -8,11 +8,12 @@
 
 namespace Economic;
 
-use Economic\Models\Units;
 use GuzzleHttp\Client;
 use Economic\Models\RespondToSchema;
 use Economic\Models\Customer;
 use Economic\Models\CustomerCollection;
+use Economic\Models\Units;
+use Economic\Models\Products;
 
 class Economic implements RespondToSchema
 {
@@ -54,7 +55,6 @@ class Economic implements RespondToSchema
 
     public function create($url, $body)
     {
-
         $data = [
             'headers' => [
                 'X-AppSecretToken' => $this->appSecretToken,
@@ -104,14 +104,31 @@ class Economic implements RespondToSchema
         return new Customer($this);
     }
 
+    /**
+     * @return CustomerCollection
+     */
+
     public function customerCollection() : CustomerCollection
     {
         return new CustomerCollection($this);
     }
 
+    /**
+     * @return Units
+     */
+
     public function units() : Units
     {
         return new Units($this);
+    }
+
+    /**
+     * @return Products
+     */
+
+    public function products() : Products
+    {
+        return new Products($this);
     }
 
 }
