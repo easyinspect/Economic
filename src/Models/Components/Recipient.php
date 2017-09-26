@@ -11,10 +11,12 @@ namespace Economic\Models\Components;
 class Recipient
 {
     public $name;
+    public $vatZone;
 
     public function __construct($name)
     {
         $this->name = $name;
+        $this->vatZone = new \stdClass();
     }
 
 

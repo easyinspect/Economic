@@ -15,7 +15,19 @@ $economic = new Economic(
     'UBBtI0nDfUz2lLBMOFvDGdvpjVMkmZgH3SsBu01n5KY1'
 );
 $test = $economic
-    ->draftInvoices()->get(3)->setCurrency('GBP')->setRecipientName('Martin kan ikke lide skildpadder')->setRecipientVatZoneNumber(2)->setVendorReferenceNumber(2);
+    ->draftInvoices()
+    ->setCurrency('DKK')
+    ->setCustomerNumber(1007)
+    ->setRecipientName('Martin kan godt lide skildpadder')
+    ->setRecipientVatZoneNumber(3)
+    ->setVendorReferenceNumber(1)
+    ->setSalesPersonNumber(1)
+    ->setDate('2016-03-04')
+    ->setPaymentTermsNumber(1)
+    ->setLayoutNumber(18)
+    ->create();
+
+//$test = $economic->draftInvoices()->get(3);
 
 //$test = $economic->customer()->get(1001);
 var_dump($test);

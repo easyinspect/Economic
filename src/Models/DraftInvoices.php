@@ -32,6 +32,7 @@ class DraftInvoices
     public function __construct(RespondToSchema $listener)
     {
         $this->listener = $listener;
+        $this->references = new \stdClass();
     }
 
     public function processObject($object)
@@ -50,6 +51,22 @@ class DraftInvoices
     {
         $invoice = $this->listener->retrieve('/invoices/drafts/' . $id);
         $this->processObject($invoice);
+        return $this;
+    }
+
+    public function create()
+    {
+        $data = [
+            'currency' => $this->getCurrency(),
+            'customer' => $this->getCustomer(),
+            'date' => $this->getDate(),
+            'layout' => $this->getLayout(),
+            'paymentTerms' => $this->getPaymentTerms(),
+            'recipient' => $this->getRecipient(),
+            'references' => $this->getReferences()
+        ];
+
+        $this->listener->create('/invoices/drafts', $data);
         return $this;
     }
 
@@ -240,7 +257,7 @@ class DraftInvoices
 
     public function getRecipientVatZoneNumber()
     {
-        if (isset($this->recipient->vatZone)) {
+        if (isset($this->recipient)) {
             return $this->recipient->vatZone->vatZoneNumber;
         }
         return null;
@@ -248,7 +265,7 @@ class DraftInvoices
 
     public function setRecipientVatZoneNumber(int $vatZoneNumber)
     {
-        if (isset($this->recipient->vatZone)) {
+        if (isset($this->recipient)) {
             $this->recipient->vatZone->vatZoneNumber = $vatZoneNumber;
         } else {
             $this->recipient->vatZone = new VatZone($vatZoneNumber);
