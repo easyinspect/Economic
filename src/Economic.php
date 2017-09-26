@@ -8,12 +8,16 @@
 
 namespace Economic;
 
+use Economic\Models\DraftInvoices;
 use GuzzleHttp\Client;
 use Economic\Models\RespondToSchema;
 use Economic\Models\Customer;
 use Economic\Models\CustomerCollection;
 use Economic\Models\Units;
 use Economic\Models\Products;
+use Economic\Models\PaymentTypes;
+use Economic\Models\Currency;
+use Economic\Models\Layouts;
 
 class Economic implements RespondToSchema
 {
@@ -129,6 +133,38 @@ class Economic implements RespondToSchema
     public function products() : Products
     {
         return new Products($this);
+    }
+
+    /**
+     * @return PaymentTypes
+     */
+
+    public function paymentTypes() : PaymentTypes
+    {
+        return new PaymentTypes($this);
+    }
+
+    /**
+     * @return Currency
+     */
+
+    public function currency() : Currency
+    {
+        return new Currency($this);
+    }
+
+    /**
+     * @return Layouts
+     */
+
+    public function layouts() : Layouts
+    {
+        return new Layouts($this);
+    }
+
+    public function draftInvoices() : DraftInvoices
+    {
+        return new DraftInvoices($this);
     }
 
 }
