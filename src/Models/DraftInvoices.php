@@ -15,6 +15,7 @@ use Economic\Models\Components\Recipient;
 use Economic\Models\Components\SalesPerson;
 use Economic\Models\Components\VatZone;
 use Economic\Models\Components\VendorReference;
+use Economic\Models\Components\Line;
 
 class DraftInvoices
 {
@@ -27,6 +28,7 @@ class DraftInvoices
     private $paymentTerms;
     private $recipient;
     private $references;
+    private $lines = array();
 
     private $api;
 
@@ -366,4 +368,36 @@ class DraftInvoices
         $this->draftInvoiceNumber = $draftInvoiceNumber;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLines() : array
+    {
+        return $this->lines;
+    }
+
+    /**
+     * @param mixed $lines
+     * @return $this
+     */
+    public function setLines($lines)
+    {
+        var_dump($lines);
+
+        $this->lines = $lines;
+        return $this;
+    }
+
+    public function setLine(int $quantityNumber, string $productNumber)
+    {
+        if (empty($this->lines)) {
+            $this->lines[] = new Line($quantityNumber, $productNumber);
+        } else {
+            array_push($this->lines, new Line($quantityNumber, $productNumber));
+        }
+
+        return $this;
+    }
+
 }
