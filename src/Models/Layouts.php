@@ -11,22 +11,22 @@ namespace Economic\Models;
 
 class Layouts
 {
-    private $listener;
+    private $api;
 
-    public function __construct(RespondToSchema $listener)
+    public function __construct(RespondToSchema $api)
     {
-        $this->listener = $listener;
+        $this->api = $api;
     }
 
     public function all()
     {
-        $layouts = $this->listener->retrieve('/layouts');
+        $layouts = $this->api->retrieve('/layouts');
         return $layouts;
     }
 
     public function get($id)
     {
-        $layout = $this->listener->retrieve('/layouts/' . $id);
+        $layout = $this->api->retrieve('/layouts/' . $id);
         return $layout;
     }
 

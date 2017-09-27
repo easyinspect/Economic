@@ -71,23 +71,23 @@ class Customer
     private $vatNumber;
 
     /** @var RespondToSchema*/
-    private $listener;
+    private $api;
 
-    public function __construct(RespondToSchema $listener)
+    public function __construct(RespondToSchema $api)
     {
-        $this->listener = $listener;
+        $this->api = $api;
     }
 
     public function get($id)
     {
-        $customer = $this->listener->retrieve('/customers/' . $id);
+        $customer = $this->api->retrieve('/customers/' . $id);
         $this->processObject($customer);
         return $this;
     }
 
     public function delete()
     {
-        $this->listener->delete('/customers/' . $this->getCustomerNumber());
+        $this->api->delete('/customers/' . $this->getCustomerNumber());
         return $this;
     }
 
@@ -118,7 +118,7 @@ class Customer
             'zip' => $this->getZip()
         ];
 
-       $this->listener->create('/customers', array_filter($data));
+       $this->api->create('/customers', array_filter($data));
        return $this;
     }
 
@@ -151,7 +151,7 @@ class Customer
 
 
 
-        $this->listener->update('/customers/' . $this->getCustomerNumber(), $data);
+        $this->api->update('/customers/' . $this->getCustomerNumber(), $data);
         return $this;
     }
 

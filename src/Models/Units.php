@@ -14,29 +14,29 @@ class Units
     private $name;
     private $unitNumber;
 
-    private $listener;
+    private $api;
 
-    public function __construct(RespondToSchema $listener)
+    public function __construct(RespondToSchema $api)
     {
-        $this->listener = $listener;
+        $this->api = $api;
     }
 
     public function all()
     {
-        $units = $this->listener->retrieve('/units');
+        $units = $this->api->retrieve('/units');
         return $units;
     }
 
     public function get($id)
     {
-        $unit = $this->listener->retrieve('/units/' . $id);
+        $unit = $this->api->retrieve('/units/' . $id);
         $this->processObject($unit);
         return $this;
     }
 
     public function delete()
     {
-        $this->listener->delete('/units/' . $this->getUnitNumber());
+        $this->api->delete('/units/' . $this->getUnitNumber());
         return $this;
     }
 
@@ -47,7 +47,7 @@ class Units
           'unitNumber' => $this->getUnitNumber()
         ];
 
-        $this->listener->update('/units/' . $this->getUnitNumber(), array_filter($data));
+        $this->api->update('/units/' . $this->getUnitNumber(), array_filter($data));
         return $this;
     }
 
@@ -57,7 +57,7 @@ class Units
             'name' => $this->getName()
         ];
 
-        $this->listener->create('/units', $data);
+        $this->api->create('/units', $data);
         return $this;
     }
 

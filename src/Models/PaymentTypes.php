@@ -12,22 +12,22 @@ namespace Economic\Models;
 class PaymentTypes
 {
 
-    private $listener;
+    private $api;
 
-    public function __construct(RespondToSchema $listener)
+    public function __construct(RespondToSchema $api)
     {
-        $this->listener = $listener;
+        $this->api = $api;
     }
 
     public function all()
     {
-        $paymentTypes = $this->listener->retrieve('/payment-types');
+        $paymentTypes = $this->api->retrieve('/payment-types');
         return $paymentTypes;
     }
 
     public function get($id)
     {
-        $paymentType = $this->listener->retrieve('/payment-types/' . $id);
+        $paymentType = $this->api->retrieve('/payment-types/' . $id);
         return $paymentType;
     }
 

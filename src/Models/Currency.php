@@ -11,22 +11,22 @@ namespace Economic\Models;
 
 class Currency
 {
-    private $listener;
+    private $api;
 
-    public function __construct(RespondToSchema $listener)
+    public function __construct(RespondToSchema $api)
     {
-        $this->listener = $listener;
+        $this->api = $api;
     }
 
     public function all()
     {
-        $currencies = $this->listener->retrieve('/currencies');
+        $currencies = $this->api->retrieve('/currencies');
         return $currencies;
     }
 
     public function get(string $code)
     {
-        $currency = $this->listener->retrieve('/currencies/' . $code);
+        $currency = $this->api->retrieve('/currencies/' . $code);
         return $currency;
     }
 

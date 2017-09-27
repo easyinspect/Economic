@@ -7,8 +7,15 @@
     <list default="true" id="db95447a-63ac-4044-ad5f-a55d24418eeb" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Models/Components/Recipient.php" afterPath="$PROJECT_DIR$/src/Models/Components/Recipient.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Economic.php" afterPath="$PROJECT_DIR$/src/Economic.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Models/Currency.php" afterPath="$PROJECT_DIR$/src/Models/Currency.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Models/Customer.php" afterPath="$PROJECT_DIR$/src/Models/Customer.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Models/CustomerCollection.php" afterPath="$PROJECT_DIR$/src/Models/CustomerCollection.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Models/DraftInvoices.php" afterPath="$PROJECT_DIR$/src/Models/DraftInvoices.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Models/Layouts.php" afterPath="$PROJECT_DIR$/src/Models/Layouts.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Models/PaymentTypes.php" afterPath="$PROJECT_DIR$/src/Models/PaymentTypes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Models/Products.php" afterPath="$PROJECT_DIR$/src/Models/Products.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Models/Units.php" afterPath="$PROJECT_DIR$/src/Models/Units.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,21 +29,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="23" column="29" lean-forward="true" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+            <state relative-caret-position="425">
+              <caret line="30" column="2" lean-forward="true" selection-start-line="30" selection-start-column="2" selection-end-line="30" selection-end-column="2" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DraftInvoices.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DraftInvoices.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Models/DraftInvoices.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3560">
-              <caret line="242" column="42" lean-forward="true" selection-start-line="242" selection-start-column="42" selection-end-line="242" selection-end-column="42" />
+            <state relative-caret-position="690">
+              <caret line="365" column="27" lean-forward="false" selection-start-line="365" selection-start-column="27" selection-end-line="365" selection-end-column="27" />
               <folding>
                 <element signature="e#115#155#0#PHP" expanded="true" />
               </folding>
@@ -47,11 +54,11 @@
       <file leaf-file-name="Economic.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Economic.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-12">
-              <caret line="118" column="0" lean-forward="true" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
+            <state relative-caret-position="119">
+              <caret line="40" column="67" lean-forward="true" selection-start-line="40" selection-start-column="67" selection-end-line="40" selection-end-column="67" />
               <folding>
                 <element signature="e#6#85#0#PHP" expanded="true" />
-                <element signature="e#108#142#0#PHP" expanded="true" />
+                <element signature="e#108#130#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -94,6 +101,7 @@
       <find>productNumber</find>
       <find>sales</find>
       <find>var_dump</find>
+      <find>lines</find>
     </findStrings>
     <replaceStrings>
       <replace>private</replace>
@@ -106,8 +114,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/UserResource.php" />
-        <option value="$PROJECT_DIR$/EconomicApi.php" />
         <option value="$PROJECT_DIR$/Api/ApiResource.php" />
         <option value="$PROJECT_DIR$/Api/EconomicApi.php" />
         <option value="$PROJECT_DIR$/Api/Resource.php" />
@@ -137,26 +143,28 @@
         <option value="$PROJECT_DIR$/src/Models/Components/PaymentTerms.php" />
         <option value="$PROJECT_DIR$/src/Customer.php" />
         <option value="$PROJECT_DIR$/src/RespondToSchema.php" />
-        <option value="$PROJECT_DIR$/src/Models/CustomerCollection.php" />
         <option value="$PROJECT_DIR$/src/Models/RespondToSchema.php" />
-        <option value="$PROJECT_DIR$/src/Models/Units.php" />
-        <option value="$PROJECT_DIR$/src/Models/Customer.php" />
         <option value="$PROJECT_DIR$/src/Models/Components/CustomerGroup.php" />
         <option value="$PROJECT_DIR$/src/Models/Components/VatZone.php" />
         <option value="$PROJECT_DIR$/src/Models/Components/ProductGroup.php" />
-        <option value="$PROJECT_DIR$/src/Models/Products.php" />
-        <option value="$PROJECT_DIR$/src/Models/PaymentTypes.php" />
-        <option value="$PROJECT_DIR$/src/Models/Currency.php" />
-        <option value="$PROJECT_DIR$/src/Models/Layouts.php" />
-        <option value="$PROJECT_DIR$/src/Economic.php" />
         <option value="$PROJECT_DIR$/src/Models/Components/Customer.php" />
         <option value="$PROJECT_DIR$/src/Models/Components/Layout.php" />
         <option value="$PROJECT_DIR$/src/Models/Recipient.php" />
         <option value="$PROJECT_DIR$/src/Models/Components/SalesPerson.php" />
         <option value="$PROJECT_DIR$/src/Models/Components/VendorReference.php" />
         <option value="$PROJECT_DIR$/src/Models/Components/Recipient.php" />
-        <option value="$PROJECT_DIR$/src/Models/DraftInvoices.php" />
+        <option value="$PROJECT_DIR$/src/Models/Currency.php" />
+        <option value="$PROJECT_DIR$/src/Models/Customer.php" />
+        <option value="$PROJECT_DIR$/src/Models/CustomerCollection.php" />
+        <option value="$PROJECT_DIR$/src/Models/Layouts.php" />
+        <option value="$PROJECT_DIR$/src/Models/PaymentTypes.php" />
+        <option value="$PROJECT_DIR$/src/Models/Products.php" />
+        <option value="$PROJECT_DIR$/src/Models/Units.php" />
+        <option value="$PROJECT_DIR$/src/Economic.php" />
+        <option value="$PROJECT_DIR$/src/Models/Components/Product.php" />
+        <option value="$PROJECT_DIR$/src/Models/Components/Lines.php" />
         <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/src/Models/DraftInvoices.php" />
       </list>
     </option>
   </component>
@@ -189,6 +197,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -222,7 +231,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -315,7 +323,8 @@
       <workItem from="1506067588406" duration="16071000" />
       <workItem from="1506326627765" duration="17412000" />
       <workItem from="1506349679778" duration="4647000" />
-      <workItem from="1506415772911" duration="16128000" />
+      <workItem from="1506415772911" duration="16220000" />
+      <workItem from="1506499166706" duration="9973000" />
     </task>
     <task id="LOCAL-00001" summary="Dette er en test">
       <created>1504263381999</created>
@@ -328,7 +337,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="320639000" />
+    <option name="totallyTimeSpent" value="330704000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -341,9 +350,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1296875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1296875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -402,8 +410,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/economicCustomer.php" />
-    <entry file="file://$PROJECT_DIR$/vendor/mashape/unirest-php/src/Unirest.php" />
     <entry file="file://$PROJECT_DIR$/vendor/mashape/unirest-php/src/Unirest/Request.php" />
     <entry file="file://$PROJECT_DIR$/css/grid.css" />
     <entry file="file://$PROJECT_DIR$/classes/economicCustomer.php" />
@@ -461,13 +467,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/composer.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="6" lean-forward="false" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/composer/autoload_psr4.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -493,66 +492,10 @@
     <entry file="file://$PROJECT_DIR$/test2.php" />
     <entry file="file://$PROJECT_DIR$/src/Models/Components/DefaultDeliveryLocations.php" />
     <entry file="file://$PROJECT_DIR$/src/Models/Components/Attention.php" />
-    <entry file="file://$PROJECT_DIR$/src/Models/RespondToSchema.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="14" column="40" lean-forward="true" selection-start-line="14" selection-start-column="40" selection-end-line="14" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Models/CustomerCollection.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Models/Units.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="55" column="10" lean-forward="false" selection-start-line="55" selection-start-column="10" selection-end-line="55" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Models/Components/ProductGroup.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Models/Products.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="261" column="21" lean-forward="false" selection-start-line="261" selection-start-column="21" selection-end-line="261" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Models/PaymentTypes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="18" column="26" lean-forward="true" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Models/Currency.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="32" column="1" lean-forward="true" selection-start-line="32" selection-start-column="1" selection-end-line="32" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Models/Layouts.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="24" column="5" lean-forward="true" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -605,39 +548,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Models/Customer.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="114" column="28" lean-forward="false" selection-start-line="114" selection-start-column="23" selection-end-line="114" selection-end-column="28" />
-          <folding>
-            <element signature="e#115#160#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Economic.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-12">
-          <caret line="118" column="0" lean-forward="true" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
-          <folding>
-            <element signature="e#6#85#0#PHP" expanded="true" />
-            <element signature="e#108#142#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Models/Components/VendorReference.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="20" column="1" lean-forward="true" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Models/Components/Recipient.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -650,21 +564,130 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Models/DraftInvoices.php">
+    <entry file="file://$PROJECT_DIR$/src/Models/RespondToSchema.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3560">
-          <caret line="242" column="42" lean-forward="true" selection-start-line="242" selection-start-column="42" selection-end-line="242" selection-end-column="42" />
+        <state relative-caret-position="85">
+          <caret line="10" column="10" lean-forward="false" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/Customer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="838">
+          <caret line="323" column="18" lean-forward="true" selection-start-line="323" selection-start-column="18" selection-end-line="323" selection-end-column="18" />
           <folding>
-            <element signature="e#115#155#0#PHP" expanded="true" />
+            <element signature="e#115#160#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/CustomerCollection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="25" column="37" lean-forward="true" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/Layouts.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/PaymentTypes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="30" column="28" lean-forward="true" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/Products.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="838">
+          <caret line="109" column="18" lean-forward="true" selection-start-line="109" selection-start-column="18" selection-end-line="109" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/Units.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="515">
+          <caret line="64" column="5" lean-forward="true" selection-start-line="64" selection-start-column="5" selection-end-line="64" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="26" lean-forward="false" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/Components/Recipient.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="17" column="25" lean-forward="false" selection-start-line="17" selection-start-column="25" selection-end-line="17" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/Currency.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="8" column="18" lean-forward="false" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Economic.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="40" column="67" lean-forward="true" selection-start-line="40" selection-start-column="67" selection-end-line="40" selection-end-column="67" />
+          <folding>
+            <element signature="e#6#85#0#PHP" expanded="true" />
+            <element signature="e#108#130#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/Components/Lines.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="20" column="1" lean-forward="true" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/Components/Product.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="5" lean-forward="true" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="23" column="29" lean-forward="true" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+        <state relative-caret-position="425">
+          <caret line="30" column="2" lean-forward="true" selection-start-line="30" selection-start-column="2" selection-end-line="30" selection-end-column="2" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Models/DraftInvoices.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="365" column="27" lean-forward="false" selection-start-line="365" selection-start-column="27" selection-end-line="365" selection-end-column="27" />
+          <folding>
+            <element signature="e#115#155#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

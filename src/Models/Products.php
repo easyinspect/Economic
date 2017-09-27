@@ -23,29 +23,29 @@ class Products
     private $productGroup;
     private $productNumber;
 
-    private $listener;
+    private $api;
 
-    public function __construct(RespondToSchema $listener)
+    public function __construct(RespondToSchema $api)
     {
-        $this->listener = $listener;
+        $this->api = $api;
     }
 
     public function all()
     {
-        $products = $this->listener->retrieve('/products');
+        $products = $this->api->retrieve('/products');
         return $products;
     }
 
     public function get($id)
     {
-        $product = $this->listener->retrieve('/products/' . $id);
+        $product = $this->api->retrieve('/products/' . $id);
         $this->processObject($product);
         return $this;
     }
 
     public function delete()
     {
-        $this->listener->delete('/products/' . $this->getProductNumber());
+        $this->api->delete('/products/' . $this->getProductNumber());
         return $this;
     }
 
@@ -64,7 +64,7 @@ class Products
             'productNumber' => $this->getProductNumber()
         ];
 
-        $this->listener->create('/products', array_filter($data));
+        $this->api->create('/products', array_filter($data));
 
         return $this;
 
@@ -85,7 +85,7 @@ class Products
             'productNumber' => $this->getProductNumber()
         ];
 
-        $this->listener->update('/products/'. $this->getProductNumber(), $data);
+        $this->api->update('/products/'. $this->getProductNumber(), $data);
 
         return $this;
     }

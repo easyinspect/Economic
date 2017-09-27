@@ -8,7 +8,6 @@
 
 namespace Economic;
 
-use Economic\Models\DraftInvoices;
 use GuzzleHttp\Client;
 use Economic\Models\RespondToSchema;
 use Economic\Models\Customer;
@@ -18,6 +17,7 @@ use Economic\Models\Products;
 use Economic\Models\PaymentTypes;
 use Economic\Models\Currency;
 use Economic\Models\Layouts;
+use Economic\Models\DraftInvoices;
 
 class Economic implements RespondToSchema
 {

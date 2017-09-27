@@ -19,6 +19,7 @@ use Economic\Models\Components\VendorReference;
 class DraftInvoices
 {
 
+    private $draftInvoiceNumber;
     private $currency;
     private $customer;
     private $date;
@@ -27,11 +28,11 @@ class DraftInvoices
     private $recipient;
     private $references;
 
-    private $listener;
+    private $api;
 
-    public function __construct(RespondToSchema $listener)
+    public function __construct(RespondToSchema $api)
     {
-        $this->listener = $listener;
+        $this->api = $api;
         $this->references = new \stdClass();
     }
 
@@ -47,9 +48,15 @@ class DraftInvoices
         return $this;
     }
 
+    public function all()
+    {
+        $invoices = $this->api->retrieve('/invoices/drafts');
+        return $invoices;
+    }
+
     public function get($id)
     {
-        $invoice = $this->listener->retrieve('/invoices/drafts/' . $id);
+        $invoice = $this->api->retrieve('/invoices/drafts/' . $id);
         $this->processObject($invoice);
         return $this;
     }
@@ -66,8 +73,23 @@ class DraftInvoices
             'references' => $this->getReferences()
         ];
 
-        $this->listener->create('/invoices/drafts', $data);
+        //$this->api->create('/invoices/drafts', $data);
         return $this;
+    }
+
+    public function bookInvoice()
+    {
+       $data = [
+           'draftInvoice' => [
+               'draftInvoiceNumber' => $this->getDraftInvoiceNumber()
+           ],
+           'bookWithNumber' => $this->getDraftInvoiceNumber()
+       ];
+
+       var_dump($data);
+
+       //$this->api->create('/invoices/booked', $data);
+       return $this;
     }
 
     // Getters & Setters
@@ -327,4 +349,21 @@ class DraftInvoices
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDraftInvoiceNumber()
+    {
+        return $this->draftInvoiceNumber;
+    }
+
+    /**
+     * @param int $draftInvoiceNumber
+     * @return $this
+     */
+    public function setDraftInvoiceNumber($draftInvoiceNumber)
+    {
+        $this->draftInvoiceNumber = $draftInvoiceNumber;
+        return $this;
+    }
 }

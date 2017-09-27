@@ -10,22 +10,22 @@ namespace Economic\Models;
 
 class CustomerCollection
 {
-    private $listener;
+    private $api;
 
-    public function __construct(RespondToSchema $listener)
+    public function __construct(RespondToSchema $api)
     {
-        $this->listener = $listener;
+        $this->api = $api;
     }
 
     public function all()
     {
-        $customers = $this->listener->retrieve('/customers');
+        $customers = $this->api->retrieve('/customers');
         return $customers;
     }
 
     public function sortByName($name)
     {
-        $customers = $this->listener->retrieve('/customers?filter=name$like:' . $name);
+        $customers = $this->api->retrieve('/customers?filter=name$like:' . $name);
         return $customers;
 
     }
