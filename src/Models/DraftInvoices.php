@@ -72,8 +72,10 @@ class DraftInvoices
             'layout' => $this->getLayout(),
             'paymentTerms' => $this->getPaymentTerms(),
             'recipient' => $this->getRecipient(),
-            'references' => $this->getReferences()
+            'references' => $this->getReferences(),
+            'lines' => $this->getLines()
         ];
+        var_dump(\GuzzleHttp\json_encode($data));
 
         //$this->api->create('/invoices/drafts', $data);
         return $this;
@@ -383,8 +385,6 @@ class DraftInvoices
      */
     public function setLines($lines)
     {
-        var_dump($lines);
-
         $this->lines = $lines;
         return $this;
     }

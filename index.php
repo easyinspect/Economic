@@ -22,11 +22,10 @@ $test = $economic
     ->setRecipientVatZoneNumber(3)
     ->setVendorReferenceNumber(1)
     ->setSalesPersonNumber(1)
-    ->setLine(1, "11")
-    ->setLine(2, "12")
     ->setDate('2016-03-04')
     ->setPaymentTermsNumber(1)
-    ->setLayoutNumber(18);
+    ->setLayoutNumber(18)
+    ->create();
 
 //$test = $economic->draftInvoices()->get(9);
 

@@ -12,12 +12,12 @@ namespace Economic\Models\Components;
 class Line
 {
     public $quantity;
-    public $productNumber;
+    public $product;
 
     public function __construct($quantityNumber, $productNumber)
     {
         $this->quantity = $quantityNumber;
-        (object)$this->productNumber = $productNumber;
+        $this->product = new Product($productNumber);
     }
 
 }
