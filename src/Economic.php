@@ -21,12 +21,6 @@ use Economic\Models\DraftInvoices;
 
 class Economic implements RespondToSchema
 {
-
-    /* AppSecretToken - IBDTsO7n5FmWF4ms7YlBKScXJV14sqp14mYw3OxbAqU1
-     * AgreementGrantToken - UBBtI0nDfUz2lLBMOFvDGdvpjVMkmZgH3SsBu01n5KY1
-     * ContentType - application/json
-     */
-
     private $appSecretToken;
     private $agreementGrantToken;
     private $contentType = 'application/json';
@@ -161,6 +155,10 @@ class Economic implements RespondToSchema
     {
         return new Layouts($this);
     }
+
+    /**
+     * @return draftInvoices
+     */
 
     public function draftInvoices() : DraftInvoices
     {

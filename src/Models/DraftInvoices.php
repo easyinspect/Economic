@@ -372,7 +372,7 @@ class DraftInvoices
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getLines() : array
     {
@@ -380,7 +380,7 @@ class DraftInvoices
     }
 
     /**
-     * @param mixed $lines
+     * @param array $lines
      * @return $this
      */
     public function setLines($lines)
@@ -389,15 +389,20 @@ class DraftInvoices
         return $this;
     }
 
-    public function setLine(int $quantityNumber, string $productNumber)
+    public function setInvoiceLine(int $quantityNumber, string $productNumber, string $productName, int $costPrice)
     {
         if (empty($this->lines)) {
-            $this->lines[] = new Line($quantityNumber, $productNumber);
+            $this->lines[] = new Line($quantityNumber, $productNumber, $productName, $costPrice);
         } else {
-            array_push($this->lines, new Line($quantityNumber, $productNumber));
+            array_push($this->lines, new Line($quantityNumber, $productNumber, $productName, $costPrice));
         }
 
         return $this;
+    }
+
+    public function setLineDiscountPercentage(int $discountPercentageNumber)
+    {
+
     }
 
 }
