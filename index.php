@@ -14,7 +14,7 @@ $economic = new Economic(
     'SwQn6scivHjMlAEmS9FbbDxYzyOb3sLjBuMnVBi2VSU1',
     'bje2Mxj6bD2uRIDTKcgMaQt1z5K868Y9mrhGBL8ywVI1'
 );
-$test = $economic
+/*$test = $economic
     ->draftInvoices()
     ->setCurrency('DKK')
     ->setCustomerNumber(1007)
@@ -24,13 +24,20 @@ $test = $economic
     ->setSalesPersonNumber(1)
     ->setInvoiceLine(1, "1", "Cult bundet af flok sjakaler", 100)
     ->setInvoiceLine(2, "2", "Cult Energy Strawberry", 111)
-    ->setLineDiscountPercentage(1)
     ->setDate('2016-03-04')
     ->setPaymentTermsNumber(1)
     ->setLayoutNumber(18)
-    ->create();
+    ->create();*/
 
-//$test = $economic->customer()->get(1007);
+$test = $economic
+    ->customer()
+    ->setCurrency('DKK')
+    ->setName('Mikkel v3')
+    ->setPaymentTermsNumber(1)
+    ->setCustomerGroupNumber(1)
+    ->setVatZoneNumber(1)
+    ->create()
+    ->getCustomerNumber();
 
 //$test = $economic->customer()->get(1001);
 var_dump($test);

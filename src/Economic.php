@@ -62,7 +62,9 @@ class Economic implements RespondToSchema
             'body' => json_encode($body)
         ];
 
-        $this->client->post($url, $data);
+        $create = $this->client->post($url, $data);
+        $json = \GuzzleHttp\json_decode($create->getBody()->getContents());
+        return $json;
     }
 
     public function update($url, $body)

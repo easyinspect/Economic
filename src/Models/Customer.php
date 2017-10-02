@@ -53,7 +53,7 @@ class Customer
     private $contacts;
     /** @var boolean $barred*/
     private $barred;
-    /** @var string $customerNumber*/
+    /** @var string $corporateIdentificationNumber*/
     private $corporateIdentificationNumber;
     /** @var int $creditLimit*/
     private $creditLimit;
@@ -118,7 +118,10 @@ class Customer
             'zip' => $this->getZip()
         ];
 
-       $this->api->create('/customers', array_filter($data));
+
+
+       $customer = $this->api->create('/customers', array_filter($data));
+       $this->processObject($customer);
        return $this;
     }
 

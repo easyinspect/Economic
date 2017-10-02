@@ -402,7 +402,9 @@ class DraftInvoices
 
     public function setLineDiscountPercentage(int $discountPercentageNumber)
     {
-
+        if (isset($this->lines)) {
+            $this->lines->discountPercentage = $discountPercentageNumber;
+        }
     }
 
 }
