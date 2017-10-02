@@ -1,11 +1,13 @@
 {
-    "require": {
-        "guzzlehttp/guzzle": "~6.0"
-    },
-
-    "autoload": {
-        "psr-4": {
-            "Economic\\": "src"
+    "name": "easyinspect/economic",
+    "description": "Wrapper to call economic API.",
+    "type": "library",
+    "license": "open source",
+    "authors": [
+        {
+            "name": "Mikkel Schou",
+            "email": "mbs@easyinspect.net"
         }
-    }
+    ],
+    "require": {}
 }
