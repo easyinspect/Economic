@@ -8,6 +8,7 @@
 
 namespace Economic\Models;
 
+use Economic\Economic;
 use Economic\Models\Components\CustomerGroup;
 use Economic\Models\Components\VatZone;
 use Economic\Models\Components\PaymentTerms;
@@ -70,10 +71,10 @@ class Customer
     /** @var string $vatNumber*/
     private $vatNumber;
 
-    /** @var RespondToSchema*/
+    /** @var Economic*/
     private $api;
 
-    public function __construct(RespondToSchema $api)
+    public function __construct(Economic $api)
     {
         $this->api = $api;
     }
@@ -81,7 +82,7 @@ class Customer
     public function get($id)
     {
         $customer = $this->api->retrieve('/customers/' . $id);
-        $this->processObject($customer);
+        $this->api->setObject($customer, $this);
         return $this;
     }
 
@@ -118,10 +119,8 @@ class Customer
             'zip' => $this->getZip()
         ];
 
-
-
        $customer = $this->api->create('/customers', array_filter($data));
-       $this->processObject($customer);
+       $this->api->setObject($customer, $this);
        return $this;
     }
 
@@ -152,24 +151,10 @@ class Customer
             'zip' => $this->getZip()
         ];
 
-
-
-        $this->api->update('/customers/' . $this->getCustomerNumber(), $data);
+        $customer = $this->api->update('/customers/' . $this->getCustomerNumber(), $data);
+        $this->api->setObject($customer, $this);
         return $this;
     }
-
-    public function processObject($object)
-    {
-        foreach ($object as $key => $value)
-        {
-            if (method_exists($this, 'set'.ucfirst($key)))
-            {
-                $this->{'set' . ucfirst($key)}($value);
-            }
-        }
-        return $this;
-    }
-
 
     // Getters & Setters
 

@@ -9,11 +9,15 @@
 namespace Economic\Models;
 
 
+use Economic\Economic;
+
 class Currency
 {
+
+    /** @var Economic */
     private $api;
 
-    public function __construct(RespondToSchema $api)
+    public function __construct(Economic $api)
     {
         $this->api = $api;
     }

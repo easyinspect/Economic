@@ -9,7 +9,6 @@
 namespace Economic;
 
 use GuzzleHttp\Client;
-use Economic\Models\RespondToSchema;
 use Economic\Models\Customer;
 use Economic\Models\CustomerCollection;
 use Economic\Models\Units;
@@ -19,12 +18,13 @@ use Economic\Models\Currency;
 use Economic\Models\Layouts;
 use Economic\Models\DraftInvoices;
 
-class Economic implements RespondToSchema
+class Economic
 {
     private $appSecretToken;
     private $agreementGrantToken;
     private $contentType = 'application/json';
     private $baseUrl = 'https://restapi.e-conomic.com/';
+    private $headers;
 
     private $client;
 
@@ -33,19 +33,19 @@ class Economic implements RespondToSchema
         $this->appSecretToken = $appSecretToken;
         $this->agreementGrantToken = $agreementGrantToken;
         $this->client = new Client(['base_uri' => $this->baseUrl]);
-    }
 
-    public function retrieve($url)
-    {
-        $headers = [
+        $this->headers = [
             'headers' => [
                 'X-AppSecretToken' => $this->appSecretToken,
                 'X-AgreementGrantToken' => $this->agreementGrantToken,
                 'Content-Type' => $this->contentType
-            ]
+            ],
         ];
+    }
 
-        $response = $this->client->get($url, $headers);
+    public function retrieve($url)
+    {
+        $response = $this->client->get($url, $this->headers);
         $data = json_decode($response->getBody()->getContents());
 
         return $data;
@@ -53,46 +53,39 @@ class Economic implements RespondToSchema
 
     public function create($url, $body)
     {
-        $data = [
-            'headers' => [
-                'X-AppSecretToken' => $this->appSecretToken,
-                'X-AgreementGrantToken' => $this->agreementGrantToken,
-                'Content-Type' => $this->contentType
-            ],
-            'body' => json_encode($body)
-        ];
 
-        $create = $this->client->post($url, $data);
-        $json = \GuzzleHttp\json_decode($create->getBody()->getContents());
+        $this->headers['body'] = json_encode($body);
+
+        $create = $this->client->post($url, $this->headers);
+        $json = json_decode($create->getBody()->getContents());
         return $json;
     }
 
     public function update($url, $body)
     {
 
-        $data = [
-            'headers' => [
-                'X-AppSecretToken' => $this->appSecretToken,
-                'X-AgreementGrantToken' => $this->agreementGrantToken,
-                'Content-Type' => $this->contentType
-            ],
-            'body' => json_encode($body)
-        ];
+        $this->headers['body'] = json_encode($body);
 
-        $this->client->put($url, $data);
+        $update = $this->client->put($url, $this->headers);
+        $json = json_decode($update->getBody()->getContents());
+        return $json;
     }
 
     public function delete($url)
     {
-        $data = [
-            'headers' => [
-                'X-AppSecretToken' => $this->appSecretToken,
-                'X-AgreementGrantToken' => $this->agreementGrantToken,
-                'Content-Type' => $this->contentType
-            ]
-        ];
+        $this->client->delete($url, $this->headers);
+    }
 
-        $this->client->delete($url, $data);
+    public function setObject($object, $methods)
+    {
+        foreach ($object as $key => $value)
+        {
+            if (method_exists($methods, 'set'.ucfirst($key)))
+            {
+                $methods->{'set' . ucfirst($key)}($value);
+            }
+        }
+        return $this;
     }
 
     /**

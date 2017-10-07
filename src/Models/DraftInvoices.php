@@ -8,6 +8,7 @@
 
 namespace Economic\Models;
 
+use Economic\Economic;
 use Economic\Models\Components\Customer;
 use Economic\Models\Components\Layout;
 use Economic\Models\Components\PaymentTerms;
@@ -28,26 +29,14 @@ class DraftInvoices
     private $paymentTerms;
     private $recipient;
     private $references;
-    private $lines = array();
+    private $lines = [];
 
     private $api;
 
-    public function __construct(RespondToSchema $api)
+    public function __construct(Economic $api)
     {
         $this->api = $api;
         $this->references = new \stdClass();
-    }
-
-    public function processObject($object)
-    {
-        foreach ($object as $key => $value)
-        {
-            if (method_exists($this, 'set'.ucfirst($key)))
-            {
-                $this->{'set' . ucfirst($key)}($value);
-            }
-        }
-        return $this;
     }
 
     public function all()
@@ -59,7 +48,7 @@ class DraftInvoices
     public function get($id)
     {
         $invoice = $this->api->retrieve('/invoices/drafts/' . $id);
-        $this->processObject($invoice);
+        $this->api->setObject($invoice, $this);
         return $this;
     }
 
@@ -75,9 +64,9 @@ class DraftInvoices
             'references' => $this->getReferences(),
             'lines' => $this->getLines()
         ];
-        var_dump(\GuzzleHttp\json_encode($data));
 
-        //$this->api->create('/invoices/drafts', $data);
+        $invoice = $this->api->create('/invoices/drafts', $data);
+        $this->api->setObject($invoice, $this);
         return $this;
     }
 
@@ -90,9 +79,8 @@ class DraftInvoices
            'bookWithNumber' => $this->getDraftInvoiceNumber()
        ];
 
-       var_dump($data);
-
-       //$this->api->create('/invoices/booked', $data);
+       $bookInvoice = $this->api->create('/invoices/booked', $data);
+       $this->api->setObject($bookInvoice, $this);
        return $this;
     }
 
@@ -389,22 +377,10 @@ class DraftInvoices
         return $this;
     }
 
-    public function setInvoiceLine(int $quantityNumber, string $productNumber, string $productName, int $costPrice)
+    public function setInvoiceLine(string $productNumber, string $name, int $quantity, $price)
     {
-        if (empty($this->lines)) {
-            $this->lines[] = new Line($quantityNumber, $productNumber, $productName, $costPrice);
-        } else {
-            array_push($this->lines, new Line($quantityNumber, $productNumber, $productName, $costPrice));
-        }
+        $this->lines[] = new Line($productNumber, $name, $quantity, $price);
 
         return $this;
     }
-
-    public function setLineDiscountPercentage(int $discountPercentageNumber)
-    {
-        if (isset($this->lines)) {
-            $this->lines->discountPercentage = $discountPercentageNumber;
-        }
-    }
-
 }

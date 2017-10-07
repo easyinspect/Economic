@@ -8,6 +8,8 @@
 
 namespace Economic\Models;
 
+use Economic\Economic;
+
 class Units
 {
 
@@ -16,7 +18,7 @@ class Units
 
     private $api;
 
-    public function __construct(RespondToSchema $api)
+    public function __construct(Economic $api)
     {
         $this->api = $api;
     }
@@ -30,7 +32,7 @@ class Units
     public function get($id)
     {
         $unit = $this->api->retrieve('/units/' . $id);
-        $this->processObject($unit);
+        $this->api->setObject($unit, $this);
         return $this;
     }
 
@@ -47,7 +49,8 @@ class Units
           'unitNumber' => $this->getUnitNumber()
         ];
 
-        $this->api->update('/units/' . $this->getUnitNumber(), array_filter($data));
+        $unit = $this->api->update('/units/' . $this->getUnitNumber(), array_filter($data));
+        $this->api->setObject($unit, $this);
         return $this;
     }
 
@@ -57,21 +60,11 @@ class Units
             'name' => $this->getName()
         ];
 
-        $this->api->create('/units', $data);
+        $unit = $this->api->create('/units', $data);
+        $this->api->setObject($unit, $this);
         return $this;
     }
 
-    public function processObject($object)
-    {
-        foreach ($object as $key => $value)
-        {
-            if (method_exists($this, 'set'.ucfirst($key)))
-            {
-                $this->{'set' . ucfirst($key)}($value);
-            }
-        }
-        return $this;
-    }
 
     // Getters & Setters
 

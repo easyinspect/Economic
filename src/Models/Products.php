@@ -8,6 +8,7 @@
 
 namespace Economic\Models;
 
+use Economic\Economic;
 use Economic\Models\Components\ProductGroup;
 
 class Products
@@ -25,7 +26,7 @@ class Products
 
     private $api;
 
-    public function __construct(RespondToSchema $api)
+    public function __construct(Economic $api)
     {
         $this->api = $api;
     }
@@ -39,7 +40,7 @@ class Products
     public function get($id)
     {
         $product = $this->api->retrieve('/products/' . $id);
-        $this->processObject($product);
+        $this->api->setObject($product, $this);
         return $this;
     }
 
@@ -64,8 +65,8 @@ class Products
             'productNumber' => $this->getProductNumber()
         ];
 
-        $this->api->create('/products', array_filter($data));
-
+        $product = $this->api->create('/products', array_filter($data));
+        $this->api->setObject($product, $this);
         return $this;
 
     }
@@ -85,20 +86,8 @@ class Products
             'productNumber' => $this->getProductNumber()
         ];
 
-        $this->api->update('/products/'. $this->getProductNumber(), $data);
-
-        return $this;
-    }
-
-    public function processObject($object)
-    {
-        foreach ($object as $key => $value)
-        {
-            if (method_exists($this, 'set'.ucfirst($key)))
-            {
-                $this->{'set' . ucfirst($key)}($value);
-            }
-        }
+        $product = $this->api->update('/products/'. $this->getProductNumber(), $data);
+        $this->api->setObject($product, $this);
         return $this;
     }
 
