@@ -377,9 +377,9 @@ class DraftInvoices
         return $this;
     }
 
-    public function setInvoiceLine(string $productNumber, string $name, int $quantity, $price)
+    public function setInvoiceLine(string $productNumber, string $name, int $quantity, $price, $discountPrice)
     {
-        $this->lines[] = new Line($productNumber, $name, $quantity, $price);
+        $this->lines[] = new Line($productNumber, $name, $quantity, $price, $discountPrice);
 
         return $this;
     }
