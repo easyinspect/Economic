@@ -15,14 +15,13 @@ class Line
     public $quantity;
     public $unitNetPrice;
     public $product;
-    public $discountPercentage;
 
-    public function __construct($productNumber, $name, $quantity, $price, $discountPercentage)
+    public function __construct($productNumber, $name, $quantity, $price)
     {
         $this->unitNetPrice = $price;
         $this->quantity = $quantity;
         $this->description = $name;
-        $this->discountPercentage = $discountPercentage;
         $this->product = new Product($productNumber);
     }
+
 }

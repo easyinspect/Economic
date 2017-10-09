@@ -9,6 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Filter;
 
 class CustomerCollection
 {
@@ -19,16 +20,13 @@ class CustomerCollection
         $this->api = $api;
     }
 
-    public function all()
+    public function all(Filter $filter = null)
     {
-        $customers = $this->api->retrieve('/customers');
+        if (is_null($filter)) {
+            $customers = $this->api->retrieve('/customers');
+        } else {
+            $customers = $this->api->retrieve('/customers'.$filter->filter());
+        }
         return $customers;
-    }
-
-    public function sortByName($name)
-    {
-        $customers = $this->api->retrieve('/customers?filter=name$like:' . $name);
-        return $customers;
-
     }
 }

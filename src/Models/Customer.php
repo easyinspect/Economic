@@ -156,6 +156,18 @@ class Customer
         return $this;
     }
 
+    public function draftInvoices()
+    {
+        $invoices = $this->api->retrieve('/customers/'.$this->getCustomerNumber().'/invoices/drafts');
+        return $invoices;
+    }
+
+    public function bookedInvoices()
+    {
+        $invoices = $this->api->retrieve('/customers/'.$this->getCustomerNumber().'/invoices/booked');
+        return $invoices;
+    }
+
     // Getters & Setters
 
 

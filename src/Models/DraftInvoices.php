@@ -9,6 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Filter;
 use Economic\Models\Components\Customer;
 use Economic\Models\Components\Layout;
 use Economic\Models\Components\PaymentTerms;
@@ -16,6 +17,7 @@ use Economic\Models\Components\Recipient;
 use Economic\Models\Components\SalesPerson;
 use Economic\Models\Components\VatZone;
 use Economic\Models\Components\VendorReference;
+use Economic\Models\Components\DeliveryLocation;
 use Economic\Models\Components\Line;
 
 class DraftInvoices
@@ -27,6 +29,7 @@ class DraftInvoices
     private $date;
     private $layout;
     private $paymentTerms;
+    private $deliveryLocation;
     private $recipient;
     private $references;
     private $lines = [];
@@ -39,9 +42,14 @@ class DraftInvoices
         $this->references = new \stdClass();
     }
 
-    public function all()
+    public function all(Filter $filter = null)
     {
-        $invoices = $this->api->retrieve('/invoices/drafts');
+        if (is_null($filter)) {
+            $invoices = $this->api->retrieve('/invoices/drafts');
+        } else {
+            $invoices = $this->api->retrieve('/invoices/drafts'.$filter->filter());
+        }
+
         return $invoices;
     }
 
@@ -62,11 +70,18 @@ class DraftInvoices
             'paymentTerms' => $this->getPaymentTerms(),
             'recipient' => $this->getRecipient(),
             'references' => $this->getReferences(),
+            'deliveryLocation' => $this->getDeliveryLocation(),
             'lines' => $this->getLines()
         ];
 
         $invoice = $this->api->create('/invoices/drafts', $data);
         $this->api->setObject($invoice, $this);
+        return $this;
+    }
+
+    public function downloadPdf()
+    {
+        $this->api->download('/invoices/drafts/'.$this->getDraftInvoiceNumber().'/pdf');
         return $this;
     }
 
@@ -344,6 +359,34 @@ class DraftInvoices
     /**
      * @return mixed
      */
+    public function getDeliveryLocation()
+    {
+        return $this->deliveryLocation;
+    }
+
+    /**
+     * @param mixed $deliveryLocation
+     */
+    public function setDeliveryLocation($deliveryLocation)
+    {
+        $this->deliveryLocation = $deliveryLocation;
+    }
+
+
+    public function setDeliveryLocationNumber(int $deliveryLocationNumber)
+    {
+        if (isset($this->deliveryLocation)) {
+            $this->deliveryLocation->deliveryLocationNumber = $deliveryLocationNumber;
+        } else {
+            $this->deliveryLocation = new DeliveryLocation($deliveryLocationNumber);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getDraftInvoiceNumber()
     {
         return $this->draftInvoiceNumber;
@@ -377,9 +420,9 @@ class DraftInvoices
         return $this;
     }
 
-    public function setInvoiceLine(string $productNumber, string $name, int $quantity, $price, $discountPrice)
+    public function setInvoiceLine(string $productNumber, string $name, int $quantity, $price)
     {
-        $this->lines[] = new Line($productNumber, $name, $quantity, $price, $discountPrice);
+        $this->lines[] = new Line($productNumber, $name, $quantity, $price);
 
         return $this;
     }

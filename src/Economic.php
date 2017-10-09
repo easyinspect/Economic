@@ -51,6 +51,14 @@ class Economic
         return $data;
     }
 
+    public function download($url)
+    {
+        $response = $this->client->get($url, $this->headers);
+
+        return $response->getBody()->getContents();
+
+    }
+
     public function create($url, $body)
     {
 
@@ -74,6 +82,7 @@ class Economic
     public function delete($url)
     {
         $this->client->delete($url, $this->headers);
+        return $this;
     }
 
     public function setObject($object, $methods)
