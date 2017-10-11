@@ -193,7 +193,7 @@ class Customer
         return $this;
     }
 
-    public function getPaymentTerms() : PaymentTerms
+    public function getPaymentTerms() : ?PaymentTerms
     {
         return $this->paymentTerms;
     }
@@ -226,7 +226,7 @@ class Customer
         return $this;
     }
 
-    public function getCustomerGroup() : CustomerGroup
+    public function getCustomerGroup() : ?CustomerGroup
     {
         return $this->customerGroup;
     }
@@ -369,7 +369,7 @@ class Customer
         return $this;
     }
 
-    public function getVatZone() : VatZone
+    public function getVatZone() : ?VatZone
     {
         return $this->vatZone;
     }
@@ -459,7 +459,7 @@ class Customer
         return $this;
     }
 
-    public function getCustomerContact() : CustomerContact
+    public function getCustomerContact() : ?CustomerContact
     {
         return new CustomerContact($this->customerContact);
     }
@@ -481,7 +481,7 @@ class Customer
         return $this;
     }
 
-    public function getLayout() : Layout
+    public function getLayout() : ?Layout
     {
         return new Layout($this->layout);
     }
@@ -503,7 +503,7 @@ class Customer
         return $this;
     }
 
-    public function getSalesPerson() : SalesPerson
+    public function getSalesPerson() : ?SalesPerson
     {
         return new SalesPerson($this->salesPerson);
     }
