@@ -9,23 +9,24 @@
 namespace Economic;
 
 use GuzzleHttp\Client;
-use Economic\Models\Customer;
-use Economic\Models\CustomerCollection;
-use Economic\Models\Units;
-use Economic\Models\Products;
-use Economic\Models\PaymentTypes;
-use Economic\Models\Currency;
-use Economic\Models\Layouts;
-use Economic\Models\DraftInvoices;
+use Economic\Models\{
+    Customer, CustomerCollection, Invoices, Units, Products, PaymentTypes, Currency, Layouts, DraftInvoices
+};
 
 class Economic
 {
+    /** @var string $appSecretToken */
     private $appSecretToken;
+    /** @var string $agreementGrantToken */
     private $agreementGrantToken;
+    /** @var string $contentType */
     private $contentType = 'application/json';
+    /** @var string $baseUrl */
     private $baseUrl = 'https://restapi.e-conomic.com/';
+    /** @var array $headers */
     private $headers;
 
+    /** @var Client $client */
     private $client;
 
     public function __construct($appSecretToken, $agreementGrantToken)
@@ -87,13 +88,13 @@ class Economic
 
     public function setObject($object, $methods)
     {
-        foreach ($object as $key => $value)
-        {
-            if (method_exists($methods, 'set'.ucfirst($key)))
-            {
+
+        foreach ($object as $key => $value) {
+            if (method_exists($methods, 'set' . ucfirst($key))) {
                 $methods->{'set' . ucfirst($key)}($value);
             }
         }
+
         return $this;
     }
 
@@ -167,6 +168,13 @@ class Economic
     public function draftInvoices() : DraftInvoices
     {
         return new DraftInvoices($this);
+    }
+
+    /** @return Invoices */
+
+    public function Invoices() : Invoices
+    {
+        return new Invoices($this);
     }
 
 }

@@ -11,9 +11,13 @@ namespace Economic;
 
 class Filter
 {
+    /** @var array $filterable */
     private $filterable;
+    /** @var array $operator */
     private $operator;
+    /** @var array $value */
     private $value;
+    /** @var string $string */
     private $string = null;
 
     public function __construct($filterable = [], $operator = [], $value = [])

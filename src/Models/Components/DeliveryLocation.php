@@ -11,9 +11,10 @@ namespace Economic\Models\Components;
 
 class DeliveryLocation
 {
+    /** @var int $deliveryLocationNumber */
     public $deliveryLocationNumber;
 
-    public function __construct($deliveryLocationNumber)
+    public function __construct(int $deliveryLocationNumber)
     {
         $this->deliveryLocationNumber = $deliveryLocationNumber;
     }

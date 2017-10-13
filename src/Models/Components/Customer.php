@@ -11,9 +11,10 @@ namespace Economic\Models\Components;
 
 class Customer
 {
+    /** @var  int $customerNumber */
     public $customerNumber;
 
-    public function __construct($customerNumber)
+    public function __construct(int $customerNumber)
     {
         $this->customerNumber = $customerNumber;
     }

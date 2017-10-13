@@ -11,9 +11,10 @@ namespace Economic\Models\Components;
 
 class Product
 {
+    /** @var int $productNumber */
     public $productNumber;
 
-    public function __construct($productNumber)
+    public function __construct(string $productNumber)
     {
         $this->productNumber = $productNumber;
     }

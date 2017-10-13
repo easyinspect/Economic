@@ -9,12 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
-use Economic\Models\Components\CustomerGroup;
-use Economic\Models\Components\VatZone;
-use Economic\Models\Components\PaymentTerms;
-use Economic\Models\Components\CustomerContact;
-use Economic\Models\Components\Layout;
-use Economic\Models\Components\SalesPerson;
+use Economic\Models\Components\{CustomerGroup, VatZone, PaymentTerms, CustomerContact, SalesPerson};
 
 class Customer
 {
@@ -22,9 +17,9 @@ class Customer
     private $customerNumber;
     /** @var string $currency*/
     private $currency;
-    /** @var PaymentTerms*/
+    /** @var PaymentTerms $paymentTerms*/
     private $paymentTerms;
-    /** @var CustomerGroup*/
+    /** @var CustomerGroup $customerGroup*/
     private $customerGroup;
     /** @var string $address*/
     private $address;
@@ -46,32 +41,26 @@ class Customer
     private $telephoneAndFaxNumber;
     /** @var string $website*/
     private $website;
-    /** @var VatZone*/
+    /** @var VatZone $vatZone*/
     private $vatZone;
     /** @var string $lastUpdated*/
     private $lastUpdated;
-    /** @var string $contacts*/
-    private $contacts;
     /** @var boolean $barred*/
     private $barred;
     /** @var string $corporateIdentificationNumber*/
     private $corporateIdentificationNumber;
     /** @var int $creditLimit*/
     private $creditLimit;
-    /** @var CustomerContact*/
+    /** @var CustomerContact $customerContact*/
     private $customerContact;
     /** @var string $ean*/
     private $ean;
-    /** @var Layout*/
-    private $layout;
     /** @var string $publicEntryNumber*/
     private $publicEntryNumber;
-    /** @var SalesPerson*/
+    /** @var SalesPerson $salesPerson*/
     private $salesPerson;
-    /** @var string $vatNumber*/
-    private $vatNumber;
 
-    /** @var Economic*/
+    /** @var Economic $api*/
     private $api;
 
     public function __construct(Economic $api)
@@ -107,15 +96,13 @@ class Customer
             'corporateIdentificationNumber' => $this->getCorporateIdentificationNumber(),
             'country' => $this->getCountry(),
             'creditLimit' => $this->getCreditLimit(),
-            //1. Før at man kan tilknytte en kundekontakt, skal de være oprettet 'customerContact' => $this->getCustomerContact(),
+            'customerContact' => $this->getCustomerContact(),
             'customerNumber' => $this->getCustomerNumber(),
             'ean' => $this->getEan(),
             'email' => $this->getEmail(),
-            //2. Error'layout' => $this->getLayout(),
             'publicEntryNumber' => $this->getPublicEntryNumber(),
-            //3. Error'salesPerson' => $this->getSalesPerson(),
+            'salesPerson' => $this->getSalesPerson(),
             'telephoneAndFaxNumber' => $this->getTelephoneAndFaxNumber(),
-            'vatNumber' => $this->getVatNumber(),
             'zip' => $this->getZip()
         ];
 
@@ -139,15 +126,13 @@ class Customer
             'corporateIdentificationNumber' => $this->getCorporateIdentificationNumber(),
             'country' => $this->getCountry(),
             'creditLimit' => $this->getCreditLimit(),
-            //1. Før at man kan tilknytte en kundekontakt, skal de være oprettet 'customerContact' => $this->getCustomerContact(),
+            'customerContact' => $this->getCustomerContact(),
             'customerNumber' => $this->getCustomerNumber(),
             'ean' => $this->getEan(),
             'email' => $this->getEmail(),
-            //2. Error'layout' => $this->getLayout(),
             'publicEntryNumber' => $this->getPublicEntryNumber(),
-            //3. Error'salesPerson' => $this->getSalesPerson(),
+            'salesPerson' => $this->getSalesPerson(),
             'telephoneAndFaxNumber' => $this->getTelephoneAndFaxNumber(),
-            'vatNumber' => $this->getVatNumber(),
             'zip' => $this->getZip()
         ];
 
@@ -171,32 +156,50 @@ class Customer
     // Getters & Setters
 
 
-    public function getCustomerNumber()
+    /** @return int */
+
+    public function getCustomerNumber() : ?int
     {
         return $this->customerNumber;
     }
 
-    public function setCustomerNumber($customerNumber)
+    /**
+     * @param int $customerNumber
+     * @return $this */
+
+    public function setCustomerNumber(int $customerNumber)
     {
         $this->customerNumber = $customerNumber;
         return $this;
     }
 
-    public function getCurrency()
+    /** @return string */
+
+    public function getCurrency() : ?string
     {
         return $this->currency;
     }
 
-    public function setCurrency($currency)
+    /**
+     * @param string $currency
+     * @return $this */
+
+    public function setCurrency(string $currency)
     {
         $this->currency = $currency;
         return $this;
     }
 
+    /** @return PaymentTerms */
+
     public function getPaymentTerms() : ?PaymentTerms
     {
         return $this->paymentTerms;
     }
+
+    /**
+     * @param PaymentTerms
+     * @return $this */
 
     public function setPaymentTerms($paymentTerms)
     {
@@ -204,7 +207,10 @@ class Customer
         return $this;
     }
 
-    public function getPaymentTermsNumber() {
+    /** @return int */
+
+    public function getPaymentTermsNumber() : ?int
+    {
 
         if (isset($this->paymentTerms))
         {
@@ -213,6 +219,10 @@ class Customer
 
         return null;
     }
+
+    /**
+     * @param int $paymentTermsNumber
+     * @return $this */
 
     public function setPaymentTermsNumber(int $paymentTermsNumber)
     {
@@ -226,10 +236,17 @@ class Customer
         return $this;
     }
 
+    /** @return CustomerGroup */
+
     public function getCustomerGroup() : ?CustomerGroup
     {
         return $this->customerGroup;
     }
+
+    /**
+     * @param CustomerGroup $customerGroup
+     * @return $this
+     */
 
     public function setCustomerGroup($customerGroup)
     {
@@ -237,7 +254,9 @@ class Customer
         return $this;
     }
 
-    public function getCustomerGroupNumber()
+    /** @return int */
+
+    public function getCustomerGroupNumber() : ?int
     {
         if (isset($this->customerGroup))
         {
@@ -246,6 +265,11 @@ class Customer
 
         return null;
     }
+
+    /**
+     * @param int $customerGroupNumber
+     * @return $this
+     */
 
     public function setCustomerGroupNumber(int $customerGroupNumber)
     {
@@ -259,115 +283,177 @@ class Customer
         return $this;
     }
 
-    public function getAddress()
+    /** @return string */
+
+    public function getAddress() : ?string
     {
         return $this->address;
     }
 
-    public function setAddress($address)
+    /**
+     * @param string $address
+     * @return $this */
+
+    public function setAddress(string $address)
     {
         $this->address = $address;
         return $this;
     }
 
-    public function getBalance()
+    /** @return float */
+
+    public function getBalance() : ?float
     {
         return $this->balance;
     }
 
-    public function setBalance($balance)
+    /**
+     * @param float $balance
+     * @return $this */
+
+    public function setBalance(float $balance)
     {
         $this->balance = $balance;
         return $this;
     }
 
-    public function getDueAmount()
+    /** @return float */
+
+    public function getDueAmount() : ?float
     {
         return $this->dueAmount;
     }
 
-    public function setDueAmount($dueAmount)
+    /**
+     * @param float $dueAmount
+     * @return $this */
+
+    public function setDueAmount(float $dueAmount)
     {
         $this->dueAmount = $dueAmount;
         return $this;
     }
 
-    public function getCity()
+    /** @return string */
+
+    public function getCity() : ?string
     {
         return $this->city;
     }
 
-    public function setCity($city)
+    /**
+     * @param string $city
+     * @return $this */
+
+    public function setCity(string $city)
     {
         $this->city = $city;
         return $this;
     }
 
-    public function getCountry()
+    /** @return string */
+
+    public function getCountry() : ?string
     {
         return $this->country;
     }
 
-    public function setCountry($country)
+    /**
+     * @param string $country
+     * @return $this */
+
+    public function setCountry(string $country)
     {
         $this->country = $country;
         return $this;
     }
 
-    public function getEmail()
+    /** @return string */
+
+    public function getEmail() : ?string
     {
         return $this->email;
     }
 
-    public function setEmail($email)
+    /**
+     * @param string $email
+     * @return $this */
+
+    public function setEmail(string $email)
     {
         $this->email = $email;
         return $this;
     }
 
-    public function getName()
+    /** @return string */
+
+    public function getName() : ?string
     {
         return $this->name;
     }
 
-    public function setName($name)
+    /**
+     * @param string $name
+     * @return $this */
+
+    public function setName(string $name)
     {
         $this->name = $name;
         return $this;
     }
 
-    public function getZip()
+    /** @return string */
+
+    public function getZip() : ?string
     {
         return $this->zip;
     }
 
-    public function setZip($zip)
+    /**
+     * @param string $zip
+     * @return $this */
+
+    public function setZip(string $zip)
     {
         $this->zip = $zip;
         return $this;
     }
 
-    public function getTelephoneAndFaxNumber()
+    /** @return string */
+
+    public function getTelephoneAndFaxNumber() : ?string
     {
         return $this->telephoneAndFaxNumber;
     }
 
-    public function setTelephoneAndFaxNumber($telephoneAndFaxNumber)
+    /**
+     * @param string $telephoneAndFaxNumber
+     * @return $this */
+
+    public function setTelephoneAndFaxNumber(string $telephoneAndFaxNumber)
     {
         $this->telephoneAndFaxNumber = $telephoneAndFaxNumber;
         return $this;
     }
 
-    public function getWebsite()
+    /** @return string */
+
+    public function getWebsite() : ?string
     {
         return $this->website;
     }
 
-    public function setWebsite($website)
+    /**
+     * @param string $website
+     * @return $this */
+
+    public function setWebsite(string $website)
     {
         $this->website = $website;
         return $this;
     }
+
+    /** @return VatZone */
 
     public function getVatZone() : ?VatZone
     {
@@ -375,7 +461,7 @@ class Customer
     }
 
     /**
-     * @param \stdClass|object $vatZone
+     * @param VatZone $vatZone
      * @return $this
      */
     public function setVatZone($vatZone)
@@ -384,7 +470,9 @@ class Customer
         return $this;
     }
 
-    public function getVatZoneNumber()
+    /** @return int */
+
+    public function getVatZoneNumber() : ?int
     {
         if (isset($this->vatZone))
         {
@@ -392,6 +480,10 @@ class Customer
         }
         return null;
     }
+
+    /**
+     * @param int $vatZoneNumber
+     * @return $this */
 
     public function setVatZoneNumber(int $vatZoneNumber)
     {
@@ -404,65 +496,85 @@ class Customer
         return $this;
     }
 
-    public function getLastUpdated()
+
+    /** @return string */
+
+    public function getLastUpdated() : ?string
     {
         return $this->lastUpdated;
     }
 
-    public function setLastUpdated($lastUpdated)
+    /**
+     * @param string $lastUpdated
+     * @return $this */
+
+    public function setLastUpdated(string $lastUpdated)
     {
         $this->lastUpdated = $lastUpdated;
         return $this;
     }
 
-    public function getContacts()
-    {
-        return $this->contacts;
-    }
+    /** @return boolean */
 
-    public function setContacts($contacts)
-    {
-        $this->contacts = $contacts;
-        return $this;
-    }
-
-    public function getBarred()
+    public function getBarred() : ?boolean
     {
         return $this->barred;
     }
 
-    public function setBarred($barred)
+    /**
+     * @param boolean $barred
+     * @return $this */
+
+    public function setBarred(boolean $barred)
     {
         $this->barred = $barred;
         return $this;
     }
 
-    public function getCorporateIdentificationNumber()
+    /** @return string */
+
+    public function getCorporateIdentificationNumber() : ?string
     {
         return $this->corporateIdentificationNumber;
     }
 
-    public function setCorporateIdentificationNumber($corporateIdentificationNumber)
+    /**
+     * @param string $corporateIdentificationNumber
+     * @return $this */
+
+    public function setCorporateIdentificationNumber(string $corporateIdentificationNumber)
     {
         $this->corporateIdentificationNumber = $corporateIdentificationNumber;
         return $this;
     }
 
-    public function getCreditLimit()
+    /** @return float */
+
+    public function getCreditLimit() : ?float
     {
         return $this->creditLimit;
     }
 
-    public function setCreditLimit($creditLimit)
+    /**
+     * @param float $creditLimit
+     * @return $this */
+
+    public function setCreditLimit(float $creditLimit)
     {
         $this->creditLimit = $creditLimit;
         return $this;
     }
 
+    /** @return CustomerContact */
+
     public function getCustomerContact() : ?CustomerContact
     {
-        return new CustomerContact($this->customerContact);
+        return $this->customerContact;
     }
+
+    /**
+     * @param CustomerContact
+     * @return $this */
 
     public function setCustomerContact($customerContact)
     {
@@ -470,58 +582,106 @@ class Customer
         return $this;
     }
 
-    public function getEan()
+    /** @return int */
+
+    public function getCustomerContactNumber() : ?int
+    {
+        if (isset($this->customerContact)) {
+            return $this->customerContact->customerContactNumber;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param int $customerContactNumber
+     * @return $this */
+
+    public function setCustomerContactNumber(int $customerContactNumber)
+    {
+        if (isset($this->customerContact)) {
+            $this->customerContact->customerContactNumber = $customerContactNumber;
+        } else {
+            $this->customerContact = new CustomerContact($customerContactNumber);
+        }
+
+        return $this;
+    }
+
+    /** @return string */
+
+    public function getEan() : ?string
     {
         return $this->ean;
     }
 
-    public function setEan($ean)
+    /**
+     * @param string $ean
+     * @return $this */
+
+    public function setEan(string $ean)
     {
         $this->ean = $ean;
         return $this;
     }
 
-    public function getLayout() : ?Layout
-    {
-        return new Layout($this->layout);
-    }
+    /** @return string */
 
-    public function setLayout($layout)
-    {
-        $this->layout = $layout;
-        return $this;
-    }
-
-    public function getPublicEntryNumber()
+    public function getPublicEntryNumber() : ?string
     {
         return $this->publicEntryNumber;
     }
 
-    public function setPublicEntryNumber($publicEntryNumber)
+    /**
+     * @param string $publicEntryNumber
+     * @return $this */
+
+    public function setPublicEntryNumber(string $publicEntryNumber)
     {
         $this->publicEntryNumber = $publicEntryNumber;
         return $this;
     }
 
+    /** @return SalesPerson */
+
     public function getSalesPerson() : ?SalesPerson
     {
-        return new SalesPerson($this->salesPerson);
+        return $this->salesPerson;
     }
+
+    /**
+     * @param SalesPerson
+     * @return $this*/
 
     public function setSalesPerson($salesPerson)
     {
         $this->salesPerson = $salesPerson;
-    }
-
-    public function getVatNumber()
-    {
-        return $this->vatNumber;
-    }
-
-    public function setVatNumber($vatNumber)
-    {
-        $this->vatNumber = $vatNumber;
         return $this;
+    }
+
+    /**
+     * @param int $employeeNumber
+     * @return $this */
+
+    public function setSalesPersonNumber(int $employeeNumber)
+    {
+        if (isset($this->salesPerson)) {
+            $this->salesPerson->employeeNumber = $employeeNumber;
+        } else {
+            $this->salesPerson = new SalesPerson($employeeNumber);
+        }
+        return $this;
+    }
+
+    /** @return int */
+
+    public function getSalesPersonNumber() : ?int
+    {
+        if (isset($this->salesPerson)) {
+            return $this->salesPerson->employeeNumber;
+        }
+
+        return null;
     }
 
 }

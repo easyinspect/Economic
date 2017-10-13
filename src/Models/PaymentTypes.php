@@ -8,12 +8,11 @@
 
 namespace Economic\Models;
 
-
 use Economic\Economic;
 
 class PaymentTypes
 {
-
+    /** @var Economic $api*/
     private $api;
 
     public function __construct(Economic $api)

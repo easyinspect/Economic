@@ -11,7 +11,7 @@ namespace Economic\Models\Components;
 
 class CustomerGroup
 {
-
+    /** @var int $customerGroupNumber */
     public $customerGroupNumber;
 
     public function __construct(int $customerGroupNumber)

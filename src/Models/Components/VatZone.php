@@ -10,6 +10,7 @@ namespace Economic\Models\Components;
 
 class VatZone
 {
+    /** @var int $vatZoneNumber */
     public $vatZoneNumber;
 
     public function __construct(int $vatZoneNumber)

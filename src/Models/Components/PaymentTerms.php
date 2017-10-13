@@ -11,7 +11,7 @@ namespace Economic\Models\Components;
 
 class PaymentTerms
 {
-
+    /** @var int $paymentTermsNumber */
     public $paymentTermsNumber;
 
     public function __construct(int $paymentTermsNumber)

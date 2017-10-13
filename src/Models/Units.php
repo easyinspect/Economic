@@ -12,10 +12,12 @@ use Economic\Economic;
 
 class Units
 {
-
+    /** @var string $name*/
     private $name;
+    /** @var int $unitNumber*/
     private $unitNumber;
 
+    /** @var Economic $api*/
     private $api;
 
     public function __construct(Economic $api)
@@ -71,7 +73,7 @@ class Units
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : ?string
     {
         return $this->name;
     }
@@ -80,17 +82,16 @@ class Units
      * @param string $name
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
-
         return $this;
     }
 
     /**
      * @return int
      */
-    public function getUnitNumber()
+    public function getUnitNumber() : ?int
     {
         return $this->unitNumber;
     }
@@ -99,10 +100,9 @@ class Units
      * @param int $unitNumber
      * @return $this
      */
-    public function setUnitNumber($unitNumber)
+    public function setUnitNumber(int $unitNumber)
     {
         $this->unitNumber = $unitNumber;
-
         return $this;
     }
 

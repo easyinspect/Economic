@@ -8,11 +8,11 @@
 
 namespace Economic\Models;
 
-
 use Economic\Economic;
 
 class Layouts
 {
+    /** @var Economic $api*/
     private $api;
 
     public function __construct(Economic $api)

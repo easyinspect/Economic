@@ -11,10 +11,10 @@ namespace Economic\Models\Components;
 
 class Layout
 {
-
+    /** @var int $layoutNumber */
     public $layoutNumber;
 
-    public function __construct($layoutNumber)
+    public function __construct(int $layoutNumber)
     {
         $this->layoutNumber = $layoutNumber;
     }

@@ -22,18 +22,28 @@ use Economic\Models\Components\Line;
 
 class DraftInvoices
 {
-
+    /** @var int $draftInvoiceNumber*/
     private $draftInvoiceNumber;
+    /** @var string $currency*/
     private $currency;
+    /** @var Customer $customer*/
     private $customer;
+    /** @var string $date*/
     private $date;
+    /** @var Layout $layout*/
     private $layout;
+    /** @var PaymentTerms $paymentTerms*/
     private $paymentTerms;
+    /** @var DeliveryLocation $deliveryLocation*/
     private $deliveryLocation;
+    /** @var Recipient $recipient*/
     private $recipient;
+    /** @var object $references*/
     private $references;
+    /** @var array $lines*/
     private $lines = [];
 
+    /** @var Economic $api*/
     private $api;
 
     public function __construct(Economic $api)
@@ -79,12 +89,6 @@ class DraftInvoices
         return $this;
     }
 
-    public function downloadPdf()
-    {
-        $this->api->download('/invoices/drafts/'.$this->getDraftInvoiceNumber().'/pdf');
-        return $this;
-    }
-
     public function bookInvoice()
     {
        $data = [
@@ -104,7 +108,7 @@ class DraftInvoices
     /**
      * @return mixed
      */
-    public function getCurrency()
+    public function getCurrency() : ?string
     {
         return $this->currency;
     }
@@ -122,13 +126,13 @@ class DraftInvoices
     /**
      * @return Customer
      */
-    public function getCustomer()
+    public function getCustomer() : ?Customer
     {
         return $this->customer;
     }
 
     /**
-     * @param mixed $customer
+     * @param Customer $customer
      * @return $this
      */
     public function setCustomer($customer)
@@ -137,7 +141,9 @@ class DraftInvoices
         return $this;
     }
 
-    public function getCustomerNumber()
+    /** @return int */
+
+    public function getCustomerNumber() : ?int
     {
         if (isset($this->customer)) {
             return $this->customer->customerNumber;
@@ -161,18 +167,18 @@ class DraftInvoices
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getDate()
+    public function getDate() : ?string
     {
         return $this->date;
     }
 
     /**
-     * @param mixed $date
+     * @param string $date
      * @return $this
      */
-    public function setDate($date)
+    public function setDate(string $date)
     {
         $this->date = $date;
         return $this;
@@ -181,7 +187,7 @@ class DraftInvoices
     /**
      * @return Layout
      */
-    public function getLayout() : Layout
+    public function getLayout() : ?Layout
     {
         return $this->layout;
     }
@@ -196,13 +202,20 @@ class DraftInvoices
         return $this;
     }
 
-    public function getLayoutNumber()
+    /** @return int */
+
+    public function getLayoutNumber() : ?int
     {
         if (isset($this->layout)) {
             return $this->layout->layoutNumber;
         }
         return null;
     }
+
+    /**
+     * @param int $layoutNumber
+     * @return $this
+     */
 
     public function setLayoutNumber(int $layoutNumber)
     {
@@ -215,15 +228,15 @@ class DraftInvoices
     }
 
     /**
-     * @return mixed
+     * @return PaymentTerms
      */
-    public function getPaymentTerms()
+    public function getPaymentTerms() : ?PaymentTerms
     {
         return $this->paymentTerms;
     }
 
     /**
-     * @param mixed $paymentTerms
+     * @param PaymentTerms $paymentTerms
      * @return $this
      */
     public function setPaymentTerms($paymentTerms)
@@ -232,13 +245,20 @@ class DraftInvoices
         return $this;
     }
 
-    public function getPaymentTermsNumber()
+    /** @return int */
+
+    public function getPaymentTermsNumber() : ?int
     {
         if (isset($this->paymentTerms)) {
             return $this->paymentTerms->paymentTermsNumber;
         }
         return null;
     }
+
+    /**
+     * @param int $paymentTermsNumber
+     * @return $this
+     */
 
     public function setPaymentTermsNumber(int $paymentTermsNumber)
     {
@@ -251,28 +271,37 @@ class DraftInvoices
     }
 
     /**
-     * @return mixed
+     * @return Recipient
      */
-    public function getRecipient()
+    public function getRecipient() : ?Recipient
     {
         return $this->recipient;
     }
 
     /**
-     * @param mixed $recipient
+     * @param Recipient $recipient
+     * @return $this
      */
     public function setRecipient($recipient)
     {
         $this->recipient = $recipient;
+        return $this;
     }
 
-    public function getRecipientName()
+    /** @return string */
+
+    public function getRecipientName() : ?string
     {
         if (isset($this->recipient)) {
             return $this->recipient->name;
         }
         return null;
     }
+
+    /**
+     * @param string $name
+     * @return $this
+     */
 
     public function setRecipientName(string $name)
     {
@@ -284,13 +313,20 @@ class DraftInvoices
         return $this;
     }
 
-    public function getRecipientVatZoneNumber()
+    /** @return int */
+
+    public function getRecipientVatZoneNumber() : ?int
     {
         if (isset($this->recipient)) {
             return $this->recipient->vatZone->vatZoneNumber;
         }
         return null;
     }
+
+    /**
+     * @param int $vatZoneNumber
+     * @return $this
+     */
 
     public function setRecipientVatZoneNumber(int $vatZoneNumber)
     {
@@ -303,15 +339,15 @@ class DraftInvoices
     }
 
     /**
-     * @return mixed
+     * @return \stdClass
      */
-    public function getReferences()
+    public function getReferences() : ?\stdClass
     {
         return $this->references;
     }
 
     /**
-     * @param mixed $references
+     * @param \stdClass $references
      * @return $this
      */
     public function setReferences($references)
@@ -320,13 +356,20 @@ class DraftInvoices
         return $this;
     }
 
-    public function getSalesPersonNumber()
+    /** @return int */
+
+    public function getSalesPersonNumber() : ?int
     {
         if (isset($this->references->salesPerson)) {
             return $this->references->salesPerson->employeeNumber;
         }
         return null;
     }
+
+    /**
+     * @param int $employeeNumber
+     * @return $this
+     */
 
     public function setSalesPersonNumber(int $employeeNumber)
     {
@@ -338,13 +381,20 @@ class DraftInvoices
         return $this;
     }
 
-    public function getVendorReferenceNumber()
+    /** @return int */
+
+    public function getVendorReferenceNumber() : ?int
     {
         if (isset($this->references->vendorReference)) {
             return $this->references->vendorReference->employeeNumber;
         }
         return null;
     }
+
+    /**
+     * @param int $employeeNumber
+     * @return $this
+     */
 
     public function setVendorReferenceNumber(int $employeeNumber)
     {
@@ -357,21 +407,39 @@ class DraftInvoices
     }
 
     /**
-     * @return mixed
+     * @return DeliveryLocation
      */
-    public function getDeliveryLocation()
+    public function getDeliveryLocation() : ?DeliveryLocation
     {
         return $this->deliveryLocation;
     }
 
     /**
-     * @param mixed $deliveryLocation
+     * @param DeliveryLocation $deliveryLocation
+     * @return $this;
      */
     public function setDeliveryLocation($deliveryLocation)
     {
         $this->deliveryLocation = $deliveryLocation;
+        return $this;
     }
 
+    /** @return int */
+
+    public function getDeliveryLocationNumber() : ?int
+    {
+
+        if (isset($this->deliveryLocation)) {
+            return $this->deliveryLocation->deliveryLocationNumber;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param int $deliveryLocationNumber
+     * @return $this
+     */
 
     public function setDeliveryLocationNumber(int $deliveryLocationNumber)
     {
@@ -384,9 +452,7 @@ class DraftInvoices
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
+    /** @return int */
     public function getDraftInvoiceNumber()
     {
         return $this->draftInvoiceNumber;
@@ -420,9 +486,9 @@ class DraftInvoices
         return $this;
     }
 
-    public function setInvoiceLine(string $productNumber, string $name, int $quantity, $price)
+    public function setInvoiceLine(string $productNumber, string $name, int $quantity, float $price, float $discountPercentage = 0)
     {
-        $this->lines[] = new Line($productNumber, $name, $quantity, $price);
+        $this->lines[] = new Line($productNumber, $name, $quantity, $price, $discountPercentage);
 
         return $this;
     }

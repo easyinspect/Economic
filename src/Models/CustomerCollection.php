@@ -8,11 +8,11 @@
 
 namespace Economic\Models;
 
-use Economic\Economic;
-use Economic\Filter;
+use Economic\{Economic, Filter};
 
 class CustomerCollection
 {
+    /** @var Economic $api*/
     private $api;
 
     public function __construct(Economic $api)

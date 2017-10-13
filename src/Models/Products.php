@@ -13,17 +13,28 @@ use Economic\Models\Components\ProductGroup;
 
 class Products
 {
+    /** @var string $barCode*/
     private $barCode;
+    /** @var boolean $barred*/
     private $barred;
+    /** @var float $costPrice*/
     private $costPrice;
+    /** @var float $salesPrice*/
     private $salesPrice;
+    /** @var float $recommendedPrice*/
     private $recommendedPrice;
+    /** @var string $description*/
     private $description;
+    /** @var string $lastUpdated*/
     private $lastUpdated;
+    /** @var string $name*/
     private $name;
+    /** @var ProductGroup $productGroup*/
     private $productGroup;
+    /** @var int $productNumber*/
     private $productNumber;
 
+    /** @var Economic $api*/
     private $api;
 
     public function __construct(Economic $api)
@@ -96,7 +107,7 @@ class Products
     /**
      * @return string
      */
-    public function getBarCode()
+    public function getBarCode() : ?string
     {
         return $this->barCode;
     }
@@ -105,7 +116,7 @@ class Products
      * @param string $barCode
      * @return $this;
      */
-    public function setBarCode($barCode)
+    public function setBarCode(string $barCode)
     {
         $this->barCode = $barCode;
         return $this;
@@ -114,7 +125,7 @@ class Products
     /**
      * @return boolean
      */
-    public function getBarred()
+    public function getBarred() : ?boolean
     {
         return $this->barred;
     }
@@ -123,7 +134,7 @@ class Products
      * @param boolean $barred
      * @return $this;
      */
-    public function setBarred($barred)
+    public function setBarred(boolean $barred)
     {
         $this->barred = $barred;
         return $this;
@@ -132,7 +143,7 @@ class Products
     /**
      * @return float
      */
-    public function getCostPrice()
+    public function getCostPrice() : ?float
     {
         return $this->costPrice;
     }
@@ -141,7 +152,7 @@ class Products
      * @param float $costPrice
      * @return $this;
      */
-    public function setCostPrice($costPrice)
+    public function setCostPrice(float $costPrice)
     {
         $this->costPrice = $costPrice;
         return $this;
@@ -150,7 +161,7 @@ class Products
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription() : ?string
     {
         return $this->description;
     }
@@ -159,7 +170,7 @@ class Products
      * @param string $description
      * @return $this;
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
         return $this;
@@ -168,7 +179,7 @@ class Products
     /**
      * @return string
      */
-    public function getLastUpdated()
+    public function getLastUpdated() : ?string
     {
         return $this->lastUpdated;
     }
@@ -177,7 +188,7 @@ class Products
      * @param string $lastUpdated
      * @return $this;
      */
-    public function setLastUpdated($lastUpdated)
+    public function setLastUpdated(string $lastUpdated)
     {
         $this->lastUpdated = $lastUpdated;
         return $this;
@@ -186,7 +197,7 @@ class Products
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : ?string
     {
         return $this->name;
     }
@@ -195,7 +206,7 @@ class Products
      * @param string $name
      * @return $this;
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
         return $this;
@@ -204,7 +215,7 @@ class Products
     /**
      * @return ProductGroup
      */
-    public function getProductGroup() : ProductGroup
+    public function getProductGroup() : ?ProductGroup
     {
         return $this->productGroup;
     }
@@ -219,13 +230,19 @@ class Products
         return $this;
     }
 
-    public function getProductGroupNumber()
+    /** @return int */
+
+    public function getProductGroupNumber() : ?int
     {
         if (isset($this->productGroup)) {
             return $this->productGroup->productGroupNumber;
         }
         return null;
     }
+
+    /**
+     * @param int $productGroupNumber
+     * @return $this */
 
     public function setProductGroupNumber(int $productGroupNumber)
     {
@@ -241,7 +258,7 @@ class Products
     /**
      * @return string
      */
-    public function getProductNumber()
+    public function getProductNumber() : ?string
     {
         return $this->productNumber;
     }
@@ -250,7 +267,7 @@ class Products
      * @param string $productNumber
      * @return $this;
      */
-    public function setProductNumber($productNumber)
+    public function setProductNumber(string $productNumber)
     {
         $this->productNumber = $productNumber;
         return $this;
@@ -259,7 +276,7 @@ class Products
     /**
      * @return float
      */
-    public function getSalesPrice()
+    public function getSalesPrice() : ?float
     {
         return $this->salesPrice;
     }
@@ -268,7 +285,7 @@ class Products
      * @param float $salesPrice
      * @return $this;
      */
-    public function setSalesPrice($salesPrice)
+    public function setSalesPrice(float $salesPrice)
     {
         $this->salesPrice = $salesPrice;
         return $this;
@@ -277,7 +294,7 @@ class Products
     /**
      * @return float
      */
-    public function getRecommendedPrice()
+    public function getRecommendedPrice() : ?float
     {
         return $this->recommendedPrice;
     }
@@ -286,7 +303,7 @@ class Products
      * @param float $recommendedPrice
      * @return $this;
      */
-    public function setRecommendedPrice($recommendedPrice)
+    public function setRecommendedPrice(float $recommendedPrice)
     {
         $this->recommendedPrice = $recommendedPrice;
         return $this;

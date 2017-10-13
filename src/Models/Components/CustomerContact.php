@@ -8,14 +8,15 @@
 
 namespace Economic\Models\Components;
 
+
 class CustomerContact
 {
+    /** @var int $customerContactNumber */
+    public $customerContactNumber;
 
-    public $customerContactnumber;
-
-    public function __construct($customerContact)
+    public function __construct(int $customerContact)
     {
-        $this->customerContactnumber = $customerContact;
+        $this->customerContactNumber = $customerContact;
     }
 
 }

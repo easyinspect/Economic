@@ -14,7 +14,7 @@ use Economic\Economic;
 class Currency
 {
 
-    /** @var Economic */
+    /** @var Economic $api*/
     private $api;
 
     public function __construct(Economic $api)
