@@ -8,10 +8,13 @@
 
 namespace Economic;
 
+
 use GuzzleHttp\Client;
 use Economic\Models\{
-    Customer, CustomerCollection, Invoices, Units, Products, PaymentTypes, Currency, Layouts, DraftInvoices
+    Customer, CustomerCollection, Invoices, Journals, Units, Products, PaymentTypes, Currency, Layouts, DraftInvoices
 };
+use Economic\Exceptions\{EconomicRequestException, EconomicServerException};
+use GuzzleHttp\Exception\{ClientException, ServerException, ConnectException};
 
 class Economic
 {
@@ -22,7 +25,7 @@ class Economic
     /** @var string $contentType */
     private $contentType = 'application/json';
     /** @var string $baseUrl */
-    private $baseUrl = 'https://restapi.e-conomic.com/';
+    private $baseUrl = 'https://restapi.e-conomic.com';
     /** @var array $headers */
     private $headers;
 
@@ -46,14 +49,27 @@ class Economic
 
     public function retrieve($url)
     {
-        $response = $this->client->get($url, $this->headers);
-        $data = json_decode($response->getBody()->getContents());
-
-        return $data;
+        try
+        {
+            return \GuzzleHttp\json_decode($this->client->get($url, $this->headers)->getBody()->getContents());
+        }
+        catch (ClientException $exception)
+        {
+            throw new EconomicRequestException();
+        }
+        catch (ServerException $exception)
+        {
+            throw new EconomicServerException();
+        }
+        catch (ConnectException $exception)
+        {
+            throw new EconomicServerException('E-conomic is not available.');
+        }
     }
 
     public function download($url)
     {
+
         $response = $this->client->get($url, $this->headers);
 
         return $response->getBody()->getContents();
@@ -88,7 +104,6 @@ class Economic
 
     public function setObject($object, $methods)
     {
-
         foreach ($object as $key => $value) {
             if (method_exists($methods, 'set' . ucfirst($key))) {
                 $methods->{'set' . ucfirst($key)}($value);
@@ -170,11 +185,22 @@ class Economic
         return new DraftInvoices($this);
     }
 
-    /** @return Invoices */
+    /**
+     * @return Invoices
+     */
 
-    public function Invoices() : Invoices
+    public function invoices() : Invoices
     {
         return new Invoices($this);
+    }
+
+    /**
+     * @return Journals
+     */
+
+    public function journals() : Journals
+    {
+        return new Journals($this);
     }
 
 }

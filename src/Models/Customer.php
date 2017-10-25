@@ -9,58 +9,60 @@
 namespace Economic\Models;
 
 use Economic\Economic;
-use Economic\Models\Components\{CustomerGroup, VatZone, PaymentTerms, CustomerContact, SalesPerson};
+use Economic\Models\Components\{CustomerGroup, VatZone, PaymentTerms, CustomerContact, SalesPerson, Templates, Totals};
 
 class Customer
 {
-    /** @var int $customerNumber*/
+    /** @var int $customerNumber */
     private $customerNumber;
-    /** @var string $currency*/
+    /** @var string $currency */
     private $currency;
-    /** @var PaymentTerms $paymentTerms*/
+    /** @var PaymentTerms $paymentTerms */
     private $paymentTerms;
-    /** @var CustomerGroup $customerGroup*/
+    /** @var CustomerGroup $customerGroup */
     private $customerGroup;
-    /** @var string $address*/
+    /** @var string $address */
     private $address;
-    /** @var float $balance*/
+    /** @var float $balance */
     private $balance;
-    /** @var float $dueAmount*/
+    /** @var float $dueAmount */
     private $dueAmount;
-    /** @var string $city*/
+    /** @var string $city */
     private $city;
-    /** @var string $country*/
+    /** @var string $country */
     private $country;
-    /** @var string $email*/
+    /** @var string $email */
     private $email;
-    /** @var string $name*/
+    /** @var string $name */
     private $name;
-    /** @var int $zip*/
+    /** @var int $zip */
     private $zip;
-    /** @var int $telephoneAndFaxNumber*/
+    /** @var int $telephoneAndFaxNumber */
     private $telephoneAndFaxNumber;
-    /** @var string $website*/
+    /** @var string $website */
     private $website;
-    /** @var VatZone $vatZone*/
+    /** @var VatZone $vatZone */
     private $vatZone;
-    /** @var string $lastUpdated*/
+    /** @var string $lastUpdated */
     private $lastUpdated;
-    /** @var boolean $barred*/
+    /** @var boolean $barred */
     private $barred;
-    /** @var string $corporateIdentificationNumber*/
+    /** @var string $corporateIdentificationNumber */
     private $corporateIdentificationNumber;
-    /** @var int $creditLimit*/
+    /** @var int $creditLimit */
     private $creditLimit;
-    /** @var CustomerContact $customerContact*/
+    /** @var CustomerContact $customerContact */
     private $customerContact;
-    /** @var string $ean*/
+    /** @var string $ean */
     private $ean;
-    /** @var string $publicEntryNumber*/
+    /** @var string $publicEntryNumber */
     private $publicEntryNumber;
-    /** @var SalesPerson $salesPerson*/
+    /** @var SalesPerson $salesPerson */
     private $salesPerson;
+    /** @var string $contacts */
+    private $contacts;
 
-    /** @var Economic $api*/
+    /** @var Economic $api */
     private $api;
 
     public function __construct(Economic $api)
@@ -106,9 +108,9 @@ class Customer
             'zip' => $this->getZip()
         ];
 
-       $customer = $this->api->create('/customers', array_filter($data));
-       $this->api->setObject($customer, $this);
-       return $this;
+        $customer = $this->api->create('/customers', array_filter($data));
+        $this->api->setObject($customer, $this);
+        return $this;
     }
 
     public function update()
@@ -143,13 +145,13 @@ class Customer
 
     public function draftInvoices()
     {
-        $invoices = $this->api->retrieve('/customers/'.$this->getCustomerNumber().'/invoices/drafts');
+        $invoices = $this->api->retrieve('/customers/' . $this->getCustomerNumber() . '/invoices/drafts');
         return $invoices;
     }
 
     public function bookedInvoices()
     {
-        $invoices = $this->api->retrieve('/customers/'.$this->getCustomerNumber().'/invoices/booked');
+        $invoices = $this->api->retrieve('/customers/' . $this->getCustomerNumber() . '/invoices/booked');
         return $invoices;
     }
 
@@ -158,14 +160,15 @@ class Customer
 
     /** @return int */
 
-    public function getCustomerNumber() : ?int
+    public function getCustomerNumber(): ?int
     {
         return $this->customerNumber;
     }
 
     /**
      * @param int $customerNumber
-     * @return $this */
+     * @return $this
+     */
 
     public function setCustomerNumber(int $customerNumber)
     {
@@ -175,14 +178,15 @@ class Customer
 
     /** @return string */
 
-    public function getCurrency() : ?string
+    public function getCurrency(): ?string
     {
         return $this->currency;
     }
 
     /**
      * @param string $currency
-     * @return $this */
+     * @return $this
+     */
 
     public function setCurrency(string $currency)
     {
@@ -190,16 +194,35 @@ class Customer
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getContacts(): string
+    {
+        return $this->contacts;
+    }
+
+    /**
+     * @param string $contacts
+     * @return $this
+     */
+    public function setContacts(string $contacts)
+    {
+        $this->contacts = $contacts;
+        return $this;
+    }
+
     /** @return PaymentTerms */
 
-    public function getPaymentTerms() : ?PaymentTerms
+    public function getPaymentTerms(): ?PaymentTerms
     {
         return $this->paymentTerms;
     }
 
     /**
      * @param PaymentTerms
-     * @return $this */
+     * @return $this
+     */
 
     public function setPaymentTerms($paymentTerms)
     {
@@ -209,11 +232,10 @@ class Customer
 
     /** @return int */
 
-    public function getPaymentTermsNumber() : ?int
+    public function getPaymentTermsNumber(): ?int
     {
 
-        if (isset($this->paymentTerms))
-        {
+        if (isset($this->paymentTerms)) {
             return $this->paymentTerms->paymentTermsNumber;
         }
 
@@ -222,12 +244,12 @@ class Customer
 
     /**
      * @param int $paymentTermsNumber
-     * @return $this */
+     * @return $this
+     */
 
     public function setPaymentTermsNumber(int $paymentTermsNumber)
     {
-        if (isset($this->paymentTerms))
-        {
+        if (isset($this->paymentTerms)) {
             $this->paymentTerms->paymentTermsNumber = $paymentTermsNumber;
         } else {
             $this->paymentTerms = new PaymentTerms($paymentTermsNumber);
@@ -238,7 +260,7 @@ class Customer
 
     /** @return CustomerGroup */
 
-    public function getCustomerGroup() : ?CustomerGroup
+    public function getCustomerGroup(): ?CustomerGroup
     {
         return $this->customerGroup;
     }
@@ -256,10 +278,9 @@ class Customer
 
     /** @return int */
 
-    public function getCustomerGroupNumber() : ?int
+    public function getCustomerGroupNumber(): ?int
     {
-        if (isset($this->customerGroup))
-        {
+        if (isset($this->customerGroup)) {
             return $this->customerGroup->customerGroupNumber;
         }
 
@@ -273,8 +294,7 @@ class Customer
 
     public function setCustomerGroupNumber(int $customerGroupNumber)
     {
-        if (isset($this->customerGroup))
-        {
+        if (isset($this->customerGroup)) {
             $this->customerGroup->customerGroupNumber = $customerGroupNumber;
         } else {
             $this->customerGroup = new CustomerGroup($customerGroupNumber);
@@ -285,14 +305,15 @@ class Customer
 
     /** @return string */
 
-    public function getAddress() : ?string
+    public function getAddress(): ?string
     {
         return $this->address;
     }
 
     /**
      * @param string $address
-     * @return $this */
+     * @return $this
+     */
 
     public function setAddress(string $address)
     {
@@ -302,14 +323,15 @@ class Customer
 
     /** @return float */
 
-    public function getBalance() : ?float
+    public function getBalance(): ?float
     {
         return $this->balance;
     }
 
     /**
      * @param float $balance
-     * @return $this */
+     * @return $this
+     */
 
     public function setBalance(float $balance)
     {
@@ -319,14 +341,15 @@ class Customer
 
     /** @return float */
 
-    public function getDueAmount() : ?float
+    public function getDueAmount(): ?float
     {
         return $this->dueAmount;
     }
 
     /**
      * @param float $dueAmount
-     * @return $this */
+     * @return $this
+     */
 
     public function setDueAmount(float $dueAmount)
     {
@@ -336,14 +359,15 @@ class Customer
 
     /** @return string */
 
-    public function getCity() : ?string
+    public function getCity(): ?string
     {
         return $this->city;
     }
 
     /**
      * @param string $city
-     * @return $this */
+     * @return $this
+     */
 
     public function setCity(string $city)
     {
@@ -353,14 +377,15 @@ class Customer
 
     /** @return string */
 
-    public function getCountry() : ?string
+    public function getCountry(): ?string
     {
         return $this->country;
     }
 
     /**
      * @param string $country
-     * @return $this */
+     * @return $this
+     */
 
     public function setCountry(string $country)
     {
@@ -370,14 +395,15 @@ class Customer
 
     /** @return string */
 
-    public function getEmail() : ?string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
     /**
      * @param string $email
-     * @return $this */
+     * @return $this
+     */
 
     public function setEmail(string $email)
     {
@@ -387,14 +413,15 @@ class Customer
 
     /** @return string */
 
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
      * @param string $name
-     * @return $this */
+     * @return $this
+     */
 
     public function setName(string $name)
     {
@@ -404,14 +431,15 @@ class Customer
 
     /** @return string */
 
-    public function getZip() : ?string
+    public function getZip(): ?string
     {
         return $this->zip;
     }
 
     /**
      * @param string $zip
-     * @return $this */
+     * @return $this
+     */
 
     public function setZip(string $zip)
     {
@@ -421,14 +449,15 @@ class Customer
 
     /** @return string */
 
-    public function getTelephoneAndFaxNumber() : ?string
+    public function getTelephoneAndFaxNumber(): ?string
     {
         return $this->telephoneAndFaxNumber;
     }
 
     /**
      * @param string $telephoneAndFaxNumber
-     * @return $this */
+     * @return $this
+     */
 
     public function setTelephoneAndFaxNumber(string $telephoneAndFaxNumber)
     {
@@ -438,14 +467,15 @@ class Customer
 
     /** @return string */
 
-    public function getWebsite() : ?string
+    public function getWebsite(): ?string
     {
         return $this->website;
     }
 
     /**
      * @param string $website
-     * @return $this */
+     * @return $this
+     */
 
     public function setWebsite(string $website)
     {
@@ -455,7 +485,7 @@ class Customer
 
     /** @return VatZone */
 
-    public function getVatZone() : ?VatZone
+    public function getVatZone(): ?VatZone
     {
         return $this->vatZone;
     }
@@ -472,10 +502,9 @@ class Customer
 
     /** @return int */
 
-    public function getVatZoneNumber() : ?int
+    public function getVatZoneNumber(): ?int
     {
-        if (isset($this->vatZone))
-        {
+        if (isset($this->vatZone)) {
             return $this->vatZone->vatZoneNumber;
         }
         return null;
@@ -483,12 +512,12 @@ class Customer
 
     /**
      * @param int $vatZoneNumber
-     * @return $this */
+     * @return $this
+     */
 
     public function setVatZoneNumber(int $vatZoneNumber)
     {
-        if (isset($this->vatZone))
-        {
+        if (isset($this->vatZone)) {
             $this->vatZone->vatZoneNumber = $vatZoneNumber;
         } else {
             $this->vatZone = new VatZone($vatZoneNumber);
@@ -499,14 +528,15 @@ class Customer
 
     /** @return string */
 
-    public function getLastUpdated() : ?string
+    public function getLastUpdated(): ?string
     {
         return $this->lastUpdated;
     }
 
     /**
      * @param string $lastUpdated
-     * @return $this */
+     * @return $this
+     */
 
     public function setLastUpdated(string $lastUpdated)
     {
@@ -516,14 +546,15 @@ class Customer
 
     /** @return boolean */
 
-    public function getBarred() : ?boolean
+    public function getBarred(): ?boolean
     {
         return $this->barred;
     }
 
     /**
      * @param boolean $barred
-     * @return $this */
+     * @return $this
+     */
 
     public function setBarred(boolean $barred)
     {
@@ -533,14 +564,15 @@ class Customer
 
     /** @return string */
 
-    public function getCorporateIdentificationNumber() : ?string
+    public function getCorporateIdentificationNumber(): ?string
     {
         return $this->corporateIdentificationNumber;
     }
 
     /**
      * @param string $corporateIdentificationNumber
-     * @return $this */
+     * @return $this
+     */
 
     public function setCorporateIdentificationNumber(string $corporateIdentificationNumber)
     {
@@ -550,14 +582,15 @@ class Customer
 
     /** @return float */
 
-    public function getCreditLimit() : ?float
+    public function getCreditLimit(): ?float
     {
         return $this->creditLimit;
     }
 
     /**
      * @param float $creditLimit
-     * @return $this */
+     * @return $this
+     */
 
     public function setCreditLimit(float $creditLimit)
     {
@@ -567,24 +600,25 @@ class Customer
 
     /** @return CustomerContact */
 
-    public function getCustomerContact() : ?CustomerContact
+    public function getCustomerContact(): ?CustomerContact
     {
         return $this->customerContact;
     }
 
     /**
      * @param CustomerContact
-     * @return $this */
+     * @return $this
+     */
 
     public function setCustomerContact($customerContact)
     {
-        $this->customerContact = $customerContact;
+        $this->customerContact = new CustomerContact($customerContact->customerContactNumber);
         return $this;
     }
 
     /** @return int */
 
-    public function getCustomerContactNumber() : ?int
+    public function getCustomerContactNumber(): ?int
     {
         if (isset($this->customerContact)) {
             return $this->customerContact->customerContactNumber;
@@ -595,7 +629,8 @@ class Customer
 
     /**
      * @param int $customerContactNumber
-     * @return $this */
+     * @return $this
+     */
 
     public function setCustomerContactNumber(int $customerContactNumber)
     {
@@ -610,14 +645,15 @@ class Customer
 
     /** @return string */
 
-    public function getEan() : ?string
+    public function getEan(): ?string
     {
         return $this->ean;
     }
 
     /**
      * @param string $ean
-     * @return $this */
+     * @return $this
+     */
 
     public function setEan(string $ean)
     {
@@ -627,14 +663,15 @@ class Customer
 
     /** @return string */
 
-    public function getPublicEntryNumber() : ?string
+    public function getPublicEntryNumber(): ?string
     {
         return $this->publicEntryNumber;
     }
 
     /**
      * @param string $publicEntryNumber
-     * @return $this */
+     * @return $this
+     */
 
     public function setPublicEntryNumber(string $publicEntryNumber)
     {
@@ -644,24 +681,26 @@ class Customer
 
     /** @return SalesPerson */
 
-    public function getSalesPerson() : ?SalesPerson
+    public function getSalesPerson(): ?SalesPerson
     {
         return $this->salesPerson;
     }
 
     /**
      * @param SalesPerson
-     * @return $this*/
+     * @return $this
+     */
 
     public function setSalesPerson($salesPerson)
     {
-        $this->salesPerson = $salesPerson;
+        $this->salesPerson = new SalesPerson($salesPerson->employeeNumber);
         return $this;
     }
 
     /**
      * @param int $employeeNumber
-     * @return $this */
+     * @return $this
+     */
 
     public function setSalesPersonNumber(int $employeeNumber)
     {
@@ -675,7 +714,7 @@ class Customer
 
     /** @return int */
 
-    public function getSalesPersonNumber() : ?int
+    public function getSalesPersonNumber(): ?int
     {
         if (isset($this->salesPerson)) {
             return $this->salesPerson->employeeNumber;
@@ -683,5 +722,4 @@ class Customer
 
         return null;
     }
-
 }
