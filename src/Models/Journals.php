@@ -32,7 +32,6 @@ class Journals
 
     public function create($id)
     {
-
         $entry = $this->api->create('/journals-experimental/'.$id.'/vouchers', $this->getEntries());
         $this->api->setObject($entry, $this);
         return $this;

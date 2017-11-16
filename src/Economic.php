@@ -8,12 +8,11 @@
 
 namespace Economic;
 
-
 use GuzzleHttp\Client;
 use Economic\Models\{
-    Customer, CustomerCollection, Invoices, Journals, Units, Products, PaymentTypes, Currency, Layouts, DraftInvoices
+    BillingContacts, Customer, CustomerCollection, Invoices, Journals, Units, Products, PaymentTypes, Currency, Layouts, DraftInvoices
 };
-use Economic\Exceptions\{EconomicRequestException, EconomicServerException};
+use Economic\Exceptions\{EconomicRequestException, EconomicServerException, EconomicConnectionException};
 use GuzzleHttp\Exception\{ClientException, ServerException, ConnectException};
 
 class Economic
@@ -63,43 +62,94 @@ class Economic
         }
         catch (ConnectException $exception)
         {
-            throw new EconomicServerException('E-conomic is not available.');
+            throw new EconomicConnectionException();
         }
     }
 
     public function download($url)
     {
 
-        $response = $this->client->get($url, $this->headers);
-
-        return $response->getBody()->getContents();
-
+        try {
+            return $this->client->get($url, $this->headers)->getBody()->getContents();
+        }
+        catch (ClientException $exception)
+        {
+            throw new EconomicRequestException();
+        }
+        catch (ServerException $exception)
+        {
+            throw new EconomicServerException();
+        }
+        catch (ConnectException $exception)
+        {
+            throw new EconomicConnectionException();
+        }
     }
 
     public function create($url, $body)
     {
+        try {
 
-        $this->headers['body'] = json_encode($body);
+            $this->headers['body'] = \GuzzleHttp\json_encode($body);
 
-        $create = $this->client->post($url, $this->headers);
-        $json = json_decode($create->getBody()->getContents());
-        return $json;
+            return \GuzzleHttp\json_decode($this->client->post($url, $this->headers)->getBody()->getContents());
+        }
+        catch (ClientException $exception)
+        {
+            throw new EconomicRequestException();
+        }
+        catch (ServerException $exception)
+        {
+            throw new EconomicServerException();
+        }
+        catch (ConnectException $exception)
+        {
+            throw new EconomicConnectionException();
+        }
+
     }
 
     public function update($url, $body)
     {
 
-        $this->headers['body'] = json_encode($body);
+        try {
 
-        $update = $this->client->put($url, $this->headers);
-        $json = json_decode($update->getBody()->getContents());
-        return $json;
+            $this->headers['body'] = \GuzzleHttp\json_encode($body);
+
+            return \GuzzleHttp\json_decode($this->client->put($url, $this->headers)->getBody()->getContents());
+        }
+        catch (ClientException $exception)
+        {
+            throw new EconomicRequestException();
+        }
+        catch (ServerException $exception)
+        {
+            throw new EconomicServerException();
+        }
+        catch (ConnectException $exception)
+        {
+            throw new EconomicConnectionException();
+        }
+
     }
 
     public function delete($url)
     {
-        $this->client->delete($url, $this->headers);
-        return $this;
+        try {
+            return $this->client->delete($url, $this->headers);
+        }
+        catch (ClientException $exception)
+        {
+            throw new EconomicRequestException();
+        }
+        catch (ServerException $exception)
+        {
+            throw new EconomicServerException();
+        }
+        catch (ConnectException $exception)
+        {
+            throw new EconomicConnectionException();
+        }
     }
 
     public function setObject($object, $methods)
@@ -201,6 +251,15 @@ class Economic
     public function journals() : Journals
     {
         return new Journals($this);
+    }
+
+    /**
+     * @return BillingContacts
+     */
+
+    public function billingContacts() : BillingContacts
+    {
+        return new BillingContacts($this);
     }
 
 }
