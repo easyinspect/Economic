@@ -20,12 +20,12 @@ class CustomerCollection
         $this->api = $api;
     }
 
-    public function all(Filter $filter = null)
+    public function all(Filter $filter = null, $pagesize = 1000)
     {
         if (is_null($filter)) {
-            $customers = $this->api->retrieve('/customers');
+            $customers = $this->api->retrieve('/customers?pagesize='.$pagesize);
         } else {
-            $customers = $this->api->retrieve('/customers'.$filter->filter());
+            $customers = $this->api->retrieve('/customers'.$filter->filter() .'&pagesize='.$pagesize);
         }
         return $customers;
     }
