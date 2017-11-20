@@ -42,9 +42,9 @@ class Products
         $this->api = $api;
     }
 
-    public function all()
+    public function all($pagesize = 1000)
     {
-        $products = $this->api->retrieve('/products');
+        $products = $this->api->retrieve('/products?pagesize='. $pagesize);
         return $products;
     }
 

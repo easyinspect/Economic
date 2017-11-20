@@ -20,9 +20,9 @@ class Layouts
         $this->api = $api;
     }
 
-    public function all()
+    public function all($pagesize = 1000)
     {
-        $layouts = $this->api->retrieve('/layouts');
+        $layouts = $this->api->retrieve('/layouts?pagesize='. $pagesize);
         return $layouts;
     }
 

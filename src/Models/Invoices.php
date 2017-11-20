@@ -25,6 +25,17 @@ class Invoices
         $this->api = $api;
     }
 
+    public function all(Filter $filter = null, $pagesize = 1000)
+    {
+        if (is_null($filter)) {
+            $invoices = $this->api->retrieve('/invoices/booked?pagesize='. $pagesize);
+        } else {
+            $invoices = $this->api->retrieve('/invoices/booked'.$filter->filter() .'&pagesize='. $pagesize);
+        }
+
+        return $invoices;
+    }
+
     public function get($id)
     {
         $invoice = $this->api->retrieve('/invoices/booked/' . $id);

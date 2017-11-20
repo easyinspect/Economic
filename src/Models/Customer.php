@@ -143,15 +143,15 @@ class Customer
         return $this;
     }
 
-    public function draftInvoices()
+    public function draftInvoices($pagesize = 1000)
     {
-        $invoices = $this->api->retrieve('/customers/' . $this->getCustomerNumber() . '/invoices/drafts');
+        $invoices = $this->api->retrieve('/customers/' . $this->getCustomerNumber() . '/invoices/drafts?pagesize='. $pagesize);
         return $invoices;
     }
 
-    public function bookedInvoices()
+    public function bookedInvoices($pagesize = 1000)
     {
-        $invoices = $this->api->retrieve('/customers/' . $this->getCustomerNumber() . '/invoices/booked');
+        $invoices = $this->api->retrieve('/customers/' . $this->getCustomerNumber() . '/invoices/booked?pagesize='. $pagesize);
         return $invoices;
     }
 

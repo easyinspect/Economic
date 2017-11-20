@@ -52,12 +52,12 @@ class DraftInvoices
         $this->references = new \stdClass();
     }
 
-    public function all(Filter $filter = null)
+    public function all(Filter $filter = null, $pagesize = 1000)
     {
         if (is_null($filter)) {
-            $invoices = $this->api->retrieve('/invoices/drafts');
+            $invoices = $this->api->retrieve('/invoices/drafts?pagesize='. $pagesize);
         } else {
-            $invoices = $this->api->retrieve('/invoices/drafts'.$filter->filter());
+            $invoices = $this->api->retrieve('/invoices/drafts'.$filter->filter() .'&pagesize='. $pagesize);
         }
 
         return $invoices;
