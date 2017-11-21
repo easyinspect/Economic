@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 27-09-2017
- * Time: 13:50
+ * Time: 13:50.
  */
 
 namespace Economic\Models\Components;
-
 
 class Line
 {
@@ -30,5 +29,4 @@ class Line
         $this->description = $name;
         $this->product = new Product($productNumber);
     }
-
 }

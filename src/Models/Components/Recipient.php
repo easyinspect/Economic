@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 26-09-2017
- * Time: 12:58
+ * Time: 12:58.
  */
 
 namespace Economic\Models\Components;
@@ -20,6 +20,4 @@ class Recipient
         $this->name = $name;
         $this->vatZone = new \stdClass();
     }
-
-
 }

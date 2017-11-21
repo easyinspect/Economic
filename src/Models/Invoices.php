@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 12-10-2017
- * Time: 17:05
+ * Time: 17:05.
  */
 
 namespace Economic\Models;
@@ -12,7 +12,6 @@ use Economic\Economic;
 
 class Invoices
 {
-
     /** @var float $grossAmount */
     private $grossAmount;
     /** @var int $bookedInvoiceNumber */
@@ -28,9 +27,9 @@ class Invoices
     public function all(Filter $filter = null, $pagesize = 1000)
     {
         if (is_null($filter)) {
-            $invoices = $this->api->retrieve('/invoices/booked?pagesize='. $pagesize);
+            $invoices = $this->api->retrieve('/invoices/booked?pagesize='.$pagesize);
         } else {
-            $invoices = $this->api->retrieve('/invoices/booked'.$filter->filter() .'&pagesize='. $pagesize);
+            $invoices = $this->api->retrieve('/invoices/booked'.$filter->filter().'&pagesize='.$pagesize);
         }
 
         return $invoices;
@@ -38,14 +37,16 @@ class Invoices
 
     public function get($id)
     {
-        $invoice = $this->api->retrieve('/invoices/booked/' . $id);
+        $invoice = $this->api->retrieve('/invoices/booked/'.$id);
         $this->api->setObject($invoice, $this);
+
         return $this;
     }
 
     public function downloadPdf()
     {
         $pdf = $this->api->download('/invoices/booked/'.$this->getBookedInvoiceNumber().'/pdf');
+
         return $pdf;
     }
 
@@ -66,6 +67,7 @@ class Invoices
     public function setBookedInvoiceNumber(int $bookedInvoiceNumber)
     {
         $this->bookedInvoiceNumber = $bookedInvoiceNumber;
+
         return $this;
     }
 
@@ -84,7 +86,7 @@ class Invoices
     public function setGrossAmount(float $grossAmount)
     {
         $this->grossAmount = $grossAmount;
+
         return $this;
     }
-
 }

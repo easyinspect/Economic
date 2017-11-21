@@ -3,17 +3,29 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 13-09-2017
- * Time: 12:09
+ * Time: 12:09.
  */
 
 namespace Economic;
 
 use GuzzleHttp\Client;
-use Economic\Models\{
-    BillingContacts, Customer, CustomerCollection, Invoices, Journals, Units, Products, PaymentTypes, Currency, Layouts, DraftInvoices
-};
-use Economic\Exceptions\{EconomicRequestException, EconomicServerException, EconomicConnectionException};
-use GuzzleHttp\Exception\{ClientException, ServerException, ConnectException};
+use Economic\Models\Units;
+use Economic\Models\Layouts;
+use Economic\Models\Currency;
+use Economic\Models\Customer;
+use Economic\Models\Invoices;
+use Economic\Models\Journals;
+use Economic\Models\Products;
+use Economic\Models\PaymentTypes;
+use Economic\Models\DraftInvoices;
+use Economic\Models\BillingContacts;
+use Economic\Models\CustomerCollection;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ConnectException;
+use Economic\Exceptions\EconomicServerException;
+use Economic\Exceptions\EconomicRequestException;
+use Economic\Exceptions\EconomicConnectionException;
 
 class Economic
 {
@@ -41,47 +53,33 @@ class Economic
             'headers' => [
                 'X-AppSecretToken' => $this->appSecretToken,
                 'X-AgreementGrantToken' => $this->agreementGrantToken,
-                'Content-Type' => $this->contentType
+                'Content-Type' => $this->contentType,
             ],
         ];
     }
 
     public function retrieve($url)
     {
-        try
-        {
+        try {
             return \GuzzleHttp\json_decode($this->client->get($url, $this->headers)->getBody()->getContents());
-        }
-        catch (ClientException $exception)
-        {
+        } catch (ClientException $exception) {
             throw new EconomicRequestException();
-        }
-        catch (ServerException $exception)
-        {
+        } catch (ServerException $exception) {
             throw new EconomicServerException();
-        }
-        catch (ConnectException $exception)
-        {
+        } catch (ConnectException $exception) {
             throw new EconomicConnectionException();
         }
     }
 
     public function download($url)
     {
-
         try {
             return $this->client->get($url, $this->headers)->getBody()->getContents();
-        }
-        catch (ClientException $exception)
-        {
+        } catch (ClientException $exception) {
             throw new EconomicRequestException();
-        }
-        catch (ServerException $exception)
-        {
+        } catch (ServerException $exception) {
             throw new EconomicServerException();
-        }
-        catch (ConnectException $exception)
-        {
+        } catch (ConnectException $exception) {
             throw new EconomicConnectionException();
         }
     }
@@ -89,65 +87,42 @@ class Economic
     public function create($url, $body)
     {
         try {
-
             $this->headers['body'] = \GuzzleHttp\json_encode($body);
 
             return \GuzzleHttp\json_decode($this->client->post($url, $this->headers)->getBody()->getContents());
-        }
-        catch (ClientException $exception)
-        {
+        } catch (ClientException $exception) {
             throw new EconomicRequestException();
-        }
-        catch (ServerException $exception)
-        {
+        } catch (ServerException $exception) {
             throw new EconomicServerException();
-        }
-        catch (ConnectException $exception)
-        {
+        } catch (ConnectException $exception) {
             throw new EconomicConnectionException();
         }
-
     }
 
     public function update($url, $body)
     {
-
         try {
-
             $this->headers['body'] = \GuzzleHttp\json_encode($body);
 
             return \GuzzleHttp\json_decode($this->client->put($url, $this->headers)->getBody()->getContents());
-        }
-        catch (ClientException $exception)
-        {
+        } catch (ClientException $exception) {
             throw new EconomicRequestException();
-        }
-        catch (ServerException $exception)
-        {
+        } catch (ServerException $exception) {
             throw new EconomicServerException();
-        }
-        catch (ConnectException $exception)
-        {
+        } catch (ConnectException $exception) {
             throw new EconomicConnectionException();
         }
-
     }
 
     public function delete($url)
     {
         try {
             return $this->client->delete($url, $this->headers);
-        }
-        catch (ClientException $exception)
-        {
+        } catch (ClientException $exception) {
             throw new EconomicRequestException();
-        }
-        catch (ServerException $exception)
-        {
+        } catch (ServerException $exception) {
             throw new EconomicServerException();
-        }
-        catch (ConnectException $exception)
-        {
+        } catch (ConnectException $exception) {
             throw new EconomicConnectionException();
         }
     }
@@ -155,8 +130,8 @@ class Economic
     public function setObject($object, $methods)
     {
         foreach ($object as $key => $value) {
-            if (method_exists($methods, 'set' . ucfirst($key))) {
-                $methods->{'set' . ucfirst($key)}($value);
+            if (method_exists($methods, 'set'.ucfirst($key))) {
+                $methods->{'set'.ucfirst($key)}($value);
             }
         }
 
@@ -166,7 +141,6 @@ class Economic
     /**
      * @return Customer
      */
-
     public function customer() : Customer
     {
         return new Customer($this);
@@ -175,7 +149,6 @@ class Economic
     /**
      * @return CustomerCollection
      */
-
     public function customerCollection() : CustomerCollection
     {
         return new CustomerCollection($this);
@@ -184,7 +157,6 @@ class Economic
     /**
      * @return Units
      */
-
     public function units() : Units
     {
         return new Units($this);
@@ -193,7 +165,6 @@ class Economic
     /**
      * @return Products
      */
-
     public function products() : Products
     {
         return new Products($this);
@@ -202,7 +173,6 @@ class Economic
     /**
      * @return PaymentTypes
      */
-
     public function paymentTypes() : PaymentTypes
     {
         return new PaymentTypes($this);
@@ -211,7 +181,6 @@ class Economic
     /**
      * @return Currency
      */
-
     public function currency() : Currency
     {
         return new Currency($this);
@@ -220,7 +189,6 @@ class Economic
     /**
      * @return Layouts
      */
-
     public function layouts() : Layouts
     {
         return new Layouts($this);
@@ -229,7 +197,6 @@ class Economic
     /**
      * @return draftInvoices
      */
-
     public function draftInvoices() : DraftInvoices
     {
         return new DraftInvoices($this);
@@ -238,7 +205,6 @@ class Economic
     /**
      * @return Invoices
      */
-
     public function invoices() : Invoices
     {
         return new Invoices($this);
@@ -247,7 +213,6 @@ class Economic
     /**
      * @return Journals
      */
-
     public function journals() : Journals
     {
         return new Journals($this);
@@ -256,10 +221,8 @@ class Economic
     /**
      * @return BillingContacts
      */
-
     public function billingContacts() : BillingContacts
     {
         return new BillingContacts($this);
     }
-
 }
