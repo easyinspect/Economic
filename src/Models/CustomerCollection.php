@@ -20,13 +20,25 @@ class CustomerCollection
         $this->api = $api;
     }
 
-    public function all(Filter $filter = null, $pagesize = 1000)
+    public function all(Filter $filter = null, $pagesize = 10, $skipPages = 0, $recursive = true)
     {
         if (is_null($filter)) {
-            $customers = $this->api->retrieve('/customers?pagesize='.$pagesize);
+
+            $customers = $this->api->retrieve('/customers?skippages='.$skipPages.'&pagesize='.$pagesize);
+
         } else {
-            $customers = $this->api->retrieve('/customers'.$filter->filter() .'&pagesize='.$pagesize);
+            $customers = $this->api->retrieve('/customers?'.$filter->filter() .'&pagesize='.$pagesize);
         }
-        return $customers;
+
+        if ($recursive && isset($customers->pagination->nextPage)) {
+            $temp = $this->all($filter, $pagesize, $skipPages + 1);
+            $customers->collection = array_merge($customers->collection, $temp);
+        }
+
+        $customers->collection = array_map(function ($item) {
+            return Customer::parse($this->api, $item);
+        }, $customers->collection);
+
+        return $customers->collection;
     }
 }

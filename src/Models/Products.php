@@ -42,10 +42,30 @@ class Products
         $this->api = $api;
     }
 
-    public function all($pagesize = 1000)
+    public static function parse($api, $object)
     {
-        $products = $this->api->retrieve('/products?pagesize='. $pagesize);
-        return $products;
+        $product = new Products($api);
+
+        $product->setBarred($object->barred);
+        $product->setCostPrice(isset($object->costPrice) ? $object->costPrice : null);
+
+        return $product;
+    }
+
+    public function all($pagesize = 10, $skipPages = 0, $recursive = true)
+    {
+        $products = $this->api->retrieve('/products?skippages='.$skipPages.'&pagesize='. $pagesize);
+
+        if ($recursive && isset($products->pagination->nextPage)) {
+            $temp = $this->all($pagesize, $skipPages + 1);
+            $products->collection = array_merge($products->collection, $temp);
+        }
+
+        $products->collection = array_map(function ($item) {
+            return Products::parse($this->api, $item);
+        }, $products->collection);
+
+        return $products->collection;
     }
 
     public function get($id)
@@ -134,7 +154,7 @@ class Products
      * @param boolean $barred
      * @return $this;
      */
-    public function setBarred(boolean $barred)
+    public function setBarred($barred)
     {
         $this->barred = $barred;
         return $this;
@@ -152,7 +172,7 @@ class Products
      * @param float $costPrice
      * @return $this;
      */
-    public function setCostPrice(float $costPrice)
+    public function setCostPrice(?float $costPrice)
     {
         $this->costPrice = $costPrice;
         return $this;

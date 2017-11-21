@@ -13,7 +13,7 @@ class SalesPerson
     /** @var int $employeeNumber */
     public $employeeNumber;
 
-    public function __construct(int $employeeNumber)
+    public function __construct(?int $employeeNumber)
     {
         $this->employeeNumber = $employeeNumber;
     }

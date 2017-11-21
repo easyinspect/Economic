@@ -14,7 +14,7 @@ class CustomerContact
     /** @var int $customerContactNumber */
     public $customerContactNumber;
 
-    public function __construct(int $customerContact)
+    public function __construct(?int $customerContact)
     {
         $this->customerContactNumber = $customerContact;
     }

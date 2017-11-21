@@ -70,6 +70,38 @@ class Customer
         $this->api = $api;
     }
 
+    public static function parse($api, $object) : Customer
+    {
+        $customer = new Customer($api);
+
+        $customer->setCustomerNumber($object->customerNumber);
+        $customer->setCurrency($object->currency);
+        $customer->setPaymentTerms($object->paymentTerms);
+        $customer->setCustomerGroup($object->customerGroup);
+        $customer->setAddress(isset($object->address) ? $object->address : null);
+        $customer->setBalance($object->balance);
+        $customer->setDueAmount($object->dueAmount);
+        $customer->setCity(isset($object->city) ? $object->city : null);
+        $customer->setCountry(isset($object->country) ? $object->country : null);
+        $customer->setEmail(isset($object->email) ? $object->email : null);
+        $customer->setName($object->name);
+        $customer->setZip(isset($object->zip) ? $object->zip : null);
+        $customer->setTelephoneAndFaxNumber(isset($object->telephoneAndFaxNumber) ? $object->telephoneAndFaxNumber : null);
+        $customer->setWebsite(isset($object->website) ? $object->website : null);
+        $customer->setVatZone($object->vatZone);
+        $customer->setLastUpdated($object->lastUpdated);
+        $customer->setBarred(isset($object->barred) ? $object->barred : null);
+        $customer->setCorporateIdentificationNumber(isset($object->corporateIdentificationNumber) ? $object->corporateIdentificationNumber : null);
+        $customer->setCreditLimit(isset($object->creditLimit) ? $object->creditLimit : null);
+        $customer->setCustomerContactNumber(isset($object->customerContact->customerContactNumber) ? $object->customerContact->customerContactNumber : null);
+        $customer->setEan(isset($object->ean) ? $object->ean : null);
+        $customer->setPublicEntryNumber(isset($object->publicEntryNumber) ? $object->publicEntryNumber : null);
+        $customer->setSalesPersonNumber(isset($object->salesPerson->employeeNumber) ? $object->salesPerson->employeeNumber : null);
+        $customer->setContacts($object->contacts);
+
+        return $customer;
+    }
+
     public function get($id)
     {
         $customer = $this->api->retrieve('/customers/' . $id);
@@ -315,7 +347,7 @@ class Customer
      * @return $this
      */
 
-    public function setAddress(string $address)
+    public function setAddress(?string $address)
     {
         $this->address = $address;
         return $this;
@@ -369,7 +401,7 @@ class Customer
      * @return $this
      */
 
-    public function setCity(string $city)
+    public function setCity(?string $city)
     {
         $this->city = $city;
         return $this;
@@ -387,7 +419,7 @@ class Customer
      * @return $this
      */
 
-    public function setCountry(string $country)
+    public function setCountry(?string $country)
     {
         $this->country = $country;
         return $this;
@@ -405,7 +437,7 @@ class Customer
      * @return $this
      */
 
-    public function setEmail(string $email)
+    public function setEmail(?string $email)
     {
         $this->email = $email;
         return $this;
@@ -423,7 +455,7 @@ class Customer
      * @return $this
      */
 
-    public function setName(string $name)
+    public function setName(?string $name)
     {
         $this->name = $name;
         return $this;
@@ -441,7 +473,7 @@ class Customer
      * @return $this
      */
 
-    public function setZip(string $zip)
+    public function setZip(?string $zip)
     {
         $this->zip = $zip;
         return $this;
@@ -459,7 +491,7 @@ class Customer
      * @return $this
      */
 
-    public function setTelephoneAndFaxNumber(string $telephoneAndFaxNumber)
+    public function setTelephoneAndFaxNumber(?string $telephoneAndFaxNumber)
     {
         $this->telephoneAndFaxNumber = $telephoneAndFaxNumber;
         return $this;
@@ -477,7 +509,7 @@ class Customer
      * @return $this
      */
 
-    public function setWebsite(string $website)
+    public function setWebsite(?string $website)
     {
         $this->website = $website;
         return $this;
@@ -556,7 +588,7 @@ class Customer
      * @return $this
      */
 
-    public function setBarred(boolean $barred)
+    public function setBarred(?boolean $barred)
     {
         $this->barred = $barred;
         return $this;
@@ -574,7 +606,7 @@ class Customer
      * @return $this
      */
 
-    public function setCorporateIdentificationNumber(string $corporateIdentificationNumber)
+    public function setCorporateIdentificationNumber(?string $corporateIdentificationNumber)
     {
         $this->corporateIdentificationNumber = $corporateIdentificationNumber;
         return $this;
@@ -592,7 +624,7 @@ class Customer
      * @return $this
      */
 
-    public function setCreditLimit(float $creditLimit)
+    public function setCreditLimit(?float $creditLimit)
     {
         $this->creditLimit = $creditLimit;
         return $this;
@@ -632,7 +664,7 @@ class Customer
      * @return $this
      */
 
-    public function setCustomerContactNumber(int $customerContactNumber)
+    public function setCustomerContactNumber(?int $customerContactNumber)
     {
         if (isset($this->customerContact)) {
             $this->customerContact->customerContactNumber = $customerContactNumber;
@@ -655,7 +687,7 @@ class Customer
      * @return $this
      */
 
-    public function setEan(string $ean)
+    public function setEan(?string $ean)
     {
         $this->ean = $ean;
         return $this;
@@ -673,7 +705,7 @@ class Customer
      * @return $this
      */
 
-    public function setPublicEntryNumber(string $publicEntryNumber)
+    public function setPublicEntryNumber(?string $publicEntryNumber)
     {
         $this->publicEntryNumber = $publicEntryNumber;
         return $this;
@@ -702,7 +734,7 @@ class Customer
      * @return $this
      */
 
-    public function setSalesPersonNumber(int $employeeNumber)
+    public function setSalesPersonNumber(?int $employeeNumber)
     {
         if (isset($this->salesPerson)) {
             $this->salesPerson->employeeNumber = $employeeNumber;
