@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 18-09-2017
- * Time: 13:24
+ * Time: 13:24.
  */
 
 namespace Economic\Models\Components;
-
 
 class CustomerGroup
 {
@@ -18,5 +17,4 @@ class CustomerGroup
     {
         $this->customerGroupNumber = $customerGroupNumber;
     }
-
 }

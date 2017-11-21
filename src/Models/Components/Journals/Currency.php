@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 18-10-2017
- * Time: 12:46
+ * Time: 12:46.
  */
 
 namespace Economic\Models\Components\Journals;
-
 
 class Currency
 {
@@ -17,5 +16,4 @@ class Currency
     {
         $this->code = $code;
     }
-
 }

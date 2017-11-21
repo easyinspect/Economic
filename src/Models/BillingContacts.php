@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 13-11-2017
- * Time: 15:39
+ * Time: 15:39.
  */
 
 namespace Economic\Models;
