@@ -41,7 +41,6 @@ class BillingContacts
     public function all(int $customerNumber)
     {
         $contacts = $this->api->retrieve('/customers/'.$customerNumber.'/contacts');
-        $this->api->setObject($contacts, $this);
 
         return $contacts;
     }

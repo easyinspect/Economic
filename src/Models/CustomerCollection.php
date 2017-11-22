@@ -20,18 +20,18 @@ class CustomerCollection
         $this->api = $api;
     }
 
-    public function all(Filter $filter = null, $pagesize = 10, $skipPages = 0, $recursive = true)
+    public function all(Filter $filter = null, $pageSize = 10, $skipPages = 0, $recursive = true)
     {
         if (is_null($filter)) {
 
-            $customers = $this->api->retrieve('/customers?skippages='.$skipPages.'&pagesize='.$pagesize);
+            $customers = $this->api->retrieve('/customers?skippages='.$skipPages.'&pagesize='.$pageSize);
 
         } else {
-            $customers = $this->api->retrieve('/customers?'.$filter->filter() .'&pagesize='.$pagesize);
+            $customers = $this->api->retrieve('/customers?'.$filter->filter() .'&pagesize='.$pageSize);
         }
 
         if ($recursive && isset($customers->pagination->nextPage)) {
-            $temp = $this->all($filter, $pagesize, $skipPages + 1);
+            $temp = $this->all($filter, $pageSize, $skipPages + 1);
             $customers->collection = array_merge($customers->collection, $temp);
         }
 

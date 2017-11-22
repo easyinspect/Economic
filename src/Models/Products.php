@@ -46,18 +46,26 @@ class Products
     {
         $product = new Products($api);
 
+        $product->setBarCode(isset($object->barCode) ? $object->barCode : null);
         $product->setBarred($object->barred);
         $product->setCostPrice(isset($object->costPrice) ? $object->costPrice : null);
+        $product->setSalesPrice($object->salesPrice);
+        $product->setRecommendedPrice($object->recommendedPrice);
+        $product->setDescription(isset($object->description) ? $object->description : null);
+        $product->setLastUpdated($object->lastUpdated);
+        $product->setName($object->name);
+        $product->setProductGroup($object->productGroup);
+        $product->setProductNumber($object->productNumber);
 
         return $product;
     }
 
-    public function all($pagesize = 10, $skipPages = 0, $recursive = true)
+    public function all($pageSize = 20, $skipPages = 0, $recursive = true)
     {
-        $products = $this->api->retrieve('/products?skippages='.$skipPages.'&pagesize='. $pagesize);
+        $products = $this->api->retrieve('/products?skippages='.$skipPages.'&pagesize='. $pageSize);
 
         if ($recursive && isset($products->pagination->nextPage)) {
-            $temp = $this->all($pagesize, $skipPages + 1);
+            $temp = $this->all($pageSize, $skipPages + 1);
             $products->collection = array_merge($products->collection, $temp);
         }
 
@@ -136,25 +144,25 @@ class Products
      * @param string $barCode
      * @return $this;
      */
-    public function setBarCode(string $barCode)
+    public function setBarCode(?string $barCode)
     {
         $this->barCode = $barCode;
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function getBarred() : ?boolean
+    public function getBarred() : ?bool
     {
         return $this->barred;
     }
 
     /**
-     * @param boolean $barred
+     * @param bool $barred
      * @return $this;
      */
-    public function setBarred($barred)
+    public function setBarred(bool $barred)
     {
         $this->barred = $barred;
         return $this;
@@ -190,7 +198,7 @@ class Products
      * @param string $description
      * @return $this;
      */
-    public function setDescription(string $description)
+    public function setDescription(?string $description)
     {
         $this->description = $description;
         return $this;

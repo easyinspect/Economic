@@ -12,13 +12,13 @@ class Recipient
 {
     /** @var string $name */
     public $name;
-    /** @var \stdClass $vatZone */
+    /** @var VatZone $vatZone */
     public $vatZone;
 
-    public function __construct(string $name)
+    public function __construct(string $name, $vatZone = null)
     {
         $this->name = $name;
-        $this->vatZone = new \stdClass();
+        $this->vatZone = new VatZone($vatZone->vatZoneNumber);
     }
 
 

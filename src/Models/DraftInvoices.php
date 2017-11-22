@@ -12,8 +12,10 @@ use Economic\Economic;
 use Economic\Filter;
 use Economic\Models\Components\Customer;
 use Economic\Models\Components\Layout;
+use Economic\Models\Components\Notes;
 use Economic\Models\Components\PaymentTerms;
 use Economic\Models\Components\Recipient;
+use Economic\Models\Components\References;
 use Economic\Models\Components\SalesPerson;
 use Economic\Models\Components\VatZone;
 use Economic\Models\Components\VendorReference;
@@ -38,10 +40,42 @@ class DraftInvoices
     private $deliveryLocation;
     /** @var Recipient $recipient*/
     private $recipient;
-    /** @var object $references*/
+    /** @var References $references*/
     private $references;
     /** @var array $lines*/
     private $lines = [];
+    /** @var int $costPriceInBaseCurrency */
+    private $costPriceInBaseCurrency;
+    /** @var string $dueDate */
+    private $dueDate;
+    /** @var int $exchangeRate */
+    private $exchangeRate;
+    /** @var int $grossAmount */
+    private $grossAmount;
+    /** @var int $grossAmountInBaseCurrency */
+    private $grossAmountInBaseCurrency;
+    /** @var int $marginInBaseCurrency */
+    private $marginInBaseCurrency;
+    /** @var int $marginPercentage */
+    private $marginPercentage;
+    /** @var int $netAmount */
+    private $netAmount;
+    /** @var int $netAmountInBaseCurrency */
+    private $netAmountInBaseCurrency;
+    /** @var Notes $notes */
+    private $notes;
+    /** @var Pdf $pdf */
+    private $pdf;
+    /** @var Project $project */
+    private $project;
+    /** @var Templates $templates */
+    private $templates;
+    /** @var int $roundingAmount */
+    private $roundingAmount;
+    /** @var string $self */
+    private $self;
+    /** @var int $vatAmount */
+    private $vatAmount;
 
     /** @var Economic $api*/
     private $api;
@@ -49,18 +83,52 @@ class DraftInvoices
     public function __construct(Economic $api)
     {
         $this->api = $api;
-        $this->references = new \stdClass();
     }
 
-    public function all(Filter $filter = null, $pagesize = 1000)
+    public static function parse($api, $object)
+    {
+        $draftInvoices = new DraftInvoices($api);
+
+        $draftInvoices->setDraftInvoiceNumber($object->draftInvoiceNumber);
+        $draftInvoices->setCurrency($object->currency);
+        $draftInvoices->setCustomer($object->customer);
+        $draftInvoices->setDate($object->date);
+        $draftInvoices->setLayout($object->layout);
+        $draftInvoices->setPaymentTerms($object->paymentTerms);
+        $draftInvoices->setDeliveryLocation(isset($object->deliveryLocation) ? $object->deliveryLocation : null);
+        $draftInvoices->setRecipient($object->recipient, $object->recipient->vatZone);
+        $draftInvoices->setReferences($object->references);
+        $draftInvoices->setCostPriceInBaseCurrency($object->costPriceInBaseCurrency);
+        $draftInvoices->setDueDate($object->dueDate);
+        $draftInvoices->setExchangeRate($object->exchangeRate);
+        $draftInvoices->setGrossAmount($object->grossAmount);
+        $draftInvoices->setGrossAmountInBaseCurrency(isset($object->grossAmountInBaseCurrency) ? $object->grossAmountInBaseCurrency : null);
+        $draftInvoices->setMarginInBaseCurrency($object->marginInBaseCurrency);
+        $draftInvoices->setMarginPercentage($object->marginPercentage);
+        $draftInvoices->setNetAmount($object->netAmount);
+        $draftInvoices->setNetAmountInBaseCurrency($object->netAmountInBaseCurrency);
+
+        return $draftInvoices;
+    }
+
+    public function all(Filter $filter = null, $pageSize = 20, $skipPages = 0, $recursive = true)
     {
         if (is_null($filter)) {
-            $invoices = $this->api->retrieve('/invoices/drafts?pagesize='. $pagesize);
+            $invoices = $this->api->retrieve('/invoices/drafts?skippages='.$skipPages.'&pagesize='.$pageSize.'');
         } else {
-            $invoices = $this->api->retrieve('/invoices/drafts'.$filter->filter() .'&pagesize='. $pagesize);
+            $invoices = $this->api->retrieve('/invoices/drafts'.$filter->filter() .'&pagesize='. $pageSize);
         }
 
-        return $invoices;
+        if ($recursive && isset($invoices->pagination->nextPage)) {
+            $collection = $this->all($filter, $pageSize, $skipPages + 1);
+            $invoices->collection = array_merge($invoices->collection, $collection);
+        }
+
+        $invoices->collection = array_map(function ($item) {
+            return DraftInvoices::parse($this->api, $item);
+        }, $invoices->collection);
+
+        return $invoices->collection;
     }
 
     public function get($id)
@@ -105,8 +173,252 @@ class DraftInvoices
 
     // Getters & Setters
 
+    public function getNotes() : ?Notes
+    {
+        return $this->notes;
+    }
+
+    public function setNotes($notes = null)
+    {
+        if (isset($notes)) {
+            $this->notes = new Notes($notes->heading, $notes->textLine1, $notes->textLine2);
+        } else {
+            return null;
+        }
+
+        return $this;
+    }
+
     /**
-     * @return mixed
+     * @return int
+     */
+    public function getRoundingAmount() : ?int
+    {
+        return $this->roundingAmount;
+    }
+
+    /**
+     * @param int $roundingAmount
+     * @return $this
+     */
+    public function setRoundingAmount(int $roundingAmount)
+    {
+        $this->roundingAmount = $roundingAmount;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSelf() : ?string
+    {
+        return $this->self;
+    }
+
+    /**
+     * @param string $self
+     * @return $this
+     */
+    public function setSelf(string $self)
+    {
+        $this->self = $self;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVatAmount() : ?int
+    {
+        return $this->vatAmount;
+    }
+
+    /**
+     * @param int $vatAmount
+     * @return $this
+     */
+    public function setVatAmount(int $vatAmount)
+    {
+        $this->vatAmount = $vatAmount;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMarginInBaseCurrency() : ?int
+    {
+        return $this->marginInBaseCurrency;
+    }
+
+    /**
+     * @param int $marginInBaseCurrency
+     * @return $this
+     */
+    public function setMarginInBaseCurrency(int $marginInBaseCurrency)
+    {
+        $this->marginInBaseCurrency = $marginInBaseCurrency;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMarginPercentage() : ?int
+    {
+        return $this->marginPercentage;
+    }
+
+    /**
+     * @param int $marginPercentage
+     * @return $this
+     */
+    public function setMarginPercentage(int $marginPercentage)
+    {
+        $this->marginPercentage = $marginPercentage;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNetAmount() : ?int
+    {
+        return $this->netAmount;
+    }
+
+    /**
+     * @param int $netAmount
+     * @return $this
+     */
+    public function setNetAmount(int $netAmount)
+    {
+        $this->netAmount = $netAmount;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNetAmountInBaseCurrency() : ?int
+    {
+        return $this->netAmountInBaseCurrency;
+    }
+
+    /**
+     * @param int $netAmountInBaseCurrency
+     * @return $this
+     */
+    public function setNetAmountInBaseCurrency(int $netAmountInBaseCurrency)
+    {
+        $this->netAmountInBaseCurrency = $netAmountInBaseCurrency;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCostPriceInBaseCurrency() : ?int
+    {
+        return $this->costPriceInBaseCurrency;
+    }
+
+    /**
+     * @param int $costPriceInBaseCurrency
+     * @return $this
+     */
+    public function setCostPriceInBaseCurrency(int $costPriceInBaseCurrency)
+    {
+        $this->costPriceInBaseCurrency = $costPriceInBaseCurrency;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDueDate() : ?string
+    {
+        return $this->dueDate;
+    }
+
+    /**
+     * @param string $dueDate
+     * @return $this
+     */
+    public function setDueDate(string $dueDate)
+    {
+        $this->dueDate = $dueDate;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExchangeRate() : ?int
+    {
+        return $this->exchangeRate;
+    }
+
+    /**
+     * @param int $exchangeRate
+     * @return $this
+     */
+    public function setExchangeRate(int $exchangeRate)
+    {
+        $this->exchangeRate = $exchangeRate;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGrossAmount() : ?int
+    {
+        return $this->grossAmount;
+    }
+
+    /**
+     * @param int $grossAmount
+     * @return $this
+     */
+    public function setGrossAmount(int $grossAmount)
+    {
+        $this->grossAmount = $grossAmount;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGrossAmountInBaseCurrency() : ?int
+    {
+        return $this->grossAmountInBaseCurrency;
+    }
+
+    /**
+     * @param int $grossAmountInBaseCurrency
+     * @return $this
+     */
+    public function setGrossAmountInBaseCurrency(?int $grossAmountInBaseCurrency)
+    {
+        $this->grossAmountInBaseCurrency = $grossAmountInBaseCurrency;
+
+        return $this;
+    }
+
+    /**
+     * @return string
      */
     public function getCurrency() : ?string
     {
@@ -198,7 +510,7 @@ class DraftInvoices
      */
     public function setLayout($layout)
     {
-        $this->layout = $layout;
+        $this->layout = new Layout($layout->layoutNumber);
         return $this;
     }
 
@@ -241,7 +553,7 @@ class DraftInvoices
      */
     public function setPaymentTerms($paymentTerms)
     {
-        $this->paymentTerms = $paymentTerms;
+        $this->paymentTerms = new PaymentTerms($paymentTerms->paymentTermsNumber);
         return $this;
     }
 
@@ -282,9 +594,9 @@ class DraftInvoices
      * @param Recipient $recipient
      * @return $this
      */
-    public function setRecipient($recipient)
+    public function setRecipient($recipient, $vatZone = null)
     {
-        $this->recipient = $recipient;
+        $this->recipient = new Recipient($recipient->name, $vatZone);
         return $this;
     }
 
@@ -339,20 +651,25 @@ class DraftInvoices
     }
 
     /**
-     * @return \stdClass
+     * @return References
      */
-    public function getReferences() : ?\stdClass
+    public function getReferences() : ?References
     {
         return $this->references;
     }
 
     /**
-     * @param \stdClass $references
+     * @param References $reference
      * @return $this
      */
-    public function setReferences($references)
+    public function setReferences($reference = null)
     {
-        $this->references = $references;
+        if (isset($reference)) {
+            $this->references = new References($reference->vendorReference, $reference->salesPerson);
+        } else {
+            return null;
+        }
+
         return $this;
     }
 
@@ -415,12 +732,17 @@ class DraftInvoices
     }
 
     /**
-     * @param DeliveryLocation $deliveryLocation
+     * @param $deliveryLocation
      * @return $this;
      */
-    public function setDeliveryLocation($deliveryLocation)
+    public function setDeliveryLocation($deliveryLocation = null)
     {
-        $this->deliveryLocation = $deliveryLocation;
+        if (isset($deliveryLocation)) {
+            $this->deliveryLocation = new DeliveryLocation($deliveryLocation->deliveryLocationNumber);
+        } else {
+            return null;
+        }
+
         return $this;
     }
 
@@ -441,7 +763,7 @@ class DraftInvoices
      * @return $this
      */
 
-    public function setDeliveryLocationNumber(int $deliveryLocationNumber)
+    public function setDeliveryLocationNumber(?int $deliveryLocationNumber)
     {
         if (isset($this->deliveryLocation)) {
             $this->deliveryLocation->deliveryLocationNumber = $deliveryLocationNumber;

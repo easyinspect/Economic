@@ -9,6 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Filter;
 
 class Invoices
 {
