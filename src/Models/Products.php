@@ -46,16 +46,16 @@ class Products
     {
         $product = new Products($api);
 
-        $product->setBarCode(isset($object->barCode) ? $object->barCode : null);
-        $product->setBarred($object->barred);
-        $product->setCostPrice(isset($object->costPrice) ? $object->costPrice : null);
-        $product->setSalesPrice($object->salesPrice);
-        $product->setRecommendedPrice($object->recommendedPrice);
-        $product->setDescription(isset($object->description) ? $object->description : null);
-        $product->setLastUpdated($object->lastUpdated);
-        $product->setName($object->name);
-        $product->setProductGroup($object->productGroup);
-        $product->setProductNumber($object->productNumber);
+        $product->setBarCode(isset($object->barCode) ? $object->barCode : null)
+                ->setBarred($object->barred)
+                ->setCostPrice(isset($object->costPrice) ? $object->costPrice : null)
+                ->setSalesPrice($object->salesPrice)
+                ->setRecommendedPrice($object->recommendedPrice)
+                ->setDescription(isset($object->description) ? $object->description : null)
+                ->setLastUpdated($object->lastUpdated)
+                ->setName($object->name)
+                ->setProductGroup($object->productGroup)
+                ->setProductNumber($object->productNumber);
 
         return $product;
     }
@@ -70,7 +70,7 @@ class Products
         }
 
         $products->collection = array_map(function ($item) {
-            return Products::parse($this->api, $item);
+            return self::parse($this->api, $item);
         }, $products->collection);
 
         return $products->collection;

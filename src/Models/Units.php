@@ -12,10 +12,12 @@ use Economic\Economic;
 
 class Units
 {
-    /** @var string $name*/
-    private $name;
     /** @var int $unitNumber*/
     private $unitNumber;
+    /** @var string $name*/
+    private $name;
+    /** @var string $self */
+    private $self;
 
     /** @var Economic $api*/
     private $api;
@@ -25,10 +27,31 @@ class Units
         $this->api = $api;
     }
 
-    public function all()
+    public static function parse($api, $object)
+    {
+        $unit = new Units($api);
+
+        $unit->setName($object->name)
+            ->setUnitNumber($unit->unitNumber)
+            ->setSelf($unit->self);
+
+        return $unit;
+    }
+
+    public function all($pageSize = 20, $skipPages = 0, $recursive = true)
     {
         $units = $this->api->retrieve('/units');
-        return $units;
+
+        if ($recursive && isset($units->pagination->nextPage)) {
+            $collection = $this->all($pageSize, $skipPages + 1);
+            $units->collection = array_merge($units->collection, $collection);
+        }
+
+        $units->collection = array_map(function($item) {
+            return self::parse($this->api, $item);
+        }, $units->collection);
+
+        return $units->collection;
     }
 
     public function get($id)
@@ -85,6 +108,7 @@ class Units
     public function setName(string $name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -103,6 +127,26 @@ class Units
     public function setUnitNumber(int $unitNumber)
     {
         $this->unitNumber = $unitNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSelf() : ?string
+    {
+        return $this->self;
+    }
+
+    /**
+     * @param string $self
+     * @return $this
+     */
+    public function setSelf(string $self)
+    {
+        $this->self = $self;
+
         return $this;
     }
 

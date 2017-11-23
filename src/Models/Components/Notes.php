@@ -18,7 +18,7 @@ class Notes
     /** @var string $textLine2 */
     public $textLine2;
 
-    public function __construct(?string $heading, ?string $textLine1, ?string $textLine2)
+    public function __construct(string $heading = null, string $textLine1 = null, string $textLine2 = null)
     {
         $this->heading = $heading;
         $this->textLine1 = $textLine1;
