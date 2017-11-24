@@ -32,8 +32,8 @@ class Units
         $unit = new Units($api);
 
         $unit->setName($object->name)
-            ->setUnitNumber($unit->unitNumber)
-            ->setSelf($unit->self);
+            ->setUnitNumber($object->unitNumber)
+            ->setSelf($object->self);
 
         return $unit;
     }

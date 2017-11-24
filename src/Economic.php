@@ -8,12 +8,14 @@
 
 namespace Economic;
 
+use Economic\Models\Components\Unit as test;
 use GuzzleHttp\Client;
 use Economic\Models\{
     BillingContacts, Customer, CustomerCollection, Invoices, Journals, Units, Products, PaymentTypes, Currency, Layouts, DraftInvoices
 };
 use Economic\Exceptions\{EconomicRequestException, EconomicServerException, EconomicConnectionException};
 use GuzzleHttp\Exception\{ClientException, ServerException, ConnectException};
+
 
 class Economic
 {
@@ -27,6 +29,8 @@ class Economic
     private $baseUrl = 'https://restapi.e-conomic.com';
     /** @var array $headers */
     private $headers;
+    /** @var \ReflectionMethod $reflectionMethod */
+    private $reflectionMethod;
 
     /** @var Client $client */
     private $client;
@@ -161,6 +165,20 @@ class Economic
         }
 
         return $this;
+    }
+
+    public function setClass($name, $property)
+    {
+        $name = __NAMESPACE__ . '\Models\Components\\' . $name;
+
+        if (class_exists($name)) {
+
+            $this->reflectionMethod = new \ReflectionMethod($name, '__construct');
+
+            var_dump($this->reflectionMethod->getParameters());
+
+        }
+
     }
 
     /**

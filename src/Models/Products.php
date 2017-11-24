@@ -10,6 +10,7 @@ namespace Economic\Models;
 
 use Economic\Economic;
 use Economic\Models\Components\ProductGroup;
+use Economic\Models\Components\Unit;
 
 class Products
 {
@@ -33,6 +34,8 @@ class Products
     private $productGroup;
     /** @var int $productNumber*/
     private $productNumber;
+    /** @var Unit $units */
+    private $unit;
 
     /** @var Economic $api*/
     private $api;
@@ -55,7 +58,8 @@ class Products
                 ->setLastUpdated($object->lastUpdated)
                 ->setName($object->name)
                 ->setProductGroup($object->productGroup)
-                ->setProductNumber($object->productNumber);
+                ->setProductNumber($object->productNumber)
+                ->setUnit(isset($object->unit) ? $object->unit : null);
 
         return $product;
     }
@@ -101,7 +105,7 @@ class Products
             'lastUpdated' => $this->getLastUpdated(),
             'name' => $this->getName(),
             'productGroup' => $this->getProductGroup(),
-            'productNumber' => $this->getProductNumber()
+            'productNumber' => $this->getProductNumber(),
         ];
 
         $product = $this->api->create('/products', array_filter($data));
@@ -131,6 +135,35 @@ class Products
     }
 
     // Getters & Setters
+
+    public function getUnit() : ?Unit
+    {
+        return $this->unit;
+    }
+
+    public function setUnit($unit = null)
+    {
+        if (isset($unit)) {
+            $this->unit = new Unit($unit->unitNumber, $unit->name, $unit->self);
+        } else {
+            return null;
+        }
+
+        return $this;
+    }
+
+    public function setUnitNumber(int $unitNumber)
+    {
+        if (isset($this->unit)) {
+            $this->unit->unitNumber = $unitNumber;
+        } else {
+            $this->unit = $this->api->setClass('Unit', 'unitNumber');
+            $this->unit->unitNumber = $unitNumber;
+            var_dump($this->unit);
+        }
+
+        //return $this;
+    }
 
     /**
      * @return string
