@@ -20,7 +20,7 @@ class CustomerCollection
         $this->api = $api;
     }
 
-    public function all(Filter $filter = null, $pageSize = 10, $skipPages = 0, $recursive = true)
+    public function all(Filter $filter = null, $pageSize = 20, $skipPages = 0, $recursive = true)
     {
         if (is_null($filter)) {
 

@@ -8,11 +8,8 @@
 
 namespace Economic;
 
-use Economic\Models\Components\Unit as test;
 use GuzzleHttp\Client;
-use Economic\Models\{
-    BillingContacts, Customer, CustomerCollection, Invoices, Journals, Units, Products, PaymentTypes, Currency, Layouts, DraftInvoices
-};
+use Economic\Models\{BillingContacts, Customer, CustomerCollection, Invoices, Journals, Units, Products, PaymentTypes, Currency, Layouts, DraftInvoices};
 use Economic\Exceptions\{EconomicRequestException, EconomicServerException, EconomicConnectionException};
 use GuzzleHttp\Exception\{ClientException, ServerException, ConnectException};
 
@@ -175,10 +172,16 @@ class Economic
 
             $this->reflectionMethod = new \ReflectionMethod($name, '__construct');
 
-            var_dump($this->reflectionMethod->getParameters());
+            $class = new $name;
 
+            foreach ($this->reflectionMethod->getParameters() as $key => $value) {
+                if ($value->name != $property) {
+                    unset($class->{$value->name});
+                }
+            }
+
+            return $class;
         }
-
     }
 
     /**

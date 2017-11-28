@@ -13,10 +13,13 @@ class VendorReference
 {
     /** @var int $employeeNumber */
     public $employeeNumber;
+    /** @var string $self */
+    public $self;
 
-    public function __construct(?int $employeeNumber)
+    public function __construct(int $employeeNumber = null, string $self = null)
     {
         $this->employeeNumber = $employeeNumber;
+        $this->self = $self;
     }
 
 }

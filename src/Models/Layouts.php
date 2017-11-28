@@ -18,6 +18,8 @@ class Layouts
     private $name;
     /** @var string $self */
     private $self;
+    /** @var bool $deleted */
+    private $deleted;
 
     /** @var Economic $api*/
     private $api;
@@ -113,6 +115,25 @@ class Layouts
     public function setSelf($self)
     {
         $this->self = $self;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDeleted() : ?bool
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @param bool $deleted
+     * @return $this
+     */
+    public function setDeleted(bool $deleted)
+    {
+        $this->deleted = $deleted;
 
         return $this;
     }

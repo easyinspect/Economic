@@ -86,7 +86,6 @@ class DraftInvoices
     public function __construct(Economic $api)
     {
         $this->api = $api;
-        $this->references = new \stdClass();
     }
 
     public static function parse($api, $object)
@@ -163,7 +162,7 @@ class DraftInvoices
             'lines' => $this->getLines()
         ];
 
-        $invoice = $this->api->create('/invoices/drafts', $data);
+        $invoice = $this->api->create('/invoices/drafts', array_filter($data));
         $this->api->setObject($invoice, $this);
         return $this;
     }
@@ -193,18 +192,13 @@ class DraftInvoices
     }
 
     /**
-     * @param $notes
+     * @param Notes $notes
      * @return $this
      */
     public function setNotes($notes = null)
     {
         if (isset($notes)) {
-            $this->notes = new Notes(
-                isset($notes->heading) ? $notes->heading : null,
-                isset($notes->textLine1) ? $notes->textLine1 : null,
-                isset($notes->textLine2) ? $notes->textLine2 : null);
-        } else {
-            return null;
+            $this->notes = new Notes($notes->heading, $notes->textLine1, $notes->textLine2);
         }
 
         return $this;
@@ -231,7 +225,8 @@ class DraftInvoices
         if (isset($this->notes)) {
             $this->notes->heading = $heading;
         } else {
-            $this->notes = new Notes($heading, null, null);
+            $this->notes = $this->api->setClass('Notes', 'heading');
+            $this->notes->heading = $heading;
         }
 
         return $this;
@@ -258,7 +253,8 @@ class DraftInvoices
         if (isset($this->notes)) {
             $this->notes->textLine1 = $textLine1;
         } else {
-            $this->notes = new Notes(null, $textLine1, null);
+            $this->notes = $this->api->setClass('Notes', 'textLine1');
+            $this->notes->textLine1 = $textLine1;
         }
 
         return $this;
@@ -285,7 +281,8 @@ class DraftInvoices
         if (isset($this->notes)) {
             $this->notes->textLine1 = $textLine2;
         } else {
-            $this->notes = new Notes(null, null, $textLine2);
+            $this->notes = $this->api->setClass('Notes', 'textLine2');
+            $this->notes->textLine2 = $textLine2;
         }
 
         return $this;
@@ -319,15 +316,13 @@ class DraftInvoices
     }
 
     /**
-     * @param $project
+     * @param Project $project
      * @return $this
      */
     public function setProject($project = null)
     {
         if (isset($project)) {
             $this->project = new Project($project->projectNumber);
-        } else {
-            return null;
         }
 
         return $this;
@@ -354,7 +349,8 @@ class DraftInvoices
         if (isset($this->project)) {
             $this->project->projectNumber = $projectNumber;
         } else {
-            $this->project = new Project($projectNumber);
+            $this->project = $this->api->setClass('Project', 'projectNumber');
+            $this->project->projectNumber = $projectNumber;
         }
 
         return $this;
@@ -643,7 +639,7 @@ class DraftInvoices
      */
     public function setCustomer($customer)
     {
-        $this->customer = new Customer($customer->customerNumber);
+        $this->customer = new Customer($customer->customerNumber, $customer->self);
         return $this;
     }
 
@@ -667,7 +663,8 @@ class DraftInvoices
         if (isset($this->customer)) {
             $this->customer->customerNumber = $customerNumber;
         } else {
-            $this->customer = new Customer($customerNumber);
+            $this->customer = $this->api->setClass('Customer', 'customerNumber');
+            $this->customer->customerNumber = $customerNumber;
         }
         return $this;
     }
@@ -790,57 +787,9 @@ class DraftInvoices
      */
     public function setRecipient($recipient)
     {
-        $this->recipient = new Recipient($recipient->name, isset($recipient->vatZone) ? $recipient->vatZone : null);
-        return $this;
-    }
 
-    /** @return string */
+        $this->recipient = new Recipient($recipient->address, $recipient->attention, $recipient->city, $recipient->country, $recipient->ean, $recipient->name, $recipient->publicEntryNumber, $recipient->vatZone, $recipient->zip);
 
-    public function getRecipientName() : ?string
-    {
-        if (isset($this->recipient)) {
-            return $this->recipient->name;
-        }
-        return null;
-    }
-
-    /**
-     * @param string $name
-     * @return $this
-     */
-
-    public function setRecipientName(string $name)
-    {
-        if (isset($this->recipient)) {
-            $this->recipient->name = $name;
-        } else {
-            $this->recipient = new Recipient($name);
-        }
-        return $this;
-    }
-
-    /** @return int */
-
-    public function getRecipientVatZoneNumber() : ?int
-    {
-        if (isset($this->recipient->vatZone)) {
-            return $this->recipient->vatZone->vatZoneNumber;
-        }
-        return null;
-    }
-
-    /**
-     * @param int $vatZoneNumber
-     * @return $this
-     */
-
-    public function setRecipientVatZoneNumber(int $vatZoneNumber)
-    {
-        if (isset($this->recipient->vatZone)) {
-            $this->recipient->vatZone->vatZoneNumber = $vatZoneNumber;
-        } else {
-            $this->recipient->vatZone = new VatZone($vatZoneNumber);
-        }
         return $this;
     }
 
@@ -860,8 +809,6 @@ class DraftInvoices
     {
         if (isset($reference)) {
             $this->references = new References($reference->vendorReference, $reference->salesPerson);
-        } else {
-            return null;
         }
 
         return $this;

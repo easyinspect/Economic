@@ -13,10 +13,13 @@ class Project
 {
     /** @var string $heading */
     public $projectNumber;
+    /** @var string $self */
+    public $self;
 
-    public function __construct(int $projectNumber)
+    public function __construct(int $projectNumber = null, int $self = null)
     {
         $this->projectNumber = $projectNumber;
+        $this->self = $self;
     }
 
 }

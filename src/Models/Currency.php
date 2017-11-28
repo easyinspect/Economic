@@ -44,7 +44,7 @@ class Currency
 
     public function all($pageSize = 20, $skipPages = 0, $recursive = true)
     {
-        $currencies = $this->api->retrieve('/currencies');
+        $currencies = $this->api->retrieve('/currencies?skippages='.$skipPages.'&pagesize='.$pageSize.'');
 
         if ($recursive && isset($currencies->pagination->nextPage)) {
             $collection = $this->all($pageSize, $skipPages + 1);

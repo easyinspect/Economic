@@ -19,7 +19,7 @@ class Unit
     public $self;
 
 
-    public function __construct($unitNumber = null, $name = null, $self = null)
+    public function __construct(int $unitNumber = null, string $name = null, string $self = null)
     {
 
         $this->unitNumber = $unitNumber;
