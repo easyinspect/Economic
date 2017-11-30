@@ -8,10 +8,12 @@
 
 namespace Economic;
 
+use Economic\Models\Components\References;
 use GuzzleHttp\Client;
 use Economic\Models\{BillingContacts, Customer, CustomerCollection, Invoices, Journals, Units, Products, PaymentTypes, Currency, Layouts, DraftInvoices};
 use Economic\Exceptions\{EconomicRequestException, EconomicServerException, EconomicConnectionException};
 use GuzzleHttp\Exception\{ClientException, ServerException, ConnectException};
+use function GuzzleHttp\Psr7\str;
 
 
 class Economic
@@ -28,6 +30,8 @@ class Economic
     private $headers;
     /** @var \ReflectionMethod $reflectionMethod */
     private $reflectionMethod;
+    /** @var \ReflectionClass $reflectionClass */
+    private $reflectionClass;
 
     /** @var Client $client */
     private $client;
@@ -164,24 +168,39 @@ class Economic
         return $this;
     }
 
-    public function setClass($name, $property)
+    public function setClass($name, $property, $object = null)
     {
-        $name = __NAMESPACE__ . '\Models\Components\\' . $name;
+        $temp = __NAMESPACE__ . '\Models\Components\\' . $name;
 
-        if (class_exists($name)) {
+        $this->reflectionMethod = new \ReflectionMethod($temp, '__construct');
 
-            $this->reflectionMethod = new \ReflectionMethod($name, '__construct');
+        $class = new $temp;
 
-            $class = new $name;
+        foreach ($this->reflectionMethod->getParameters() as $key => $value) {
 
-            foreach ($this->reflectionMethod->getParameters() as $key => $value) {
-                if ($value->name != $property) {
-                    unset($class->{$value->name});
-                }
+            if ($value->name != $property) {
+                unset($class->{$value->name});
             }
 
-            return $class;
         }
+
+        if (is_object($class->{$property})) {
+            unset($class->{$property}->self);
+        }
+
+        if (isset($object->{strtolower($name)})) {
+
+            $array = (array) $class;
+
+            $map = array_merge($array, (array) $object->{strtolower($name)});
+
+            foreach ($map as $key => $value) {
+                $class->{$key} = $value;
+            }
+
+        }
+
+        return $class;
     }
 
     /**

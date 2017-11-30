@@ -17,9 +17,7 @@ class References
 
     public function __construct($vendorReference = null, $salesPerson = null)
     {
-        $this->salesPerson = new SalesPerson($salesPerson->employeeNumber, $salesPerson->self);
-        $this->vendorReference = new VendorReference($vendorReference->employeeNumber, $vendorReference->self);
+        $this->salesPerson = new SalesPerson(isset($salesPerson) ? $salesPerson->employeeNumber : null, isset($salesPerson) ? $salesPerson->self : null);
+        $this->vendorReference = new VendorReference(isset($vendorReference) ? $vendorReference->employeeNumber : null, isset($vendorReference) ? $vendorReference->self : null);
     }
-
-
 }

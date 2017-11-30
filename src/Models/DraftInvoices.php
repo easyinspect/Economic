@@ -44,7 +44,7 @@ class DraftInvoices
     /** @var Recipient $recipient*/
     private $recipient;
     /** @var References $references*/
-    private $references;
+    public $references;
     /** @var array $lines*/
     private $lines = [];
     /** @var int $costPriceInBaseCurrency */
@@ -622,6 +622,7 @@ class DraftInvoices
     public function setCurrency(string $currency)
     {
         $this->currency = $currency;
+
         return $this;
     }
 
@@ -701,7 +702,8 @@ class DraftInvoices
      */
     public function setLayout($layout)
     {
-        $this->layout = new Layout($layout->layoutNumber);
+        $this->layout = new Layout($layout->layoutNumber, $layout->self);
+
         return $this;
     }
 
@@ -712,6 +714,7 @@ class DraftInvoices
         if (isset($this->layout)) {
             return $this->layout->layoutNumber;
         }
+
         return null;
     }
 
@@ -725,8 +728,10 @@ class DraftInvoices
         if (isset($this->layout)) {
             $this->layout->layoutNumber = $layoutNumber;
         } else {
-            $this->layout = new Layout($layoutNumber);
+            $this->layout = $this->api->setClass('Layout', 'layoutNumber');
+            $this->layout->layoutNumber = $layoutNumber;
         }
+
         return $this;
     }
 
@@ -744,7 +749,8 @@ class DraftInvoices
      */
     public function setPaymentTerms($paymentTerms)
     {
-        $this->paymentTerms = new PaymentTerms($paymentTerms->paymentTermsNumber);
+        $this->paymentTerms = new PaymentTerms($paymentTerms->paymentTermsNumber, $paymentTerms->self);
+
         return $this;
     }
 
@@ -755,6 +761,7 @@ class DraftInvoices
         if (isset($this->paymentTerms)) {
             return $this->paymentTerms->paymentTermsNumber;
         }
+
         return null;
     }
 
@@ -768,8 +775,10 @@ class DraftInvoices
         if (isset($this->paymentTerms)) {
             $this->paymentTerms->paymentTermsNumber = $paymentTermsNumber;
         } else {
-            $this->paymentTerms =  new PaymentTerms($paymentTermsNumber);
+            $this->paymentTerms =  $this->api->setClass('PaymentTerms', 'paymentTermsNumber');
+            $this->paymentTerms->paymentTermsNumber = $paymentTermsNumber;
         }
+
         return $this;
     }
 
@@ -788,7 +797,50 @@ class DraftInvoices
     public function setRecipient($recipient)
     {
 
-        $this->recipient = new Recipient($recipient->address, $recipient->attention, $recipient->city, $recipient->country, $recipient->ean, $recipient->name, $recipient->publicEntryNumber, $recipient->vatZone, $recipient->zip);
+        $this->recipient = new Recipient($recipient->name, $recipient->vatZone);
+
+        return $this;
+
+    }
+
+    public function getRecipientName() : ?string
+    {
+        if (isset($this->recipient)) {
+            return $this->recipient->name;
+        }
+
+        return null;
+    }
+
+    public function setRecipientName(string $name)
+    {
+        if (isset($this->recipient)) {
+            $this->recipient->name = $name;
+        } else {
+            $this->recipient = $this->api->setClass('Recipient', 'name');
+            $this->recipient->name = $name;
+        }
+
+        return $this;
+    }
+
+    public function getRecipientVatZoneNumber() : ?int
+    {
+        if (isset($this->recipient->vatZone)) {
+            return $this->recipient->vatZone->vatZoneNumber;
+        }
+
+        return null;
+    }
+
+    public function setRecipientVatZoneNumber(int $vatZoneNumber)
+    {
+        if (isset($this->recipient)) {
+            $this->recipient->vatZone->vatZoneNumber = $vatZoneNumber;
+        } else {
+            $this->recipient = $this->api->setClass('Recipient', 'vatZone');
+            $this->recipient->vatZone->vatZoneNumber = $vatZoneNumber;
+        }
 
         return $this;
     }
@@ -834,8 +886,10 @@ class DraftInvoices
         if (isset($this->references->salesPerson)) {
             $this->references->salesPerson->employeeNumber = $employeeNumber;
         } else {
-            $this->references->salesPerson = new SalesPerson($employeeNumber);
+            $this->references = $this->api->setClass('References', 'salesPerson', $this);
+            $this->references->salesPerson->employeeNumber = $employeeNumber;
         }
+
         return $this;
     }
 
@@ -859,8 +913,10 @@ class DraftInvoices
         if (isset($this->references->vendorReference)) {
             $this->references->vendorReference->employeeNumber = $employeeNumber;
         } else {
-            $this->references->vendorReference = new VendorReference($employeeNumber);
+            $this->references = $this->api->setClass('References', 'vendorReference', $this);
+            $this->references->vendorReference->employeeNumber = $employeeNumber;
         }
+
         return $this;
     }
 
