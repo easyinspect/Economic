@@ -275,7 +275,7 @@ class Invoices
      */
     public function setRecipient($recipient)
     {
-        $this->recipient = new Recipient($recipient->name, $recipient->vatZone);
+        $this->recipient = new Recipient($recipient->name, $recipient->vatZone ?? null);
 
         return $this;
     }

@@ -808,7 +808,7 @@ class DraftInvoices
     public function setRecipient($recipient)
     {
 
-        $this->recipient = new Recipient($recipient->name, $recipient->vatZone ?? null);
+        $this->recipient = new Recipient($recipient->name, $recipient->vatZone);
 
         return $this;
 
