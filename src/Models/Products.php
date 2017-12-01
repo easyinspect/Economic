@@ -9,7 +9,11 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Models\Components\DepartmentalDistribution;
+use Economic\Models\Components\Inventory;
 use Economic\Models\Components\ProductGroup;
+use Economic\Models\Components\Unit;
+use Economic\Models\Components\Invoices;
 
 class Products
 {
@@ -31,8 +35,21 @@ class Products
     private $name;
     /** @var ProductGroup $productGroup*/
     private $productGroup;
+    /** @var Invoices $invoices */
+    private $invoices;
     /** @var int $productNumber*/
     private $productNumber;
+    /** @var Unit $units */
+    private $unit;
+
+    // Module objects
+    /** @var DepartmentalDistribution $departmentalDistribution */
+    private $departmentalDistribution;
+    /** @var Inventory $inventory */
+    private $inventory;
+
+    /** @var string $self */
+    private $self;
 
     /** @var Economic $api*/
     private $api;
@@ -42,10 +59,44 @@ class Products
         $this->api = $api;
     }
 
-    public function all($pagesize = 1000)
+    public static function parse($api, $object)
     {
-        $products = $this->api->retrieve('/products?pagesize='. $pagesize);
-        return $products;
+        $product = new Products($api);
+
+        $product->setBarCode(isset($object->barCode) ? $object->barCode : null)
+                ->setBarred($object->barred)
+                ->setCostPrice(isset($object->costPrice) ? $object->costPrice : null)
+                ->setSalesPrice($object->salesPrice)
+                ->setRecommendedPrice($object->recommendedPrice)
+                ->setDescription(isset($object->description) ? $object->description : null)
+                ->setLastUpdated($object->lastUpdated)
+                ->setName($object->name)
+                ->setProductGroup($object->productGroup)
+                ->setProductNumber($object->productNumber)
+                ->setUnit(isset($object->unit) ? $object->unit : null)
+                ->setDepartmentalDistribution(isset($object->departmentalDistribution) ? $object->departmentalDistribution : null)
+                ->setInventory(isset($object->iventory) ? $object->inventory : null)
+                ->setSelf($object->self)
+                ->setInventory(isset($object->inventory) ? $object->inventory : null)
+                ->setInvoices($object->invoices);
+
+        return $product;
+    }
+
+    public function all($pageSize = 20, $skipPages = 0, $recursive = true)
+    {
+        $products = $this->api->retrieve('/products?skippages='.$skipPages.'&pagesize='. $pageSize);
+
+        if ($recursive && isset($products->pagination->nextPage)) {
+            $collection = $this->all($pageSize, $skipPages + 1);
+            $products->collection = array_merge($products->collection, $collection);
+        }
+
+        $products->collection = array_map(function ($item) {
+            return self::parse($this->api, $item);
+        }, $products->collection);
+
+        return $products->collection;
     }
 
     public function get($id)
@@ -73,7 +124,10 @@ class Products
             'lastUpdated' => $this->getLastUpdated(),
             'name' => $this->getName(),
             'productGroup' => $this->getProductGroup(),
-            'productNumber' => $this->getProductNumber()
+            'productNumber' => $this->getProductNumber(),
+            'unit' => $this->getUnit(),
+            'departmentalDistribution' => $this->getDepartmentalDistribution(),
+            'inventory' => $this->getInventory()
         ];
 
         $product = $this->api->create('/products', array_filter($data));
@@ -94,15 +148,214 @@ class Products
             'lastUpdated' => $this->getLastUpdated(),
             'name' => $this->getName(),
             'productGroup' => $this->getProductGroup(),
-            'productNumber' => $this->getProductNumber()
+            'productNumber' => $this->getProductNumber(),
+            'unit' => $this->getUnit(),
+            'departmentalDistribution' => $this->getDepartmentalDistribution(),
+            'inventory' => $this->getInventory()
         ];
 
-        $product = $this->api->update('/products/'. $this->getProductNumber(), $data);
+        $product = $this->api->update('/products/'. $this->getProductNumber(), array_filter($data));
         $this->api->setObject($product, $this);
         return $this;
     }
 
     // Getters & Setters
+
+    /**
+     * @return Invoices
+     */
+    public function getInvoices() : ?Invoices
+    {
+        return $this->invoices;
+    }
+
+    /**
+     * @param Invoices $invoices
+     * @return $this
+     */
+    public function setInvoices($invoices = null)
+    {
+        if (isset($invoices)) {
+            $this->invoices = new Invoices($invoices->booked, $invoices->drafts);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return DepartmentalDistribution
+     */
+    public function getDepartmentalDistribution() : ?DepartmentalDistribution
+    {
+        return $this->departmentalDistribution;
+    }
+
+    /**
+     * @param DepartmentalDistribution $departmentalDistribution
+     * @return $this
+     */
+    public function setDepartmentalDistribution($departmentalDistribution = null)
+    {
+        if (isset($departmentalDistribution)) {
+            $this->departmentalDistribution = new DepartmentalDistribution($departmentalDistribution->departmentalDistributionNumber, $departmentalDistribution->distributionType, $departmentalDistribution->self);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDepartmentalDistributionNumber() : ?int
+    {
+        if (isset($this->departmentalDistribution)) {
+            return $this->departmentalDistribution->departmentalDistributionNumber;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param int $departmentalDistributionNumber
+     * @return $this
+     */
+    public function setDepartmentalDistributionNumber(int $departmentalDistributionNumber)
+    {
+        if (isset($this->departmentalDistribution)) {
+            $this->departmentalDistribution->departmentalDistributionNumber = $departmentalDistributionNumber;
+        } else {
+            $this->departmentalDistribution = $this->api->setClass('DepartmentalDistribution', 'departmentalDistributionNumber');
+            $this->departmentalDistribution->departmentalDistributionNumber = $departmentalDistributionNumber;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDepartmentalDistributionType() : ?string
+    {
+        if (isset($this->departmentalDistribution)) {
+            return $this->departmentalDistribution->distributionType;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $distributionType
+     * @return $this
+     */
+    public function setDepartmentalDistributionType(string $distributionType)
+    {
+        if (isset($this->departmentalDistribution)) {
+            $this->departmentalDistribution->distributionType = $distributionType;
+        } else {
+            $this->departmentalDistribution = $this->api->setClass('DepartmentalDistribution', 'distributionType');
+            $this->departmentalDistribution->distributionType = $distributionType;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Inventory
+     */
+    public function getInventory() : ?Inventory
+    {
+        return $this->inventory;
+    }
+
+    /**
+     * @param Inventory $inventory
+     * @return $this
+     */
+    public function setInventory($inventory = null)
+    {
+        if (isset($inventory)) {
+            $this->inventory = new Inventory($inventory->available, $inventory->grossWeight, $inventory->inStock, $inventory->netWeight, $inventory->orderedByCustomers, $inventory->orderedFromSuppliers, $inventory->packageVolume, $inventory->recommendedPrice);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Unit
+     */
+    public function getUnit() : ?Unit
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @param Unit $unit
+     * @return $this
+     */
+    public function setUnit($unit = null)
+    {
+        if (isset($unit)) {
+            $this->unit = new Unit($unit->unitNumber, $unit->name, $unit->self);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnitName() : ?string
+    {
+        if (isset($this->unit)) {
+            return $this->unit->name;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setUnitName(string $name)
+    {
+        if (isset($this->unit)) {
+            $this->unit->name = $name;
+        } else {
+            $this->unit = $this->api->setClass('Unit', 'name');
+            $this->unit->name = $name;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUnitNumber() : ?int
+    {
+        if (isset($this->unit)) {
+            return $this->unit->unitNumber;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param int $unitNumber
+     * @return $this
+     */
+    public function setUnitNumber(int $unitNumber)
+    {
+        if (isset($this->unit)) {
+            $this->unit->unitNumber = $unitNumber;
+        } else {
+            $this->unit = $this->api->setClass('Unit', 'unitNumber');
+            $this->unit->unitNumber = $unitNumber;
+        }
+
+        return $this;
+    }
 
     /**
      * @return string
@@ -116,25 +369,25 @@ class Products
      * @param string $barCode
      * @return $this;
      */
-    public function setBarCode(string $barCode)
+    public function setBarCode(?string $barCode)
     {
         $this->barCode = $barCode;
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function getBarred() : ?boolean
+    public function getBarred() : ?bool
     {
         return $this->barred;
     }
 
     /**
-     * @param boolean $barred
+     * @param bool $barred
      * @return $this;
      */
-    public function setBarred(boolean $barred)
+    public function setBarred(bool $barred)
     {
         $this->barred = $barred;
         return $this;
@@ -152,7 +405,7 @@ class Products
      * @param float $costPrice
      * @return $this;
      */
-    public function setCostPrice(float $costPrice)
+    public function setCostPrice(?float $costPrice)
     {
         $this->costPrice = $costPrice;
         return $this;
@@ -170,7 +423,7 @@ class Products
      * @param string $description
      * @return $this;
      */
-    public function setDescription(string $description)
+    public function setDescription(?string $description)
     {
         $this->description = $description;
         return $this;
@@ -224,9 +477,12 @@ class Products
      * @param ProductGroup $productGroup
      * @return $this
      */
-    public function setProductGroup($productGroup)
+    public function setProductGroup($productGroup = null)
     {
-        $this->productGroup = new ProductGroup($productGroup->productGroupNumber);
+        if (isset($productGroup)) {
+            $this->productGroup = new ProductGroup($productGroup->productGroupNumber, $productGroup->name, $productGroup->products, $productGroup->salesAccounts, $productGroup->self);
+        }
+
         return $this;
     }
 
@@ -237,19 +493,42 @@ class Products
         if (isset($this->productGroup)) {
             return $this->productGroup->productGroupNumber;
         }
+
         return null;
     }
 
     /**
      * @param int $productGroupNumber
-     * @return $this */
-
+     * @return $this
+     */
     public function setProductGroupNumber(int $productGroupNumber)
     {
         if (isset($this->productGroup)) {
             $this->productGroup->productGroupNumber = $productGroupNumber;
         } else {
-            $this->productGroup = new ProductGroup($productGroupNumber);
+            $this->productGroup = $this->api->setClass('ProductGroup', 'productGroupNumber');
+            $this->productGroup->productGroupNumber = $productGroupNumber;
+        }
+
+        return $this;
+    }
+
+    public function getProductGroupName() : ?string
+    {
+        if (isset($this->productGroup)) {
+            return $this->productGroup->name;
+        }
+
+        return null;
+    }
+
+    public function setProductGroupName(string $name)
+    {
+        if (isset($this->productGroup)) {
+            $this->productGroup->name = $name;
+        } else {
+            $this->productGroup = $this->api->setClass('ProductGroup', 'name');
+            $this->productGroup->name = $name;
         }
 
         return $this;
@@ -306,6 +585,24 @@ class Products
     public function setRecommendedPrice(float $recommendedPrice)
     {
         $this->recommendedPrice = $recommendedPrice;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSelf() : ?string
+    {
+        return $this->self;
+    }
+
+    /**
+     * @param string $self
+     * @return $this
+     */
+    public function setSelf(?string $self)
+    {
+        $this->self = $self;
         return $this;
     }
 

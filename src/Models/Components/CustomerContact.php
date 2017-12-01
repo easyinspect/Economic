@@ -13,10 +13,13 @@ class CustomerContact
 {
     /** @var int $customerContactNumber */
     public $customerContactNumber;
+    /** @var string $self */
+    public $self;
 
-    public function __construct(int $customerContact)
+    public function __construct(int $customerContactNumber = null, string $self = null)
     {
-        $this->customerContactNumber = $customerContact;
+        $this->customerContactNumber = $customerContactNumber;
+        $this->self = $self;
     }
 
 }

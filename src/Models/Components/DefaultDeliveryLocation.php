@@ -2,21 +2,24 @@
 /**
  * Created by PhpStorm.
  * User: mbs
- * Date: 09-10-2017
- * Time: 11:33
+ * Date: 28-09-2017
+ * Time: 10:12
  */
 
 namespace Economic\Models\Components;
 
 
-class DeliveryLocation
+class DefaultDeliveryLocation
 {
     /** @var int $deliveryLocationNumber */
     public $deliveryLocationNumber;
+    /** @var string $self */
+    public $self;
 
-    public function __construct(int $deliveryLocationNumber)
+    public function __construct(int $deliveryLocationNumber = null, string $self = null)
     {
         $this->deliveryLocationNumber = $deliveryLocationNumber;
+        $this->self = $self;
     }
 
 }
