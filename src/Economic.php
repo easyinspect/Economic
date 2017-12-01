@@ -97,10 +97,13 @@ class Economic
 
             $this->headers['body'] = \GuzzleHttp\json_encode($body);
 
+            var_dump($this->headers);
+
             return \GuzzleHttp\json_decode($this->client->post($url, $this->headers)->getBody()->getContents());
         }
         catch (ClientException $exception)
         {
+            var_dump($exception);
             throw new EconomicRequestException();
         }
         catch (ServerException $exception)
@@ -170,11 +173,11 @@ class Economic
 
     public function setClass($name, $property, $object = null)
     {
-        $temp = __NAMESPACE__ . '\Models\Components\\' . $name;
+        $class = __NAMESPACE__ . '\Models\Components\\' . $name;
 
-        $this->reflectionMethod = new \ReflectionMethod($temp, '__construct');
+        $this->reflectionMethod = new \ReflectionMethod($class, '__construct');
 
-        $class = new $temp;
+        $class = new $class;
 
         foreach ($this->reflectionMethod->getParameters() as $key => $value) {
 

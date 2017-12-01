@@ -40,7 +40,7 @@ class Units
 
     public function all($pageSize = 20, $skipPages = 0, $recursive = true)
     {
-        $units = $this->api->retrieve('/units');
+        $units = $this->api->retrieve('/units?skippages='.$skipPages.'&pagesize='.$pageSize.'');
 
         if ($recursive && isset($units->pagination->nextPage)) {
             $collection = $this->all($pageSize, $skipPages + 1);

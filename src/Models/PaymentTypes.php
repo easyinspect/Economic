@@ -40,7 +40,7 @@ class PaymentTypes
 
     public function all($pageSize = 20, $skipPages = 0, $recursive = true)
     {
-        $paymentTypes = $this->api->retrieve('/payment-types');
+        $paymentTypes = $this->api->retrieve('/payment-types?skippages='.$skipPages.'&pagesize='.$pageSize.'');
 
         if ($recursive && isset($paymentTypes->pagination->nextPage)) {
             $collection = $this->all($pageSize, $skipPages + 1);

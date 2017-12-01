@@ -19,7 +19,6 @@ class Recipient
     {
         $this->name = $name;
         $this->vatZone = new VatZone(isset($vatZone) ? $vatZone->vatZoneNumber : null, isset($vatZone) ? $vatZone->self : null);
-
     }
 
 

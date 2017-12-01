@@ -9,7 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
-use Economic\Models\Components\{CustomerGroup, VatZone, PaymentTerms, CustomerContact, SalesPerson, Templates, Totals, Invoices, DefaultDeliveryLocation};
+use Economic\Models\Components\{CustomerGroup, VatZone, PaymentTerms, CustomerContact, SalesPerson, Totals, Invoices, DefaultDeliveryLocation};
 
 class Customer
 {
@@ -61,8 +61,6 @@ class Customer
     private $creditLimit;
     /** @var string $ean */
     private $ean;
-    /** @var Templates $templates */
-    private $templates;
     /** @var Totals $totals */
     private $totals;
     /** @var string $publicEntryNumber */
@@ -114,7 +112,6 @@ class Customer
         $customer->setInvoices($object->invoices);
         $customer->setDefaultDeliveryLocation(isset($object->defaultDeliveryLocation) ? $object->defaultDeliveryLocation : null);
         $customer->setDeliveryLocations($object->deliveryLocations);
-        $customer->setTemplates($object->templates);
         $customer->setTotals($object->totals);
         $customer->setVatNumber(isset($object->vatNumber) ? $object->vatNumber : null);
         $customer->setSelf($object->self);
@@ -319,25 +316,6 @@ class Customer
     public function setTotals($totals)
     {
         $this->totals = new Totals($totals->booked, $totals->drafts, $totals->self);
-
-        return $this;
-    }
-
-    /**
-     * @return Templates
-     */
-    public function getTemplates() : ?Templates
-    {
-        return $this->templates;
-    }
-
-    /**
-     * @param Templates $templates
-     * @return $this
-     */
-    public function setTemplates($templates)
-    {
-        $this->templates = new Templates($templates->invoice, $templates->invoiceLine, $templates->self);
 
         return $this;
     }
