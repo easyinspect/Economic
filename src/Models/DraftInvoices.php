@@ -207,7 +207,6 @@ class DraftInvoices
        $data = [
            'draftInvoice' => [
                'draftInvoiceNumber' => $this->getDraftInvoiceNumber(),
-               "self" => "https://restapi.e-conomic.com/invoices/drafts/3",
            ]
        ];
 
@@ -809,7 +808,7 @@ class DraftInvoices
     public function setRecipient($recipient)
     {
 
-        $this->recipient = new Recipient($recipient->name, $recipient->vatZone);
+        $this->recipient = new Recipient($recipient->name, $recipient->vatZone ?? null);
 
         return $this;
 
