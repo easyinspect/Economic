@@ -13,10 +13,13 @@ class Customer
 {
     /** @var  int $customerNumber */
     public $customerNumber;
+    /** @var string $self */
+    public $self;
 
-    public function __construct(int $customerNumber)
+    public function __construct(int $customerNumber = null, string $self = null)
     {
         $this->customerNumber = $customerNumber;
+        $this->self = $self;
     }
 
 }

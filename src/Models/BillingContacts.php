@@ -13,10 +13,10 @@ use Economic\Models\Components\Customer;
 
 class BillingContacts
 {
-    /** @var Customer $customer */
-    private $customer;
     /** @var int $customerContactNumber */
     private $customerContactNumber;
+    /** @var Customer $customer */
+    private $customer;
     /** @var string $eInvoiceId */
     private $eInvoiceId;
     /** @var string $email */
@@ -29,6 +29,8 @@ class BillingContacts
     private $notes;
     /** @var string $phone */
     private $phone;
+    /** @var string $self */
+    private $self;
 
     /** @var Economic $api */
     private $api;
@@ -38,12 +40,37 @@ class BillingContacts
         $this->api = $api;
     }
 
-    public function all(int $customerNumber)
+    public static function parse($api, $object)
     {
-        $contacts = $this->api->retrieve('/customers/'.$customerNumber.'/contacts');
-        $this->api->setObject($contacts, $this);
+        $billingContacts = new BillingContacts($api);
 
-        return $contacts;
+        $billingContacts->setCustomerContactNumber($object->customerContactNumber);
+        $billingContacts->setCustomer($object->customer);
+        $billingContacts->setEInvoiceId(isset($object->eInvoiceId) ? $object->eInvoiceId : null);
+        $billingContacts->setEmail(isset($object->email) ? $object->email : null);
+        $billingContacts->setEmailNotifications(isset($object->emailNotifications) ? $object->emailNotifications : null);
+        $billingContacts->setName($object->name);
+        $billingContacts->setNote(isset($object->notes) ? $object->notes : null);
+        $billingContacts->setPhone(isset($object->phone) ? $object->phone : null);
+        $billingContacts->setSelf($object->self);
+
+        return $billingContacts;
+    }
+
+    public function all(int $customerNumber, $pageSize = 20, $skipPages = 0, $recursive = true)
+    {
+        $contacts = $this->api->retrieve('/customers/'.$customerNumber.'/contacts?skippages='.$skipPages.'&pagesize='.$pageSize.'');
+
+        if ($recursive && isset($contacts->pagination->nextPage)) {
+            $collection = $this->all($customerNumber, $pageSize, $skipPages + 1);
+            $contacts->collection = array_merge($contacts->collection, $collection);
+        }
+
+        $contacts->collection = array_map(function ($item) {
+            return self::parse($this->api, $item);
+        }, $contacts->collection);
+
+        return $contacts->collection;
     }
 
     public function get(int $customerContactNumber, int $customerNumber)
@@ -75,7 +102,9 @@ class BillingContacts
     public function update()
     {
         $data = [
-            'customer' => $this->getCustomer(),
+            'customer' => [
+                'customerNumber' => $this->getCustomerNumber()
+            ],
             'customerContactNumber' => $this->getCustomerContactNumber(),
             'eInvoiceId' => $this->getEInvoiceId(),
             'email' => $this->getEmail(),
@@ -100,7 +129,7 @@ class BillingContacts
 
     public function setCustomer($customer)
     {
-        $this->customer = new Customer($customer->customerNumber);
+        $this->customer = new Customer($customer->customerNumber, $customer->self);
 
         return $this;
     }
@@ -115,7 +144,8 @@ class BillingContacts
         if (isset($this->customer)) {
             $this->customer->customerNumber = $customerNumber;
         } else {
-            $this->customer = new Customer($customerNumber);
+            $this->customer = $this->api->setClass('Customer', 'customerNumber');
+            $this->customer->customerNumber = $customerNumber;
         }
 
         return $this;
@@ -142,7 +172,7 @@ class BillingContacts
         return $this->customerContactNumber;
     }
 
-    public function setEInvoiceId(string $eInvoiceId)
+    public function setEInvoiceId(?string $eInvoiceId)
     {
         $this->eInvoiceId = $eInvoiceId;
 
@@ -154,7 +184,7 @@ class BillingContacts
         return $this->eInvoiceId;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(?string $email)
     {
         $this->email = $email;
 
@@ -166,7 +196,7 @@ class BillingContacts
         return $this->email;
     }
 
-    public function setEmailNotifications(array $notifications)
+    public function setEmailNotifications(?array $notifications)
     {
         $this->emailNotifications = $notifications;
 
@@ -190,7 +220,7 @@ class BillingContacts
         return $this->name;
     }
 
-    public function setNote(string $note)
+    public function setNote(?string $note)
     {
         $this->notes = $note;
 
@@ -202,7 +232,7 @@ class BillingContacts
         return $this->notes;
     }
 
-    public function setPhone(string $number)
+    public function setPhone(?string $number)
     {
         $this->phone = $number;
 
@@ -212,5 +242,17 @@ class BillingContacts
     public function getPhone() : ?string
     {
         return $this->phone;
+    }
+
+    public function setSelf(string $self)
+    {
+        $this->self = $self;
+
+        return $this;
+    }
+
+    public function getSelf() : string
+    {
+        return $this->self;
     }
 }

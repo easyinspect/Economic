@@ -12,10 +12,13 @@ class VatZone
 {
     /** @var int $vatZoneNumber */
     public $vatZoneNumber;
+    /** @var string $self */
+    public $self;
 
-    public function __construct(int $vatZoneNumber)
+    public function __construct(int $vatZoneNumber = null, string $self = null)
     {
         $this->vatZoneNumber = $vatZoneNumber;
+        $this->self = $self;
     }
 
 }

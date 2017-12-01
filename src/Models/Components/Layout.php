@@ -13,10 +13,13 @@ class Layout
 {
     /** @var int $layoutNumber */
     public $layoutNumber;
+    /** @var string $self */
+    public $self;
 
-    public function __construct(int $layoutNumber)
+    public function __construct(int $layoutNumber = null, string $self = null)
     {
         $this->layoutNumber = $layoutNumber;
+        $this->self = $self;
     }
 
 }

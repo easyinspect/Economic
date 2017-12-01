@@ -31,9 +31,9 @@ class Filter
     {
         foreach ($this->filterable as $key => $value) {
             if (is_null($this->string)) {
-                $this->string = '?filter=' . $this->filterable[$key] . $this->operator[$key] . $this->value[$key];
+                $this->string = 'filter=' . $this->filterable[$key] . $this->operator[$key] . $this->value[$key];
             } else {
-                $this->string .= '$and:'.$this->filterable[$key].$this->operator[$key].$this->value[$key];
+                $this->string .= '$and:' . $this->filterable[$key] . $this->operator[$key] . $this->value[$key];
             }
         }
 
