@@ -68,9 +68,6 @@ class Invoices
 
     public static function parse($api, $object)
     {
-
-        var_dump($object);
-
         $invoice = new self($api);
 
         $invoice->setCustomer($object->customer);
