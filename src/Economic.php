@@ -97,13 +97,10 @@ class Economic
 
             $this->headers['body'] = \GuzzleHttp\json_encode($body);
 
-            var_dump($this->headers);
-
             return \GuzzleHttp\json_decode($this->client->post($url, $this->headers)->getBody()->getContents());
         }
         catch (ClientException $exception)
         {
-            var_dump($exception);
             throw new EconomicRequestException();
         }
         catch (ServerException $exception)
