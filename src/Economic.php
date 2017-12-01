@@ -30,8 +30,6 @@ class Economic
     private $headers;
     /** @var \ReflectionMethod $reflectionMethod */
     private $reflectionMethod;
-    /** @var \ReflectionClass $reflectionClass */
-    private $reflectionClass;
 
     /** @var Client $client */
     private $client;

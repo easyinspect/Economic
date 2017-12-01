@@ -202,18 +202,20 @@ class DraftInvoices
         return $this;
     }
 
-    public function bookInvoice()
+    public function bookInvoice() : Invoices
     {
        $data = [
            'draftInvoice' => [
-               'draftInvoiceNumber' => $this->getDraftInvoiceNumber()
-           ],
-           'bookWithNumber' => $this->getDraftInvoiceNumber()
+               'draftInvoiceNumber' => $this->getDraftInvoiceNumber(),
+               "self" => "https://restapi.e-conomic.com/invoices/drafts/3",
+           ]
        ];
 
-       $bookInvoice = $this->api->create('/invoices/booked', $data);
-       $this->api->setObject($bookInvoice, $this);
-       return $this;
+       $bookedInvoice = $this->api->create('/invoices/booked', $data);
+
+       $newInvoice = Invoices::parse($this->api, $bookedInvoice);
+
+       return $newInvoice;
     }
 
     /**

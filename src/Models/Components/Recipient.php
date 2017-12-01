@@ -15,7 +15,7 @@ class Recipient
     /** @var VatZone $vatZone */
     public $vatZone;
 
-    public function __construct(string $name = null, \stdClass $vatZone = null)
+    public function __construct(string $name = null, $vatZone = null)
     {
         $this->name = $name;
         $this->vatZone = new VatZone(isset($vatZone) ? $vatZone->vatZoneNumber : null, isset($vatZone) ? $vatZone->self : null);
