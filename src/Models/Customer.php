@@ -122,8 +122,7 @@ class Customer
     public function get($id)
     {
         $customer = $this->api->retrieve('/customers/' . $id);
-        $this->api->setObject($customer, $this);
-        return $this;
+        return static::parse($this->api, $customer);
     }
 
     public function delete()
