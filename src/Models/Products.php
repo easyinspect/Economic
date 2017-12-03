@@ -3,41 +3,41 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 22-09-2017
- * Time: 10:45
+ * Time: 10:45.
  */
 
 namespace Economic\Models;
 
 use Economic\Economic;
-use Economic\Models\Components\DepartmentalDistribution;
-use Economic\Models\Components\Inventory;
-use Economic\Models\Components\ProductGroup;
 use Economic\Models\Components\Unit;
 use Economic\Models\Components\Invoices;
+use Economic\Models\Components\Inventory;
+use Economic\Models\Components\ProductGroup;
+use Economic\Models\Components\DepartmentalDistribution;
 
 class Products
 {
-    /** @var string $barCode*/
+    /** @var string $barCode */
     private $barCode;
-    /** @var boolean $barred*/
+    /** @var bool $barred */
     private $barred;
-    /** @var float $costPrice*/
+    /** @var float $costPrice */
     private $costPrice;
-    /** @var float $salesPrice*/
+    /** @var float $salesPrice */
     private $salesPrice;
-    /** @var float $recommendedPrice*/
+    /** @var float $recommendedPrice */
     private $recommendedPrice;
-    /** @var string $description*/
+    /** @var string $description */
     private $description;
-    /** @var string $lastUpdated*/
+    /** @var string $lastUpdated */
     private $lastUpdated;
-    /** @var string $name*/
+    /** @var string $name */
     private $name;
-    /** @var ProductGroup $productGroup*/
+    /** @var ProductGroup $productGroup */
     private $productGroup;
     /** @var Invoices $invoices */
     private $invoices;
-    /** @var int $productNumber*/
+    /** @var int $productNumber */
     private $productNumber;
     /** @var Unit $units */
     private $unit;
@@ -51,7 +51,7 @@ class Products
     /** @var string $self */
     private $self;
 
-    /** @var Economic $api*/
+    /** @var Economic $api */
     private $api;
 
     public function __construct(Economic $api)
@@ -61,7 +61,7 @@ class Products
 
     public static function parse($api, $object)
     {
-        $product = new Products($api);
+        $product = new self($api);
 
         $product->setBarCode(isset($object->barCode) ? $object->barCode : null)
                 ->setBarred($object->barred)
@@ -85,7 +85,7 @@ class Products
 
     public function all($pageSize = 20, $skipPages = 0, $recursive = true)
     {
-        $products = $this->api->retrieve('/products?skippages='.$skipPages.'&pagesize='. $pageSize);
+        $products = $this->api->retrieve('/products?skippages='.$skipPages.'&pagesize='.$pageSize);
 
         if ($recursive && isset($products->pagination->nextPage)) {
             $collection = $this->all($pageSize, $skipPages + 1);
@@ -101,14 +101,16 @@ class Products
 
     public function get($id)
     {
-        $product = $this->api->retrieve('/products/' . $id);
+        $product = $this->api->retrieve('/products/'.$id);
         $this->api->setObject($product, $this);
+
         return $this;
     }
 
     public function delete()
     {
-        $this->api->delete('/products/' . $this->getProductNumber());
+        $this->api->delete('/products/'.$this->getProductNumber());
+
         return $this;
     }
 
@@ -127,13 +129,13 @@ class Products
             'productNumber' => $this->getProductNumber(),
             'unit' => $this->getUnit(),
             'departmentalDistribution' => $this->getDepartmentalDistribution(),
-            'inventory' => $this->getInventory()
+            'inventory' => $this->getInventory(),
         ];
 
         $product = $this->api->create('/products', array_filter($data));
         $this->api->setObject($product, $this);
-        return $this;
 
+        return $this;
     }
 
     public function update()
@@ -151,11 +153,12 @@ class Products
             'productNumber' => $this->getProductNumber(),
             'unit' => $this->getUnit(),
             'departmentalDistribution' => $this->getDepartmentalDistribution(),
-            'inventory' => $this->getInventory()
+            'inventory' => $this->getInventory(),
         ];
 
-        $product = $this->api->update('/products/'. $this->getProductNumber(), array_filter($data));
+        $product = $this->api->update('/products/'.$this->getProductNumber(), array_filter($data));
         $this->api->setObject($product, $this);
+
         return $this;
     }
 
@@ -372,6 +375,7 @@ class Products
     public function setBarCode(?string $barCode)
     {
         $this->barCode = $barCode;
+
         return $this;
     }
 
@@ -390,6 +394,7 @@ class Products
     public function setBarred(bool $barred)
     {
         $this->barred = $barred;
+
         return $this;
     }
 
@@ -408,6 +413,7 @@ class Products
     public function setCostPrice(?float $costPrice)
     {
         $this->costPrice = $costPrice;
+
         return $this;
     }
 
@@ -426,6 +432,7 @@ class Products
     public function setDescription(?string $description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -444,6 +451,7 @@ class Products
     public function setLastUpdated(string $lastUpdated)
     {
         $this->lastUpdated = $lastUpdated;
+
         return $this;
     }
 
@@ -462,6 +470,7 @@ class Products
     public function setName(string $name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -487,7 +496,6 @@ class Products
     }
 
     /** @return int */
-
     public function getProductGroupNumber() : ?int
     {
         if (isset($this->productGroup)) {
@@ -549,6 +557,7 @@ class Products
     public function setProductNumber(string $productNumber)
     {
         $this->productNumber = $productNumber;
+
         return $this;
     }
 
@@ -567,6 +576,7 @@ class Products
     public function setSalesPrice(float $salesPrice)
     {
         $this->salesPrice = $salesPrice;
+
         return $this;
     }
 
@@ -585,6 +595,7 @@ class Products
     public function setRecommendedPrice(float $recommendedPrice)
     {
         $this->recommendedPrice = $recommendedPrice;
+
         return $this;
     }
 
@@ -603,7 +614,7 @@ class Products
     public function setSelf(?string $self)
     {
         $this->self = $self;
+
         return $this;
     }
-
 }

@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 06-10-2017
- * Time: 11:28
+ * Time: 11:28.
  */
 
 namespace Economic;
-
 
 class Filter
 {
@@ -31,12 +30,12 @@ class Filter
     {
         foreach ($this->filterable as $key => $value) {
             if (is_null($this->string)) {
-                $this->string = 'filter=' . $this->filterable[$key] . $this->operator[$key] . $this->value[$key];
+                $this->string = 'filter='.$this->filterable[$key].$this->operator[$key].$this->value[$key];
             } else {
-                $this->string .= '$and:' . $this->filterable[$key] . $this->operator[$key] . $this->value[$key];
+                $this->string .= '$and:'.$this->filterable[$key].$this->operator[$key].$this->value[$key];
             }
         }
 
-       return $this->string;
+        return $this->string;
     }
 }

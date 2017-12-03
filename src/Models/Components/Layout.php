@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 26-09-2017
- * Time: 11:44
+ * Time: 11:44.
  */
 
 namespace Economic\Models\Components;
-
 
 class Layout
 {
@@ -21,5 +20,4 @@ class Layout
         $this->layoutNumber = $layoutNumber;
         $this->self = $self;
     }
-
 }

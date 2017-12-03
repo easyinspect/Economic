@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 21-09-2017
- * Time: 11:04
+ * Time: 11:04.
  */
 
 namespace Economic\Models;
@@ -12,14 +12,14 @@ use Economic\Economic;
 
 class Units
 {
-    /** @var int $unitNumber*/
+    /** @var int $unitNumber */
     private $unitNumber;
-    /** @var string $name*/
+    /** @var string $name */
     private $name;
     /** @var string $self */
     private $self;
 
-    /** @var Economic $api*/
+    /** @var Economic $api */
     private $api;
 
     public function __construct(Economic $api)
@@ -29,7 +29,7 @@ class Units
 
     public static function parse($api, $object)
     {
-        $unit = new Units($api);
+        $unit = new self($api);
 
         $unit->setName($object->name)
             ->setUnitNumber($object->unitNumber)
@@ -47,7 +47,7 @@ class Units
             $units->collection = array_merge($units->collection, $collection);
         }
 
-        $units->collection = array_map(function($item) {
+        $units->collection = array_map(function ($item) {
             return self::parse($this->api, $item);
         }, $units->collection);
 
@@ -56,14 +56,16 @@ class Units
 
     public function get($id)
     {
-        $unit = $this->api->retrieve('/units/' . $id);
+        $unit = $this->api->retrieve('/units/'.$id);
         $this->api->setObject($unit, $this);
+
         return $this;
     }
 
     public function delete()
     {
-        $this->api->delete('/units/' . $this->getUnitNumber());
+        $this->api->delete('/units/'.$this->getUnitNumber());
+
         return $this;
     }
 
@@ -71,25 +73,26 @@ class Units
     {
         $data = [
           'name' => $this->getName(),
-          'unitNumber' => $this->getUnitNumber()
+          'unitNumber' => $this->getUnitNumber(),
         ];
 
-        $unit = $this->api->update('/units/' . $this->getUnitNumber(), array_filter($data));
+        $unit = $this->api->update('/units/'.$this->getUnitNumber(), array_filter($data));
         $this->api->setObject($unit, $this);
+
         return $this;
     }
 
     public function create()
     {
         $data = [
-            'name' => $this->getName()
+            'name' => $this->getName(),
         ];
 
         $unit = $this->api->create('/units', $data);
         $this->api->setObject($unit, $this);
+
         return $this;
     }
-
 
     // Getters & Setters
 
@@ -149,5 +152,4 @@ class Units
 
         return $this;
     }
-
 }

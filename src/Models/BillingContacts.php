@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 13-11-2017
- * Time: 15:39
+ * Time: 15:39.
  */
 
 namespace Economic\Models;
@@ -42,7 +42,7 @@ class BillingContacts
 
     public static function parse($api, $object)
     {
-        $billingContacts = new BillingContacts($api);
+        $billingContacts = new self($api);
 
         $billingContacts->setCustomerContactNumber($object->customerContactNumber);
         $billingContacts->setCustomer($object->customer);
@@ -103,7 +103,7 @@ class BillingContacts
     {
         $data = [
             'customer' => [
-                'customerNumber' => $this->getCustomerNumber()
+                'customerNumber' => $this->getCustomerNumber(),
             ],
             'customerContactNumber' => $this->getCustomerContactNumber(),
             'eInvoiceId' => $this->getEInvoiceId(),

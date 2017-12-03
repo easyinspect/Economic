@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 25-09-2017
- * Time: 17:10
+ * Time: 17:10.
  */
 
 namespace Economic\Models;
@@ -21,7 +21,7 @@ class Layouts
     /** @var bool $deleted */
     private $deleted;
 
-    /** @var Economic $api*/
+    /** @var Economic $api */
     private $api;
 
     public function __construct(Economic $api)
@@ -31,7 +31,7 @@ class Layouts
 
     public static function parse($api, $object)
     {
-        $layout = new Layouts($api);
+        $layout = new self($api);
 
         $layout->setLayoutNumber($object->layoutNumber)
                 ->setName($object->name)
@@ -42,14 +42,14 @@ class Layouts
 
     public function all($pageSize = 20, $skipPages = 0, $recursive = true)
     {
-        $layouts = $this->api->retrieve('/layouts?skippages='.$skipPages.'&pagesize='. $pageSize);
+        $layouts = $this->api->retrieve('/layouts?skippages='.$skipPages.'&pagesize='.$pageSize);
 
         if ($recursive && isset($layouts->pagination->nextPage)) {
             $collection = $this->all($pageSize, $skipPages + 1);
             $layouts->collection = array_merge($layouts->collection, $collection);
         }
 
-        $layouts->collection = array_map(function($item) {
+        $layouts->collection = array_map(function ($item) {
             return self::parse($this->api, $item);
         }, $layouts->collection);
 
@@ -58,7 +58,8 @@ class Layouts
 
     public function get($id)
     {
-        $layout = $this->api->retrieve('/layouts/' . $id);
+        $layout = $this->api->retrieve('/layouts/'.$id);
+
         return $layout;
     }
 
@@ -137,5 +138,4 @@ class Layouts
 
         return $this;
     }
-
 }

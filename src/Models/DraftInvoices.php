@@ -3,40 +3,40 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 26-09-2017
- * Time: 11:09
+ * Time: 11:09.
  */
 
 namespace Economic\Models;
 
-use Economic\Economic;
 use Economic\Filter;
-use Economic\Models\Components\Customer;
-use Economic\Models\Components\Layout;
-use Economic\Models\Components\Notes;
-use Economic\Models\Components\PaymentTerms;
+use Economic\Economic;
 use Economic\Models\Components\Pdf;
+use Economic\Models\Components\Line;
+use Economic\Models\Components\Notes;
+use Economic\Models\Components\Layout;
 use Economic\Models\Components\Project;
+use Economic\Models\Components\Customer;
 use Economic\Models\Components\Recipient;
 use Economic\Models\Components\References;
-use Economic\Models\Components\Line;
+use Economic\Models\Components\PaymentTerms;
 
 class DraftInvoices
 {
-    /** @var int $draftInvoiceNumber*/
+    /** @var int $draftInvoiceNumber */
     private $draftInvoiceNumber;
-    /** @var string $currency*/
+    /** @var string $currency */
     private $currency;
-    /** @var Customer $customer*/
+    /** @var Customer $customer */
     private $customer;
-    /** @var string $date*/
+    /** @var string $date */
     private $date;
-    /** @var Layout $layout*/
+    /** @var Layout $layout */
     private $layout;
-    /** @var PaymentTerms $paymentTerms*/
+    /** @var PaymentTerms $paymentTerms */
     private $paymentTerms;
-    /** @var Recipient $recipient*/
+    /** @var Recipient $recipient */
     public $recipient;
-    /** @var References $references*/
+    /** @var References $references */
     public $references;
     /** @var int $costPriceInBaseCurrency */
     private $costPriceInBaseCurrency;
@@ -62,7 +62,7 @@ class DraftInvoices
     private $pdf;
     /** @var Project $project */
     private $project;
-    /** @var array $lines*/
+    /** @var array $lines */
     private $lines = [];
     /** @var int $roundingAmount */
     private $roundingAmount;
@@ -71,7 +71,7 @@ class DraftInvoices
     /** @var int $vatAmount */
     private $vatAmount;
 
-    /** @var Economic $api*/
+    /** @var Economic $api */
     private $api;
 
     public function __construct(Economic $api)
@@ -81,7 +81,7 @@ class DraftInvoices
 
     public static function parse($api, $object)
     {
-        $draftInvoices = new DraftInvoices($api);
+        $draftInvoices = new self($api);
 
         $draftInvoices->setDraftInvoiceNumber($object->draftInvoiceNumber);
         $draftInvoices->setCurrency($object->currency);
@@ -115,7 +115,7 @@ class DraftInvoices
         if (is_null($filter)) {
             $invoices = $this->api->retrieve('/invoices/drafts?skippages='.$skipPages.'&pagesize='.$pageSize.'');
         } else {
-            $invoices = $this->api->retrieve('/invoices/drafts?'.$filter->filter() .'&pagesize='. $pageSize);
+            $invoices = $this->api->retrieve('/invoices/drafts?'.$filter->filter().'&pagesize='.$pageSize);
         }
 
         if ($recursive && isset($invoices->pagination->nextPage)) {
@@ -132,8 +132,9 @@ class DraftInvoices
 
     public function get($id)
     {
-        $invoice = $this->api->retrieve('/invoices/drafts/' . $id);
+        $invoice = $this->api->retrieve('/invoices/drafts/'.$id);
         $this->api->setObject($invoice, $this);
+
         return $this;
     }
 
@@ -152,7 +153,7 @@ class DraftInvoices
             'paymentTerms' => $this->getPaymentTerms(),
             'recipient' => $this->getRecipient(),
             'references' => $this->getReferences(),
-            'lines' => $this->getLines()
+            'lines' => $this->getLines(),
         ];
 
         $invoice = $this->api->create('/invoices/drafts', array_filter($data));
@@ -167,7 +168,7 @@ class DraftInvoices
             'costPriceInBaseCurrency' => $this->getCostPriceInBaseCurrency(),
             'currency' => $this->getCurrency(),
             'customer' => [
-                'customerNumber' => $this->getCustomerNumber()
+                'customerNumber' => $this->getCustomerNumber(),
             ],
             'date' => $this->getDate(),
             'dueDate' => $this->getDueDate(),
@@ -180,23 +181,23 @@ class DraftInvoices
             'netAmountInBaseCurrency' => $this->getNetAmountInBaseCurrency(),
             'notes' => $this->getNotes(),
             'paymentTerms' => [
-                'paymentTermsNumber' => $this->getPaymentTermsNumber()
+                'paymentTermsNumber' => $this->getPaymentTermsNumber(),
             ],
             'project' => [
-                'projectNumber' => $this->getProjectNumber()
+                'projectNumber' => $this->getProjectNumber(),
             ],
             'recipient' => [
                 'name' => $this->getRecipientName(),
                 'vatZone' => [
-                    'vatZoneNumber' => $this->getRecipientVatZoneNumber()
-                ]
+                    'vatZoneNumber' => $this->getRecipientVatZoneNumber(),
+                ],
             ],
             'references' => $this->getReferences(),
             'roundingAmount' => $this->getRoundingAmount(),
-            'vatAmount' => $this->getVatAmount()
+            'vatAmount' => $this->getVatAmount(),
         ];
 
-        $invoice = $this->api->update('/invoices/drafts/' . $this->getDraftInvoiceNumber(), array_filter($data));
+        $invoice = $this->api->update('/invoices/drafts/'.$this->getDraftInvoiceNumber(), array_filter($data));
         $this->api->setObject($invoice, $this);
 
         return $this;
@@ -204,17 +205,17 @@ class DraftInvoices
 
     public function bookInvoice() : Invoices
     {
-       $data = [
+        $data = [
            'draftInvoice' => [
                'draftInvoiceNumber' => $this->getDraftInvoiceNumber(),
-           ]
+           ],
        ];
 
-       $bookedInvoice = $this->api->create('/invoices/booked', $data);
+        $bookedInvoice = $this->api->create('/invoices/booked', $data);
 
-       $newInvoice = Invoices::parse($this->api, $bookedInvoice);
+        $newInvoice = Invoices::parse($this->api, $bookedInvoice);
 
-       return $newInvoice;
+        return $newInvoice;
     }
 
     /**
@@ -652,16 +653,17 @@ class DraftInvoices
     public function setCustomer($customer)
     {
         $this->customer = new Customer($customer->customerNumber, $customer->self);
+
         return $this;
     }
 
     /** @return int */
-
     public function getCustomerNumber() : ?int
     {
         if (isset($this->customer)) {
             return $this->customer->customerNumber;
         }
+
         return null;
     }
 
@@ -669,7 +671,6 @@ class DraftInvoices
      * @param int $customerNumber
      * @return $this
      */
-
     public function setCustomerNumber(int $customerNumber)
     {
         if (isset($this->customer)) {
@@ -678,6 +679,7 @@ class DraftInvoices
             $this->customer = $this->api->setClass('Customer', 'customerNumber');
             $this->customer->customerNumber = $customerNumber;
         }
+
         return $this;
     }
 
@@ -696,6 +698,7 @@ class DraftInvoices
     public function setDate(string $date)
     {
         $this->date = $date;
+
         return $this;
     }
 
@@ -719,7 +722,6 @@ class DraftInvoices
     }
 
     /** @return int */
-
     public function getLayoutNumber() : ?int
     {
         if (isset($this->layout)) {
@@ -733,7 +735,6 @@ class DraftInvoices
      * @param int $layoutNumber
      * @return $this
      */
-
     public function setLayoutNumber(int $layoutNumber)
     {
         if (isset($this->layout)) {
@@ -766,7 +767,6 @@ class DraftInvoices
     }
 
     /** @return int */
-
     public function getPaymentTermsNumber() : ?int
     {
         if (isset($this->paymentTerms)) {
@@ -780,13 +780,12 @@ class DraftInvoices
      * @param int $paymentTermsNumber
      * @return $this
      */
-
     public function setPaymentTermsNumber(int $paymentTermsNumber)
     {
         if (isset($this->paymentTerms)) {
             $this->paymentTerms->paymentTermsNumber = $paymentTermsNumber;
         } else {
-            $this->paymentTerms =  $this->api->setClass('PaymentTerms', 'paymentTermsNumber');
+            $this->paymentTerms = $this->api->setClass('PaymentTerms', 'paymentTermsNumber');
             $this->paymentTerms->paymentTermsNumber = $paymentTermsNumber;
         }
 
@@ -807,11 +806,9 @@ class DraftInvoices
      */
     public function setRecipient($recipient)
     {
-
         $this->recipient = new Recipient($recipient->name, $recipient->vatZone);
 
         return $this;
-
     }
 
     /**
@@ -892,12 +889,12 @@ class DraftInvoices
     }
 
     /** @return int */
-
     public function getSalesPersonNumber() : ?int
     {
         if (isset($this->references->salesPerson)) {
             return $this->references->salesPerson->employeeNumber;
         }
+
         return null;
     }
 
@@ -905,7 +902,6 @@ class DraftInvoices
      * @param int $employeeNumber
      * @return $this
      */
-
     public function setSalesPersonNumber(int $employeeNumber)
     {
         if (isset($this->references->salesPerson)) {
@@ -919,12 +915,12 @@ class DraftInvoices
     }
 
     /** @return int */
-
     public function getVendorReferenceNumber() : ?int
     {
         if (isset($this->references->vendorReference)) {
             return $this->references->vendorReference->employeeNumber;
         }
+
         return null;
     }
 
@@ -932,7 +928,6 @@ class DraftInvoices
      * @param int $employeeNumber
      * @return $this
      */
-
     public function setVendorReferenceNumber(int $employeeNumber)
     {
         if (isset($this->references->vendorReference)) {
@@ -977,6 +972,7 @@ class DraftInvoices
     public function setLines($lines)
     {
         $this->lines = $lines;
+
         return $this;
     }
 
