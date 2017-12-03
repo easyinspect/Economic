@@ -3,21 +3,21 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 12-10-2017
- * Time: 17:05
+ * Time: 17:05.
  */
 
 namespace Economic\Models;
 
-use Economic\Economic;
 use Economic\Filter;
-use Economic\Models\Components\Customer;
-use Economic\Models\Components\Layout;
-use Economic\Models\Components\PaymentTerms;
+use Economic\Economic;
 use Economic\Models\Components\Pdf;
+use Economic\Models\Components\Layout;
+use Economic\Models\Components\VatZone;
+use Economic\Models\Components\Customer;
 use Economic\Models\Components\Recipient;
 use Economic\Models\Components\References;
 use Economic\Models\Components\SalesPerson;
-use Economic\Models\Components\VatZone;
+use Economic\Models\Components\PaymentTerms;
 use Economic\Models\Components\VendorReference;
 
 class Invoices
@@ -40,7 +40,7 @@ class Invoices
     private $roundingAmount;
     /** @var string $self */
     private $self;
-    /** @var Customer $customer*/
+    /** @var Customer $customer */
     private $customer;
     /** @var PaymentTerms $paymentTerms */
     private $paymentTerms;
@@ -97,7 +97,7 @@ class Invoices
         if (is_null($filter)) {
             $invoices = $this->api->retrieve('/invoices/booked?skippages='.$skipPages.'&pagesize='.$pageSize.'');
         } else {
-            $invoices = $this->api->retrieve('/invoices/booked?'.$filter->filter() .'&skippages='.$skipPages.'&pagesize='.$pageSize.'');
+            $invoices = $this->api->retrieve('/invoices/booked?'.$filter->filter().'&skippages='.$skipPages.'&pagesize='.$pageSize.'');
         }
 
         if ($recursive && isset($invoices->pagination->nextPage)) {
@@ -114,14 +114,16 @@ class Invoices
 
     public function get($id)
     {
-        $invoice = $this->api->retrieve('/invoices/booked/' . $id);
+        $invoice = $this->api->retrieve('/invoices/booked/'.$id);
         $this->api->setObject($invoice, $this);
+
         return $this;
     }
 
     public function downloadPdf()
     {
         $pdf = $this->api->download('/invoices/booked/'.$this->getBookedInvoiceNumber().'/pdf');
+
         return $pdf;
     }
 
@@ -317,7 +319,6 @@ class Invoices
 
         return $this;
     }
-
 
     /**
      * @return Customer
@@ -577,5 +578,4 @@ class Invoices
 
         return $this;
     }
-
 }

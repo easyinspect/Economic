@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 18-09-2017
- * Time: 13:51
+ * Time: 13:51.
  */
 
 namespace Economic\Models\Components;
-
 
 class CustomerContact
 {
@@ -21,5 +20,4 @@ class CustomerContact
         $this->customerContactNumber = $customerContactNumber;
         $this->self = $self;
     }
-
 }

@@ -3,14 +3,14 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 17-10-2017
- * Time: 13:59
+ * Time: 13:59.
  */
 
 namespace Economic\Models;
 
 use Economic\Economic;
-use Economic\Models\Components\Journals\Entries;
 use Economic\Models\Components\Journals\Entry;
+use Economic\Models\Components\Journals\Entries;
 
 class Journals
 {
@@ -27,6 +27,7 @@ class Journals
     public function get($id)
     {
         $journal = $this->api->retrieve('/journals-experimental/'.$id.'/vouchers');
+
         return $journal;
     }
 
@@ -34,6 +35,7 @@ class Journals
     {
         $entry = $this->api->create('/journals-experimental/'.$id.'/vouchers', $this->getEntries());
         $this->api->setObject($entry, $this);
+
         return $this;
     }
 
@@ -45,9 +47,7 @@ class Journals
     public function setEntries(string $year, int $voucherNumber, Entries $entries)
     {
         $this->entries[] = new Entry($year, $voucherNumber, $entries);
+
         return $this;
     }
-
-
-
 }

@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 18-09-2017
- * Time: 13:26
+ * Time: 13:26.
  */
 
 namespace Economic\Models\Components;
-
 
 class PaymentTerms
 {
@@ -21,5 +20,4 @@ class PaymentTerms
         $this->paymentTermsNumber = $paymentTermsNumber;
         $this->self = $self;
     }
-
 }

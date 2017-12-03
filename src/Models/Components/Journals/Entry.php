@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 23-10-2017
- * Time: 10:34
+ * Time: 10:34.
  */
 
 namespace Economic\Models\Components\Journals;
-
 
 use Economic\Models\Components\AccountingYear;
 
