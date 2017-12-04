@@ -46,12 +46,12 @@ class BillingContacts
 
         $billingContacts->setCustomerContactNumber($object->customerContactNumber);
         $billingContacts->setCustomer($object->customer);
-        $billingContacts->setEInvoiceId(isset($object->eInvoiceId) ? $object->eInvoiceId : null);
-        $billingContacts->setEmail(isset($object->email) ? $object->email : null);
-        $billingContacts->setEmailNotifications(isset($object->emailNotifications) ? $object->emailNotifications : null);
+        $billingContacts->setEInvoiceId($object->eInvoiceId ?? null);
+        $billingContacts->setEmail($object->email ?? null);
+        $billingContacts->setEmailNotifications($object->emailNotifications ?? null);
         $billingContacts->setName($object->name);
-        $billingContacts->setNote(isset($object->notes) ? $object->notes : null);
-        $billingContacts->setPhone(isset($object->phone) ? $object->phone : null);
+        $billingContacts->setNote($object->notes ?? null);
+        $billingContacts->setPhone($object->phone ?? null);
         $billingContacts->setSelf($object->self);
 
         return $billingContacts;
@@ -83,7 +83,7 @@ class BillingContacts
 
     public function create(int $customerNumber)
     {
-        $data = [
+        $data = (object) [
             'customer' => $this->getCustomer(),
             'eInvoiceId' => $this->getEInvoiceId(),
             'email' => $this->getEmail(),
@@ -93,7 +93,9 @@ class BillingContacts
             'phone' => $this->getPhone(),
         ];
 
-        $contact = $this->api->create('/customers/'.$customerNumber.'/contacts', array_filter($data));
+        $this->api->cleanObject($data);
+
+        $contact = $this->api->create('/customers/'.$customerNumber.'/contacts', $data);
         $this->api->setObject($contact, $this);
 
         return $this;
@@ -101,10 +103,8 @@ class BillingContacts
 
     public function update()
     {
-        $data = [
-            'customer' => [
-                'customerNumber' => $this->getCustomerNumber(),
-            ],
+        $data = (object) [
+            'customer' => $this->getCustomer(),
             'customerContactNumber' => $this->getCustomerContactNumber(),
             'eInvoiceId' => $this->getEInvoiceId(),
             'email' => $this->getEmail(),
@@ -114,7 +114,9 @@ class BillingContacts
             'phone' => $this->getPhone(),
         ];
 
-        $contact = $this->api->update('/customers/'.$this->getCustomerNumber().'/contacts/'.$this->getCustomerContactNumber(), array_filter($data));
+        $this->api->cleanObject($data);
+
+        $contact = $this->api->update('/customers/'.$this->getCustomerNumber().'/contacts/'.$this->getCustomerContactNumber(), $data);
         $this->api->setObject($contact, $this);
 
         return $this;
