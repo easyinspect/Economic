@@ -63,12 +63,19 @@ class Economic
     public function retrieve($url)
     {
         try {
+
             return \GuzzleHttp\json_decode($this->client->get($url, $this->headers)->getBody()->getContents());
+
         } catch (ClientException $exception) {
-            throw new EconomicRequestException();
+
+            $this->handleRequestException($exception);
+
         } catch (ServerException $exception) {
+
             throw new EconomicServerException();
+
         } catch (ConnectException $exception) {
+
             throw new EconomicConnectionException();
         }
     }
@@ -76,12 +83,19 @@ class Economic
     public function download($url)
     {
         try {
+
             return $this->client->get($url, $this->headers)->getBody()->getContents();
+
         } catch (ClientException $exception) {
-            throw new EconomicRequestException();
+
+            $this->handleRequestException($exception);
+
         } catch (ServerException $exception) {
+
             throw new EconomicServerException();
+
         } catch (ConnectException $exception) {
+
             throw new EconomicConnectionException();
         }
     }
@@ -89,29 +103,41 @@ class Economic
     public function create($url, $body)
     {
         try {
-            $this->headers['body'] = \GuzzleHttp\json_encode($body);
+            $this->headers['body'] = json_encode($body);
 
             return \GuzzleHttp\json_decode($this->client->post($url, $this->headers)->getBody()->getContents());
+
         } catch (ClientException $exception) {
-            throw new EconomicRequestException();
+
+            $this->handleRequestException($exception);
+
         } catch (ServerException $exception) {
+
             throw new EconomicServerException();
+
         } catch (ConnectException $exception) {
+
             throw new EconomicConnectionException();
         }
     }
 
-    public function update($url, $body)
+    public function update($url, \stdClass $body)
     {
         try {
             $this->headers['body'] = \GuzzleHttp\json_encode($body);
 
             return \GuzzleHttp\json_decode($this->client->put($url, $this->headers)->getBody()->getContents());
+
         } catch (ClientException $exception) {
-            throw new EconomicRequestException();
+
+            $this->handleRequestException($exception);
+
         } catch (ServerException $exception) {
+
             throw new EconomicServerException();
+
         } catch (ConnectException $exception) {
+
             throw new EconomicConnectionException();
         }
     }
@@ -120,11 +146,17 @@ class Economic
     {
         try {
             return $this->client->delete($url, $this->headers);
+
         } catch (ClientException $exception) {
-            throw new EconomicRequestException();
+
+            $this->handleRequestException($exception);
+
         } catch (ServerException $exception) {
+
             throw new EconomicServerException();
+
         } catch (ConnectException $exception) {
+
             throw new EconomicConnectionException();
         }
     }
@@ -132,8 +164,8 @@ class Economic
     public function setObject($object, $methods)
     {
         foreach ($object as $key => $value) {
-            if (method_exists($methods, 'set'.ucfirst($key))) {
-                $methods->{'set'.ucfirst($key)}($value);
+            if (method_exists($methods, 'set' . ucfirst($key))) {
+                $methods->{'set' . ucfirst($key)}($value);
             }
         }
 
@@ -142,7 +174,7 @@ class Economic
 
     public function setClass($name, $property, $object = null)
     {
-        $class = __NAMESPACE__.'\Models\Components\\'.$name;
+        $class = __NAMESPACE__ . '\Models\Components\\' . $name;
 
         $this->reflectionMethod = new \ReflectionMethod($class, '__construct');
 
@@ -159,9 +191,9 @@ class Economic
         }
 
         if (isset($object->{strtolower($name)})) {
-            $array = (array) $class;
+            $array = (array)$class;
 
-            $map = array_merge($array, (array) $object->{strtolower($name)});
+            $map = array_merge($array, (array)$object->{strtolower($name)});
 
             foreach ($map as $key => $value) {
                 $class->{$key} = $value;
@@ -174,7 +206,7 @@ class Economic
     /**
      * @return Customer
      */
-    public function customer() : Customer
+    public function customer(): Customer
     {
         return new Customer($this);
     }
@@ -182,7 +214,7 @@ class Economic
     /**
      * @return CustomerCollection
      */
-    public function customerCollection() : CustomerCollection
+    public function customerCollection(): CustomerCollection
     {
         return new CustomerCollection($this);
     }
@@ -190,7 +222,7 @@ class Economic
     /**
      * @return Units
      */
-    public function units() : Units
+    public function units(): Units
     {
         return new Units($this);
     }
@@ -198,7 +230,7 @@ class Economic
     /**
      * @return Products
      */
-    public function products() : Products
+    public function products(): Products
     {
         return new Products($this);
     }
@@ -206,7 +238,7 @@ class Economic
     /**
      * @return PaymentTypes
      */
-    public function paymentTypes() : PaymentTypes
+    public function paymentTypes(): PaymentTypes
     {
         return new PaymentTypes($this);
     }
@@ -214,7 +246,7 @@ class Economic
     /**
      * @return Currency
      */
-    public function currency() : Currency
+    public function currency(): Currency
     {
         return new Currency($this);
     }
@@ -222,7 +254,7 @@ class Economic
     /**
      * @return Layouts
      */
-    public function layouts() : Layouts
+    public function layouts(): Layouts
     {
         return new Layouts($this);
     }
@@ -230,7 +262,7 @@ class Economic
     /**
      * @return draftInvoices
      */
-    public function draftInvoices() : DraftInvoices
+    public function draftInvoices(): DraftInvoices
     {
         return new DraftInvoices($this);
     }
@@ -238,7 +270,7 @@ class Economic
     /**
      * @return Invoices
      */
-    public function invoices() : Invoices
+    public function invoices(): Invoices
     {
         return new Invoices($this);
     }
@@ -246,7 +278,7 @@ class Economic
     /**
      * @return Journals
      */
-    public function journals() : Journals
+    public function journals(): Journals
     {
         return new Journals($this);
     }
@@ -254,8 +286,67 @@ class Economic
     /**
      * @return BillingContacts
      */
-    public function billingContacts() : BillingContacts
+    public function billingContacts(): BillingContacts
     {
         return new BillingContacts($this);
+    }
+
+    public function cleanObject($obj)
+    {
+        foreach ($obj as $key => $value) {
+
+            if (is_object($value)) {
+                $this->cleanObject($value);
+            }
+
+            if (is_array($value)) {
+                $this->cleanArray($value);
+            }
+
+            $this->filterData($obj, $key, $value);
+        }
+    }
+
+    protected function cleanArray(array $arr)
+    {
+        foreach ($arr as $item) {
+            if (is_object($item)) {
+                $this->cleanObject($item);
+            }
+        }
+    }
+
+    protected function filterData($obj, $property, $value)
+    {
+        if ($property == 'self') {
+            unset($obj->{$property});
+        }
+
+        if (is_null($value)) {
+            unset($obj->{$property});
+        }
+    }
+
+    protected function handleRequestException($exception)
+    {
+        $body = json_decode($exception->getResponse()->getBody()->getContents());
+
+        $message = $body->message;
+
+        if (isset($body->errors) && is_array($body->errors)) {
+            foreach ($body->errors as $error) {
+                $message .= ' ' . $error;
+            }
+        }
+
+        if (isset($body->errors)) {
+            foreach ($body->errors as $key => $value) {
+                foreach ($value->errors as $error) {
+                    $message .= ' ' . $error->errorMessage;
+                }
+            }
+        }
+
+        throw new EconomicRequestException($message, $exception->getResponse()->getStatusCode());
     }
 }

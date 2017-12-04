@@ -71,12 +71,14 @@ class Units
 
     public function update()
     {
-        $data = [
+        $data = (object) [
           'name' => $this->getName(),
           'unitNumber' => $this->getUnitNumber(),
         ];
 
-        $unit = $this->api->update('/units/'.$this->getUnitNumber(), array_filter($data));
+        $this->api->cleanObject($data);
+
+        $unit = $this->api->update('/units/'.$this->getUnitNumber(), $data);
         $this->api->setObject($unit, $this);
 
         return $this;

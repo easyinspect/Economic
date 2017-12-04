@@ -63,21 +63,21 @@ class Products
     {
         $product = new self($api);
 
-        $product->setBarCode(isset($object->barCode) ? $object->barCode : null)
+        $product->setBarCode($object->barCode ?? null)
                 ->setBarred($object->barred)
-                ->setCostPrice(isset($object->costPrice) ? $object->costPrice : null)
+                ->setCostPrice($object->costPrice ?? null)
                 ->setSalesPrice($object->salesPrice)
                 ->setRecommendedPrice($object->recommendedPrice)
-                ->setDescription(isset($object->description) ? $object->description : null)
+                ->setDescription($object->description ?? null)
                 ->setLastUpdated($object->lastUpdated)
                 ->setName($object->name)
                 ->setProductGroup($object->productGroup)
                 ->setProductNumber($object->productNumber)
-                ->setUnit(isset($object->unit) ? $object->unit : null)
-                ->setDepartmentalDistribution(isset($object->departmentalDistribution) ? $object->departmentalDistribution : null)
-                ->setInventory(isset($object->iventory) ? $object->inventory : null)
+                ->setUnit($object->unit ?? null)
+                ->setDepartmentalDistribution($object->departmentalDistribution ?? null)
+                ->setInventory($object->inventory ?? null)
                 ->setSelf($object->self)
-                ->setInventory(isset($object->inventory) ? $object->inventory : null)
+                ->setInventory($object->inventory ?? null)
                 ->setInvoices($object->invoices);
 
         return $product;
@@ -116,7 +116,7 @@ class Products
 
     public function create()
     {
-        $data = [
+        $data = (object) [
             'barCode' => $this->getBarCode(),
             'barred' => $this->getBarred(),
             'costPrice' => $this->getCostPrice(),
@@ -132,7 +132,9 @@ class Products
             'inventory' => $this->getInventory(),
         ];
 
-        $product = $this->api->create('/products', array_filter($data));
+        $this->api->cleanObject($data);
+
+        $product = $this->api->create('/products', $data);
         $this->api->setObject($product, $this);
 
         return $this;
@@ -140,7 +142,7 @@ class Products
 
     public function update()
     {
-        $data = [
+        $data = (object) [
             'barCode' => $this->getBarCode(),
             'barred' => $this->getBarred(),
             'costPrice' => $this->getCostPrice(),
@@ -156,7 +158,9 @@ class Products
             'inventory' => $this->getInventory(),
         ];
 
-        $product = $this->api->update('/products/'.$this->getProductNumber(), array_filter($data));
+        $this->api->cleanObject($data);
+
+        $product = $this->api->update('/products/'.$this->getProductNumber(), $data);
         $this->api->setObject($product, $this);
 
         return $this;

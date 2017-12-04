@@ -95,14 +95,15 @@ class DraftInvoices
         $draftInvoices->setDueDate($object->dueDate);
         $draftInvoices->setExchangeRate($object->exchangeRate);
         $draftInvoices->setGrossAmount($object->grossAmount);
-        $draftInvoices->setGrossAmountInBaseCurrency(isset($object->grossAmountInBaseCurrency) ? $object->grossAmountInBaseCurrency : null);
+        $draftInvoices->setGrossAmountInBaseCurrency($object->grossAmountInBaseCurrency ?? null);
         $draftInvoices->setMarginInBaseCurrency($object->marginInBaseCurrency);
         $draftInvoices->setMarginPercentage($object->marginPercentage);
         $draftInvoices->setNetAmount($object->netAmount);
         $draftInvoices->setNetAmountInBaseCurrency($object->netAmountInBaseCurrency);
-        $draftInvoices->setNotes(isset($object->notes) ? $object->notes : null);
+        $draftInvoices->setNotes($object->notes ?? null);
         $draftInvoices->setPdf($object->pdf);
-        $draftInvoices->setProject(isset($object->project) ? $object->project : null);
+        $draftInvoices->setProject($object->project ?? null);
+        $draftInvoices->setLines($object->lines);
         $draftInvoices->setRoundingAmount($object->roundingAmount);
         $draftInvoices->setSelf($object->self);
         $draftInvoices->setVatAmount($object->vatAmount);
@@ -140,7 +141,7 @@ class DraftInvoices
 
     public function create()
     {
-        $data = [
+        $data = (object) [
             'currency' => $this->getCurrency(),
             'customer' => $this->getCustomer(),
             'date' => $this->getDate(),
@@ -156,7 +157,9 @@ class DraftInvoices
             'lines' => $this->getLines(),
         ];
 
-        $invoice = $this->api->create('/invoices/drafts', array_filter($data));
+        $this->api->cleanObject($data);
+
+        $invoice = $this->api->create('/invoices/drafts', $data);
         $this->api->setObject($invoice, $this);
 
         return $this;
@@ -164,12 +167,10 @@ class DraftInvoices
 
     public function update()
     {
-        $data = [
+        $data = (object) [
             'costPriceInBaseCurrency' => $this->getCostPriceInBaseCurrency(),
             'currency' => $this->getCurrency(),
-            'customer' => [
-                'customerNumber' => $this->getCustomerNumber(),
-            ],
+            'customer' => $this->getCustomer(),
             'date' => $this->getDate(),
             'dueDate' => $this->getDueDate(),
             'exchangeRate' => $this->getExchangeRate(),
@@ -180,24 +181,17 @@ class DraftInvoices
             'marginPercentage' => $this->getMarginPercentage(),
             'netAmountInBaseCurrency' => $this->getNetAmountInBaseCurrency(),
             'notes' => $this->getNotes(),
-            'paymentTerms' => [
-                'paymentTermsNumber' => $this->getPaymentTermsNumber(),
-            ],
-            'project' => [
-                'projectNumber' => $this->getProjectNumber(),
-            ],
-            'recipient' => [
-                'name' => $this->getRecipientName(),
-                'vatZone' => [
-                    'vatZoneNumber' => $this->getRecipientVatZoneNumber(),
-                ],
-            ],
+            'paymentTerms' => $this->getPaymentTerms(),
+            'project' => $this->getProject(),
+            'recipient' => $this->getRecipient(),
             'references' => $this->getReferences(),
             'roundingAmount' => $this->getRoundingAmount(),
             'vatAmount' => $this->getVatAmount(),
         ];
 
-        $invoice = $this->api->update('/invoices/drafts/'.$this->getDraftInvoiceNumber(), array_filter($data));
+        $this->api->cleanObject($data);
+
+        $invoice = $this->api->update('/invoices/drafts/'.$this->getDraftInvoiceNumber(), $data);
         $this->api->setObject($invoice, $this);
 
         return $this;
@@ -969,7 +963,7 @@ class DraftInvoices
      * @param array $lines
      * @return $this
      */
-    public function setLines($lines)
+    public function setLines($lines = null)
     {
         $this->lines = $lines;
 

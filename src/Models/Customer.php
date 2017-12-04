@@ -97,30 +97,30 @@ class Customer
         $customer->setCurrency($object->currency);
         $customer->setPaymentTerms($object->paymentTerms);
         $customer->setCustomerGroup($object->customerGroup);
-        $customer->setAddress(isset($object->address) ? $object->address : null);
+        $customer->setAddress($object->address ?? null);
         $customer->setBalance($object->balance);
         $customer->setDueAmount($object->dueAmount);
-        $customer->setCity(isset($object->city) ? $object->city : null);
-        $customer->setCountry(isset($object->country) ? $object->country : null);
-        $customer->setEmail(isset($object->email) ? $object->email : null);
+        $customer->setCity($object->city ?? null);
+        $customer->setCountry($object->country ?? null);
+        $customer->setEmail($object->email ?? null);
         $customer->setName($object->name);
-        $customer->setZip(isset($object->zip) ? $object->zip : null);
-        $customer->setTelephoneAndFaxNumber(isset($object->telephoneAndFaxNumber) ? $object->telephoneAndFaxNumber : null);
-        $customer->setWebsite(isset($object->website) ? $object->website : null);
+        $customer->setZip($object->zip ?? null);
+        $customer->setTelephoneAndFaxNumber($object->telephoneAndFaxNumber ?? null);
+        $customer->setWebsite($object->website ?? null);
         $customer->setVatZone($object->vatZone);
         $customer->setLastUpdated($object->lastUpdated);
-        $customer->setBarred(isset($object->barred) ? $object->barred : null);
-        $customer->setCorporateIdentificationNumber(isset($object->corporateIdentificationNumber) ? $object->corporateIdentificationNumber : null);
-        $customer->setCreditLimit(isset($object->creditLimit) ? $object->creditLimit : null);
-        $customer->setEan(isset($object->ean) ? $object->ean : null);
-        $customer->setPublicEntryNumber(isset($object->publicEntryNumber) ? $object->publicEntryNumber : null);
-        $customer->setSalesPerson(isset($object->salesPerson) ? $object->salesPerson : null);
+        $customer->setBarred($object->barred ?? null);
+        $customer->setCorporateIdentificationNumber($object->corporateIdentificationNumber ?? null);
+        $customer->setCreditLimit($object->creditLimit ?? null);
+        $customer->setEan($object->ean ?? null);
+        $customer->setPublicEntryNumber($object->publicEntryNumber ?? null);
+        $customer->setSalesPerson($object->salesPerson ?? null);
         $customer->setContacts($object->contacts);
         $customer->setInvoices($object->invoices);
-        $customer->setDefaultDeliveryLocation(isset($object->defaultDeliveryLocation) ? $object->defaultDeliveryLocation : null);
+        $customer->setDefaultDeliveryLocation($object->defaultDeliveryLocation ?? null);
         $customer->setDeliveryLocations($object->deliveryLocations);
         $customer->setTotals($object->totals);
-        $customer->setVatNumber(isset($object->vatNumber) ? $object->vatNumber : null);
+        $customer->setVatNumber($object->vatNumber ?? null);
         $customer->setSelf($object->self);
 
         return $customer;
@@ -142,7 +142,7 @@ class Customer
 
     public function create()
     {
-        $data = [
+        $data = (object) [
             'name' => $this->getName(),
             'currency' => $this->getCurrency(),
             'customerGroup' => $this->getCustomerGroup(),
@@ -165,7 +165,9 @@ class Customer
             'vatNumber' => $this->getVatNumber(),
         ];
 
-        $customer = $this->api->create('/customers', array_filter($data));
+        $this->api->cleanObject($data);
+
+        $customer = $this->api->create('/customers', $data);
         $this->api->setObject($customer, $this);
 
         return $this;
@@ -173,7 +175,7 @@ class Customer
 
     public function update()
     {
-        $data = [
+        $data = (object) [
             'address' => $this->getAddress(),
             'barred' => $this->getBarred(),
             'city' => $this->getCity(),
@@ -181,33 +183,25 @@ class Customer
             'country' => $this->getCountry(),
             'creditLimit' => $this->getCreditLimit(),
             'currency' => $this->getCurrency(),
-            'customerGroup' => [
-                'customerGroupNumber' => $this->getCustomerGroupNumber(),
-            ],
+            'customerGroup' => $this->getCustomerGroup(),
             'customerNumber' => $this->getCustomerNumber(),
             'ean' => $this->getEan(),
             'email' => $this->getEmail(),
             'name' => $this->getName(),
-            'paymentTerms' => [
-                'paymentTermsNumber' => $this->getPaymentTermsNumber(),
-            ],
+            'paymentTerms' => $this->getPaymentTerms(),
             'publicEntryNumber' => $this->getPublicEntryNumber(),
-            'salesPerson' => [
-                'employeeNumber' => $this->getSalesPersonNumber(),
-            ],
-            'customerContact' => [
-                'customerContactNumber' => $this->getCustomerContactNumber(),
-            ],
+            'salesPerson' => $this->getSalesPerson(),
+            'customerContact' => $this->getCustomerContact(),
             'telephoneAndFaxNumber' => $this->getTelephoneAndFaxNumber(),
             'vatNumber' => $this->getVatNumber(),
-            'vatZone' => [
-                'vatZoneNumber' => $this->getVatZoneNumber(),
-            ],
+            'vatZone' => $this->getVatZone(),
             'website' => $this->getWebsite(),
             'zip' => $this->getZip(),
         ];
 
-        $customer = $this->api->update('/customers/'.$this->getCustomerNumber(), array_filter($data));
+        $this->api->cleanObject($data);
+
+        $customer = $this->api->update('/customers/'.$this->getCustomerNumber(), $data);
         $this->api->setObject($customer, $this);
 
         return $this;
