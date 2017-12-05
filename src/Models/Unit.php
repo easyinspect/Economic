@@ -10,7 +10,7 @@ namespace Economic\Models;
 
 use Economic\Economic;
 
-class Units
+class Unit
 {
     /** @var int $unitNumber */
     private $unitNumber;
@@ -57,9 +57,7 @@ class Units
     public function get($id)
     {
         $unit = $this->api->retrieve('/units/'.$id);
-        $this->api->setObject($unit, $this);
-
-        return $this;
+        return self::parse($this->api, $unit);
     }
 
     public function delete()
@@ -77,9 +75,7 @@ class Units
         ];
 
         $this->api->cleanObject($data);
-
-        $unit = $this->api->update('/units/'.$this->getUnitNumber(), $data);
-        $this->api->setObject($unit, $this);
+        $this->api->update('/units/'.$this->getUnitNumber(), $data);
 
         return $this;
     }
@@ -91,9 +87,7 @@ class Units
         ];
 
         $unit = $this->api->create('/units', $data);
-        $this->api->setObject($unit, $this);
-
-        return $this;
+        return self::parse($this->api, $unit);
     }
 
     // Getters & Setters

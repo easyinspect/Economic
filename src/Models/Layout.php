@@ -10,7 +10,7 @@ namespace Economic\Models;
 
 use Economic\Economic;
 
-class Layouts
+class Layout
 {
     /** @var int $layoutNumber */
     private $layoutNumber;
@@ -59,8 +59,7 @@ class Layouts
     public function get($id)
     {
         $layout = $this->api->retrieve('/layouts/'.$id);
-
-        return $layout;
+        return self::parse($this->api, $layout);
     }
 
     /**

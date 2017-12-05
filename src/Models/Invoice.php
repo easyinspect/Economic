@@ -20,7 +20,7 @@ use Economic\Models\Components\SalesPerson;
 use Economic\Models\Components\PaymentTerms;
 use Economic\Models\Components\VendorReference;
 
-class Invoices
+class Invoice
 {
     /** @var string $currency */
     private $currency;
@@ -115,9 +115,7 @@ class Invoices
     public function get($id)
     {
         $invoice = $this->api->retrieve('/invoices/booked/'.$id);
-        $this->api->setObject($invoice, $this);
-
-        return $this;
+        return self::parse($this->api, $invoice);
     }
 
     public function downloadPdf()

@@ -17,6 +17,7 @@ use Economic\Models\Components\PaymentTerms;
 use Economic\Models\Components\CustomerGroup;
 use Economic\Models\Components\CustomerContact;
 use Economic\Models\Components\DefaultDeliveryLocation;
+use Economic\Validations\CustomerValidator;
 
 class Customer
 {
@@ -167,10 +168,14 @@ class Customer
 
         $this->api->cleanObject($data);
 
-        $customer = $this->api->create('/customers', $data);
-        $this->api->setObject($customer, $this);
+        $validator = CustomerValidator::getValidator();
 
-        return $this;
+        if (!$validator->validate($this)) {
+            throw $validator->getException($this);
+        }
+
+        $customer = $this->api->create('/customers', $data);
+        return self::parse($this->api, $customer);
     }
 
     public function update()
@@ -200,9 +205,7 @@ class Customer
         ];
 
         $this->api->cleanObject($data);
-
-        $customer = $this->api->update('/customers/'.$this->getCustomerNumber(), $data);
-        $this->api->setObject($customer, $this);
+        $this->api->update('/customers/'.$this->getCustomerNumber(), $data);
 
         return $this;
     }

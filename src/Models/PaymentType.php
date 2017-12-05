@@ -10,7 +10,7 @@ namespace Economic\Models;
 
 use Economic\Economic;
 
-class PaymentTypes
+class PaymentType
 {
     /** @var string $name */
     private $name;
@@ -57,8 +57,7 @@ class PaymentTypes
     public function get($id)
     {
         $paymentType = $this->api->retrieve('/payment-types/'.$id);
-
-        return $paymentType;
+        return self::parse($this->api, $paymentType);
     }
 
     /**

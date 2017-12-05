@@ -9,16 +9,16 @@
 namespace Economic;
 
 use GuzzleHttp\Client;
-use Economic\Models\Units;
-use Economic\Models\Layouts;
+use Economic\Models\Unit;
+use Economic\Models\Layout;
 use Economic\Models\Currency;
 use Economic\Models\Customer;
-use Economic\Models\Invoices;
-use Economic\Models\Journals;
-use Economic\Models\Products;
-use Economic\Models\PaymentTypes;
-use Economic\Models\DraftInvoices;
-use Economic\Models\BillingContacts;
+use Economic\Models\Invoice;
+use Economic\Models\Journal;
+use Economic\Models\DraftInvoice;
+use Economic\Models\Product;
+use Economic\Models\PaymentType;
+use Economic\Models\BillingContact;
 use Economic\Models\CustomerCollection;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -161,15 +161,92 @@ class Economic
         }
     }
 
-    public function setObject($object, $methods)
+    /**
+     * @return Customer
+     */
+    public function customer(): Customer
     {
-        foreach ($object as $key => $value) {
-            if (method_exists($methods, 'set' . ucfirst($key))) {
-                $methods->{'set' . ucfirst($key)}($value);
-            }
-        }
+        return new Customer($this);
+    }
 
-        return $this;
+    /**
+     * @return CustomerCollection
+     */
+    public function customerCollection(): CustomerCollection
+    {
+        return new CustomerCollection($this);
+    }
+
+    /**
+     * @return Unit
+     */
+    public function units(): Unit
+    {
+        return new Unit($this);
+    }
+
+    /**
+     * @return Product
+     */
+    public function products(): Product
+    {
+        return new Product($this);
+    }
+
+    /**
+     * @return PaymentType
+     */
+    public function paymentTypes(): PaymentType
+    {
+        return new PaymentType($this);
+    }
+
+    /**
+     * @return Currency
+     */
+    public function currency(): Currency
+    {
+        return new Currency($this);
+    }
+
+    /**
+     * @return Layout
+     */
+    public function layouts(): Layout
+    {
+        return new Layout($this);
+    }
+
+    /**
+     * @return DraftInvoice
+     */
+    public function draftInvoices(): DraftInvoice
+    {
+        return new DraftInvoice($this);
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function invoices(): Invoice
+    {
+        return new Invoice($this);
+    }
+
+    /**
+     * @return Journal
+     */
+    public function journals(): Journal
+    {
+        return new Journal($this);
+    }
+
+    /**
+     * @return BillingContact
+     */
+    public function billingContacts(): BillingContact
+    {
+        return new BillingContact($this);
     }
 
     public function setClass($name, $property, $object = null)
@@ -201,94 +278,6 @@ class Economic
         }
 
         return $class;
-    }
-
-    /**
-     * @return Customer
-     */
-    public function customer(): Customer
-    {
-        return new Customer($this);
-    }
-
-    /**
-     * @return CustomerCollection
-     */
-    public function customerCollection(): CustomerCollection
-    {
-        return new CustomerCollection($this);
-    }
-
-    /**
-     * @return Units
-     */
-    public function units(): Units
-    {
-        return new Units($this);
-    }
-
-    /**
-     * @return Products
-     */
-    public function products(): Products
-    {
-        return new Products($this);
-    }
-
-    /**
-     * @return PaymentTypes
-     */
-    public function paymentTypes(): PaymentTypes
-    {
-        return new PaymentTypes($this);
-    }
-
-    /**
-     * @return Currency
-     */
-    public function currency(): Currency
-    {
-        return new Currency($this);
-    }
-
-    /**
-     * @return Layouts
-     */
-    public function layouts(): Layouts
-    {
-        return new Layouts($this);
-    }
-
-    /**
-     * @return draftInvoices
-     */
-    public function draftInvoices(): DraftInvoices
-    {
-        return new DraftInvoices($this);
-    }
-
-    /**
-     * @return Invoices
-     */
-    public function invoices(): Invoices
-    {
-        return new Invoices($this);
-    }
-
-    /**
-     * @return Journals
-     */
-    public function journals(): Journals
-    {
-        return new Journals($this);
-    }
-
-    /**
-     * @return BillingContacts
-     */
-    public function billingContacts(): BillingContacts
-    {
-        return new BillingContacts($this);
     }
 
     public function cleanObject($obj)

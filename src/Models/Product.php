@@ -15,7 +15,7 @@ use Economic\Models\Components\Inventory;
 use Economic\Models\Components\ProductGroup;
 use Economic\Models\Components\DepartmentalDistribution;
 
-class Products
+class Product
 {
     /** @var string $barCode */
     private $barCode;
@@ -102,9 +102,7 @@ class Products
     public function get($id)
     {
         $product = $this->api->retrieve('/products/'.$id);
-        $this->api->setObject($product, $this);
-
-        return $this;
+        return self::parse($this->api, $product);
     }
 
     public function delete()
@@ -135,9 +133,7 @@ class Products
         $this->api->cleanObject($data);
 
         $product = $this->api->create('/products', $data);
-        $this->api->setObject($product, $this);
-
-        return $this;
+        return self::parse($this->api, $product);
     }
 
     public function update()
@@ -159,9 +155,7 @@ class Products
         ];
 
         $this->api->cleanObject($data);
-
-        $product = $this->api->update('/products/'.$this->getProductNumber(), $data);
-        $this->api->setObject($product, $this);
+        $this->api->update('/products/'.$this->getProductNumber(), $data);
 
         return $this;
     }

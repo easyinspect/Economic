@@ -19,8 +19,12 @@ use Economic\Models\Components\Customer;
 use Economic\Models\Components\Recipient;
 use Economic\Models\Components\References;
 use Economic\Models\Components\PaymentTerms;
+use Economic\Models\Components\SalesPerson;
+use Economic\Models\Components\VatZone;
+use Economic\Models\Components\VendorReference;
+use Economic\Validations\DraftInvoiceValidator;
 
-class DraftInvoices
+class DraftInvoice
 {
     /** @var int $draftInvoiceNumber */
     private $draftInvoiceNumber;
@@ -103,7 +107,7 @@ class DraftInvoices
         $draftInvoices->setNotes($object->notes ?? null);
         $draftInvoices->setPdf($object->pdf);
         $draftInvoices->setProject($object->project ?? null);
-        $draftInvoices->setLines($object->lines);
+        $draftInvoices->setLines($object->lines ?? null);
         $draftInvoices->setRoundingAmount($object->roundingAmount);
         $draftInvoices->setSelf($object->self);
         $draftInvoices->setVatAmount($object->vatAmount);
@@ -134,9 +138,7 @@ class DraftInvoices
     public function get($id)
     {
         $invoice = $this->api->retrieve('/invoices/drafts/'.$id);
-        $this->api->setObject($invoice, $this);
-
-        return $this;
+        return self::parse($this->api, $invoice);
     }
 
     public function create()
@@ -159,10 +161,13 @@ class DraftInvoices
 
         $this->api->cleanObject($data);
 
-        $invoice = $this->api->create('/invoices/drafts', $data);
-        $this->api->setObject($invoice, $this);
+        $validator = DraftInvoiceValidator::getValidator();
+        if (!$validator->validate($this)) {
+            throw $validator->getException($this);
+        }
 
-        return $this;
+        $invoice = $this->api->create('/invoices/drafts', $data);
+        return self::parse($this->api, $invoice);
     }
 
     public function update()
@@ -190,14 +195,12 @@ class DraftInvoices
         ];
 
         $this->api->cleanObject($data);
-
-        $invoice = $this->api->update('/invoices/drafts/'.$this->getDraftInvoiceNumber(), $data);
-        $this->api->setObject($invoice, $this);
+        $this->api->update('/invoices/drafts/'.$this->getDraftInvoiceNumber(), $data);
 
         return $this;
     }
 
-    public function bookInvoice() : Invoices
+    public function bookInvoice() : Invoice
     {
         $data = [
            'draftInvoice' => [
@@ -207,7 +210,7 @@ class DraftInvoices
 
         $bookedInvoice = $this->api->create('/invoices/booked', $data);
 
-        $newInvoice = Invoices::parse($this->api, $bookedInvoice);
+        $newInvoice = Invoice::parse($this->api, $bookedInvoice);
 
         return $newInvoice;
     }
@@ -834,6 +837,18 @@ class DraftInvoices
     }
 
     /**
+     * @return VatZone
+     */
+    public function getRecipientVatZone() : ?VatZone
+    {
+        if (isset($this->recipient->vatZone)) {
+            return $this->recipient->vatZone;
+        }
+
+        return null;
+    }
+
+    /**
      * @return int
      */
     public function getRecipientVatZoneNumber() : ?int
@@ -880,6 +895,30 @@ class DraftInvoices
         }
 
         return $this;
+    }
+
+    /**
+     * @return SalesPerson
+     */
+    public function getReferencesSalesPerson() : ?SalesPerson
+    {
+        if (isset($this->references->salesPerson)) {
+            return $this->references->salesPerson;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return VendorReference
+     */
+    public function getReferencesVendorReference() : ?VendorReference
+    {
+        if (isset($this->references->vendorReference)) {
+            return $this->references->vendorReference;
+        }
+
+        return null;
     }
 
     /** @return int */
@@ -954,7 +993,7 @@ class DraftInvoices
     /**
      * @return array
      */
-    public function getLines() : array
+    public function getLines() : ?array
     {
         return $this->lines;
     }

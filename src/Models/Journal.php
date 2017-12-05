@@ -12,7 +12,7 @@ use Economic\Economic;
 use Economic\Models\Components\Journals\Entry;
 use Economic\Models\Components\Journals\Entries;
 
-class Journals
+class Journal
 {
     /** @var array $entries */
     private $entries = [];

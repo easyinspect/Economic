@@ -60,9 +60,7 @@ class Currency
     public function get(string $code)
     {
         $currency = $this->api->retrieve('/currencies/'.$code);
-        $this->api->setObject($currency, $this);
-
-        return $this;
+        return self::parse($this->api, $currency);
     }
 
     /**

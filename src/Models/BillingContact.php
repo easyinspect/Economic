@@ -11,7 +11,7 @@ namespace Economic\Models;
 use Economic\Economic;
 use Economic\Models\Components\Customer;
 
-class BillingContacts
+class BillingContact
 {
     /** @var int $customerContactNumber */
     private $customerContactNumber;
@@ -76,9 +76,7 @@ class BillingContacts
     public function get(int $customerContactNumber, int $customerNumber)
     {
         $contact = $this->api->retrieve('/customers/'.$customerNumber.'/contacts/'.$customerContactNumber);
-        $this->api->setObject($contact, $this);
-
-        return $this;
+        return self::parse($this->api, $contact);
     }
 
     public function create(int $customerNumber)
@@ -96,9 +94,7 @@ class BillingContacts
         $this->api->cleanObject($data);
 
         $contact = $this->api->create('/customers/'.$customerNumber.'/contacts', $data);
-        $this->api->setObject($contact, $this);
-
-        return $this;
+        return self::parse($this->api, $contact);
     }
 
     public function update()
@@ -115,9 +111,7 @@ class BillingContacts
         ];
 
         $this->api->cleanObject($data);
-
-        $contact = $this->api->update('/customers/'.$this->getCustomerNumber().'/contacts/'.$this->getCustomerContactNumber(), $data);
-        $this->api->setObject($contact, $this);
+        $this->api->update('/customers/'.$this->getCustomerNumber().'/contacts/'.$this->getCustomerContactNumber(), $data);
 
         return $this;
     }
