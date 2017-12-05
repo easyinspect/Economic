@@ -31,6 +31,6 @@ class EconomicValidationException extends \Exception
 
     private function updateMessage()
     {
-        $this->message = $this->orgMessage . implode(', ', $this->properties).'.';
+        $this->message = $this->orgMessage.implode(', ', $this->properties).'.';
     }
 }

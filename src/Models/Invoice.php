@@ -115,6 +115,7 @@ class Invoice
     public function get($id)
     {
         $invoice = $this->api->retrieve('/invoices/booked/'.$id);
+
         return self::parse($this->api, $invoice);
     }
 

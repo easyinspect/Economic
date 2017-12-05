@@ -76,6 +76,7 @@ class BillingContact
     public function get(int $customerContactNumber, int $customerNumber)
     {
         $contact = $this->api->retrieve('/customers/'.$customerNumber.'/contacts/'.$customerContactNumber);
+
         return self::parse($this->api, $contact);
     }
 
@@ -94,6 +95,7 @@ class BillingContact
         $this->api->cleanObject($data);
 
         $contact = $this->api->create('/customers/'.$customerNumber.'/contacts', $data);
+
         return self::parse($this->api, $contact);
     }
 

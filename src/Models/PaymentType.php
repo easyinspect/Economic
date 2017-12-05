@@ -57,6 +57,7 @@ class PaymentType
     public function get($id)
     {
         $paymentType = $this->api->retrieve('/payment-types/'.$id);
+
         return self::parse($this->api, $paymentType);
     }
 
