@@ -57,6 +57,7 @@ class Unit
     public function get($id)
     {
         $unit = $this->api->retrieve('/units/'.$id);
+
         return self::parse($this->api, $unit);
     }
 
@@ -87,6 +88,7 @@ class Unit
         ];
 
         $unit = $this->api->create('/units', $data);
+
         return self::parse($this->api, $unit);
     }
 

@@ -3,25 +3,23 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 04-12-2017
- * Time: 12:48
+ * Time: 12:48.
  */
 
 namespace Economic\Validations;
 
-use Economic\Exceptions\EconomicValidationException;
 use Economic\Models\Customer;
+use Economic\Exceptions\EconomicValidationException;
 
 class CustomerValidator
 {
-
     public function validate(Customer $customer)
     {
-        return !is_null($customer->getCurrency())
-            && !is_null($customer->getCustomerGroup())
-            && !is_null($customer->getName())
-            && !is_null($customer->getPaymentTerms())
-            && !is_null($customer->getVatZone());
-
+        return ! is_null($customer->getCurrency())
+            && ! is_null($customer->getCustomerGroup())
+            && ! is_null($customer->getName())
+            && ! is_null($customer->getPaymentTerms())
+            && ! is_null($customer->getVatZone());
     }
 
     public function getException(Customer $customer)
@@ -51,7 +49,7 @@ class CustomerValidator
         return $exception;
     }
 
-    public static function getValidator() : CustomerValidator
+    public static function getValidator() : self
     {
         return new static();
     }

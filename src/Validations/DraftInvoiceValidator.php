@@ -3,29 +3,27 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 04-12-2017
- * Time: 12:48
+ * Time: 12:48.
  */
 
 namespace Economic\Validations;
 
-use Economic\Exceptions\EconomicValidationException;
 use Economic\Models\DraftInvoice;
+use Economic\Exceptions\EconomicValidationException;
 
 class DraftInvoiceValidator
 {
-
     public function validate(DraftInvoice $invoice)
     {
-
-        return !is_null($invoice->getCurrency())
-            && !is_null($invoice->getCustomer())
-            && !is_null($invoice->getLayout())
-            && !is_null($invoice->getPaymentTerms())
-            && !is_null($invoice->getRecipientName())
-            && !is_null($invoice->getRecipientVatZone())
-            && !is_null($invoice->getReferencesSalesPerson())
-            && !is_null($invoice->getReferencesVendorReference())
-            && !is_null($invoice->getDate());
+        return ! is_null($invoice->getCurrency())
+            && ! is_null($invoice->getCustomer())
+            && ! is_null($invoice->getLayout())
+            && ! is_null($invoice->getPaymentTerms())
+            && ! is_null($invoice->getRecipientName())
+            && ! is_null($invoice->getRecipientVatZone())
+            && ! is_null($invoice->getReferencesSalesPerson())
+            && ! is_null($invoice->getReferencesVendorReference())
+            && ! is_null($invoice->getDate());
     }
 
     public function getException(DraftInvoice $invoice)
@@ -71,7 +69,7 @@ class DraftInvoiceValidator
         return $exception;
     }
 
-    public static function getValidator() : DraftInvoiceValidator
+    public static function getValidator() : self
     {
         return new static();
     }

@@ -13,11 +13,11 @@ use Economic\Models\Components\Totals;
 use Economic\Models\Components\VatZone;
 use Economic\Models\Components\Invoices;
 use Economic\Models\Components\SalesPerson;
+use Economic\Validations\CustomerValidator;
 use Economic\Models\Components\PaymentTerms;
 use Economic\Models\Components\CustomerGroup;
 use Economic\Models\Components\CustomerContact;
 use Economic\Models\Components\DefaultDeliveryLocation;
-use Economic\Validations\CustomerValidator;
 
 class Customer
 {
@@ -170,11 +170,12 @@ class Customer
 
         $validator = CustomerValidator::getValidator();
 
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
         $customer = $this->api->create('/customers', $data);
+
         return self::parse($this->api, $customer);
     }
 

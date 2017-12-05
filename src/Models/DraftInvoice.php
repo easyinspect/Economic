@@ -15,12 +15,12 @@ use Economic\Models\Components\Line;
 use Economic\Models\Components\Notes;
 use Economic\Models\Components\Layout;
 use Economic\Models\Components\Project;
+use Economic\Models\Components\VatZone;
 use Economic\Models\Components\Customer;
 use Economic\Models\Components\Recipient;
 use Economic\Models\Components\References;
-use Economic\Models\Components\PaymentTerms;
 use Economic\Models\Components\SalesPerson;
-use Economic\Models\Components\VatZone;
+use Economic\Models\Components\PaymentTerms;
 use Economic\Models\Components\VendorReference;
 use Economic\Validations\DraftInvoiceValidator;
 
@@ -138,6 +138,7 @@ class DraftInvoice
     public function get($id)
     {
         $invoice = $this->api->retrieve('/invoices/drafts/'.$id);
+
         return self::parse($this->api, $invoice);
     }
 
@@ -162,11 +163,12 @@ class DraftInvoice
         $this->api->cleanObject($data);
 
         $validator = DraftInvoiceValidator::getValidator();
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
         $invoice = $this->api->create('/invoices/drafts', $data);
+
         return self::parse($this->api, $invoice);
     }
 

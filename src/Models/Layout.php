@@ -59,6 +59,7 @@ class Layout
     public function get($id)
     {
         $layout = $this->api->retrieve('/layouts/'.$id);
+
         return self::parse($this->api, $layout);
     }
 

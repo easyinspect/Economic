@@ -102,6 +102,7 @@ class Product
     public function get($id)
     {
         $product = $this->api->retrieve('/products/'.$id);
+
         return self::parse($this->api, $product);
     }
 
@@ -133,6 +134,7 @@ class Product
         $this->api->cleanObject($data);
 
         $product = $this->api->create('/products', $data);
+
         return self::parse($this->api, $product);
     }
 
