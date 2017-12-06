@@ -10,6 +10,7 @@ namespace Economic\Models;
 
 use Economic\Economic;
 use Economic\Models\Components\Customer;
+use Economic\Validations\BillingContactValidator;
 
 class BillingContact
 {
@@ -94,8 +95,13 @@ class BillingContact
 
         $this->api->cleanObject($data);
 
-        $contact = $this->api->create('/customers/'.$customerNumber.'/contacts', $data);
+        $validator = BillingContactValidator::getValidator();
 
+        if (!$validator->validate($this)) {
+            throw $validator->getException($this);
+        }
+
+        $contact = $this->api->create('/customers/'.$customerNumber.'/contacts', $data);
         return self::parse($this->api, $contact);
     }
 

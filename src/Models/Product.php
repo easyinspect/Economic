@@ -14,6 +14,7 @@ use Economic\Models\Components\Invoices;
 use Economic\Models\Components\Inventory;
 use Economic\Models\Components\ProductGroup;
 use Economic\Models\Components\DepartmentalDistribution;
+use Economic\Validations\ProductValidator;
 
 class Product
 {
@@ -133,8 +134,13 @@ class Product
 
         $this->api->cleanObject($data);
 
-        $product = $this->api->create('/products', $data);
+        $validator = ProductValidator::getValidator();
 
+        if (!$validator->validate($this)) {
+            $validator->getException($this);
+        }
+
+        $product = $this->api->create('/products', $data);
         return self::parse($this->api, $product);
     }
 

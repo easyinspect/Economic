@@ -9,6 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Validations\UnitValidator;
 
 class Unit
 {
@@ -61,18 +62,29 @@ class Unit
         return self::parse($this->api, $unit);
     }
 
-    public function delete()
+    public function create()
     {
-        $this->api->delete('/units/'.$this->getUnitNumber());
+        $data = (object) [
+            'name' => $this->getName(),
+        ];
 
-        return $this;
+        $this->api->cleanObject($data);
+
+        $validator = UnitValidator::getValidator();
+
+        if (!$validator->validate($this)) {
+            $validator->getException($this);
+        }
+
+        $unit = $this->api->create('/units', $data);
+        return self::parse($this->api, $unit);
     }
 
     public function update()
     {
         $data = (object) [
-          'name' => $this->getName(),
-          'unitNumber' => $this->getUnitNumber(),
+            'name' => $this->getName(),
+            'unitNumber' => $this->getUnitNumber(),
         ];
 
         $this->api->cleanObject($data);
@@ -81,15 +93,11 @@ class Unit
         return $this;
     }
 
-    public function create()
+    public function delete()
     {
-        $data = [
-            'name' => $this->getName(),
-        ];
+        $this->api->delete('/units/'.$this->getUnitNumber());
 
-        $unit = $this->api->create('/units', $data);
-
-        return self::parse($this->api, $unit);
+        return $this;
     }
 
     // Getters & Setters
