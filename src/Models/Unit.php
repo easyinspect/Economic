@@ -72,11 +72,12 @@ class Unit
 
         $validator = UnitValidator::getValidator();
 
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             $validator->getException($this);
         }
 
         $unit = $this->api->create('/units', $data);
+
         return self::parse($this->api, $unit);
     }
 
