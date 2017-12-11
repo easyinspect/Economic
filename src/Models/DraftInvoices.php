@@ -142,8 +142,8 @@ class DraftInvoices
         $this->api->cleanObject($data);
 
         $invoice = $this->api->create('/invoices/drafts', $data);
-        return self::parse($this->api, $invoice);
 
+        return self::parse($this->api, $invoice);
     }
 
     public function update()
@@ -173,6 +173,7 @@ class DraftInvoices
         $this->api->cleanObject($data);
 
         $invoice = $this->api->update('/invoices/drafts/'.$this->getDraftInvoiceNumber(), $data);
+
         return self::parse($this->api, $invoice);
     }
 

@@ -3,13 +3,13 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 11-12-2017
- * Time: 11:06
+ * Time: 11:06.
  */
 
 namespace Economic\Models\Components\Journals;
 
-use Economic\Models\Components\Currency;
 use Economic\Models\Interfaces\Entries;
+use Economic\Models\Components\Currency;
 use Economic\Models\Components\ContraAccount;
 
 class CustomerPayments implements Entries
@@ -32,8 +32,7 @@ class CustomerPayments implements Entries
             'contraAccount' => new ContraAccount($accountNumber),
             'currency' => new Currency($currency),
             'date' => $date,
-            'customerInvoice' => $invoiceNumber
+            'customerInvoice' => $invoiceNumber,
         ];
     }
-
 }

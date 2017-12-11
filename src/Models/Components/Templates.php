@@ -10,7 +10,6 @@ namespace Economic\Models\Components;
 
 class Templates
 {
-
     /** @var string $financeVoucher */
     public $financeVoucher;
     /** @var string $manuelCustomerInvoice */
