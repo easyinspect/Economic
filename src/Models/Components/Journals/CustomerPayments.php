@@ -2,18 +2,22 @@
 /**
  * Created by PhpStorm.
  * User: mbs
- * Date: 17-10-2017
- * Time: 17:09.
+ * Date: 11-12-2017
+ * Time: 11:06
  */
 
 namespace Economic\Models\Components\Journals;
 
+use Economic\Models\Components\Currency;
+use Economic\Models\Interfaces\Entries;
+use Economic\Models\Components\ContraAccount;
+
 class CustomerPayments implements Entries
 {
-    /** @var array $manuelCustomerInvoices */
-    public $manuelCustomerInvoices = [];
+    /** @var array $manualCustomerInvoices */
+    public $manualCustomerInvoices = [];
     /** @var array $customerPayments */
-    public $customerPayments = [];
+    public $customerPayments;
     /** @var array $supplierPayments */
     public $supplierPayments = [];
     /** @var array $supplierInvoices */
@@ -21,14 +25,15 @@ class CustomerPayments implements Entries
     /** @var array $financeVouchers */
     public $financeVouchers = [];
 
-    public function __construct($amount, $contraAccount, $currency, $date, $account = null, $invoiceNumber = null)
+    public function __construct($amount, $accountNumber, $currency, $date, $account = null, $invoiceNumber = null)
     {
         $this->customerPayments[] = [
             'amount' => $amount,
-            'contraAccount' => new ContraAccount($contraAccount),
+            'contraAccount' => new ContraAccount($accountNumber),
             'currency' => new Currency($currency),
             'date' => $date,
-            'customerInvoice' => $invoiceNumber,
+            'customerInvoice' => $invoiceNumber
         ];
     }
+
 }

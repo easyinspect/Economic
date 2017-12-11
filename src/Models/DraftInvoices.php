@@ -90,7 +90,7 @@ class DraftInvoices
         $draftInvoices->setLayout($object->layout);
         $draftInvoices->setPaymentTerms($object->paymentTerms);
         $draftInvoices->setRecipient($object->recipient);
-        $draftInvoices->setReferences($object->references);
+        $draftInvoices->setReferences($object->references ?? null);
         $draftInvoices->setCostPriceInBaseCurrency($object->costPriceInBaseCurrency);
         $draftInvoices->setDueDate($object->dueDate);
         $draftInvoices->setExchangeRate($object->exchangeRate);
@@ -111,32 +111,14 @@ class DraftInvoices
         return $draftInvoices;
     }
 
-    public function all(Filter $filter = null, $pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all(Filter $filter = null)
     {
-        if (is_null($filter)) {
-            $invoices = $this->api->retrieve('/invoices/drafts?skippages='.$skipPages.'&pagesize='.$pageSize.'');
-        } else {
-            $invoices = $this->api->retrieve('/invoices/drafts?'.$filter->filter().'&pagesize='.$pageSize);
-        }
-
-        if ($recursive && isset($invoices->pagination->nextPage)) {
-            $collection = $this->all($filter, $pageSize, $skipPages + 1);
-            $invoices->collection = array_merge($invoices->collection, $collection);
-        }
-
-        $invoices->collection = array_map(function ($item) {
-            return self::parse($this->api, $item);
-        }, $invoices->collection);
-
-        return $invoices->collection;
+        return $this->api->collection('/invoices/drafts', $this);
     }
 
     public function get($id)
     {
-        $invoice = $this->api->retrieve('/invoices/drafts/'.$id);
-        $this->api->setObject($invoice, $this);
-
-        return $this;
+        return self::parse($this->api, $this->api->get('/invoices/drafts/'.$id));
     }
 
     public function create()
@@ -160,9 +142,8 @@ class DraftInvoices
         $this->api->cleanObject($data);
 
         $invoice = $this->api->create('/invoices/drafts', $data);
-        $this->api->setObject($invoice, $this);
+        return self::parse($this->api, $invoice);
 
-        return $this;
     }
 
     public function update()
@@ -192,9 +173,7 @@ class DraftInvoices
         $this->api->cleanObject($data);
 
         $invoice = $this->api->update('/invoices/drafts/'.$this->getDraftInvoiceNumber(), $data);
-        $this->api->setObject($invoice, $this);
-
-        return $this;
+        return self::parse($this->api, $invoice);
     }
 
     public function bookInvoice() : Invoices

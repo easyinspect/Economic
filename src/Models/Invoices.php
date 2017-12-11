@@ -92,39 +92,19 @@ class Invoices
         return $invoice;
     }
 
-    public function all(Filter $filter = null, $pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all(Filter $filter = null)
     {
-        if (is_null($filter)) {
-            $invoices = $this->api->retrieve('/invoices/booked?skippages='.$skipPages.'&pagesize='.$pageSize.'');
-        } else {
-            $invoices = $this->api->retrieve('/invoices/booked?'.$filter->filter().'&skippages='.$skipPages.'&pagesize='.$pageSize.'');
-        }
-
-        if ($recursive && isset($invoices->pagination->nextPage)) {
-            $collection = $this->all($filter, $pageSize, $skipPages + 1);
-            $invoices->collection = array_merge($invoices->collection, $collection);
-        }
-
-        $invoices->collection = array_map(function ($item) {
-            return self::parse($this->api, $item);
-        }, $invoices->collection);
-
-        return $invoices->collection;
+        return $this->api->collection('/invoices/booked', $this);
     }
 
     public function get($id)
     {
-        $invoice = $this->api->retrieve('/invoices/booked/'.$id);
-        $this->api->setObject($invoice, $this);
-
-        return $this;
+        return self::parse($this->api, $this->api->get('/invoices/booked/'.$id));
     }
 
     public function downloadPdf()
     {
-        $pdf = $this->api->download('/invoices/booked/'.$this->getBookedInvoiceNumber().'/pdf');
-
-        return $pdf;
+        return $this->api->download('/invoices/booked/'.$this->getBookedInvoiceNumber().'/pdf');
     }
 
     // Getters & Setters

@@ -60,12 +60,42 @@ class Economic
         ];
     }
 
-    public function retrieve($url)
+    public function collection($url, $model, $skipPages = 0, $pageSize = 20, $recursive = true)
     {
+        try {
+            $data =  \GuzzleHttp\json_decode($this->client->get($url.'?skippages='.$skipPages.'&pagesize='.$pageSize, $this->headers)->getBody()->getContents());
+
+            if ($recursive && isset($data->pagination->nextPage)) {
+                $collection = $this->collection($url, $model, $recursive, $skipPages + 1);
+                $data->collection = array_merge($data->collection, $collection);
+            }
+
+            $data->collection = array_map(function ($item) use ($model){
+                return $model::parse($this, $item);
+            }, $data->collection);
+
+            return $data->collection;
+
+        } catch (ClientException $exception) {
+
+            throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
+
+        } catch (ServerException $exception) {
+
+            throw new EconomicServerException();
+
+        } catch (ConnectException $exception) {
+
+            throw new EconomicConnectionException();
+        }
+    }
+
+    public function get($url) {
+
         try {
             return \GuzzleHttp\json_decode($this->client->get($url, $this->headers)->getBody()->getContents());
         } catch (ClientException $exception) {
-            $this->handleRequestException($exception);
+            throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
         } catch (ServerException $exception) {
             throw new EconomicServerException();
         } catch (ConnectException $exception) {
@@ -78,7 +108,7 @@ class Economic
         try {
             return $this->client->get($url, $this->headers)->getBody()->getContents();
         } catch (ClientException $exception) {
-            $this->handleRequestException($exception);
+            throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
         } catch (ServerException $exception) {
             throw new EconomicServerException();
         } catch (ConnectException $exception) {
@@ -93,7 +123,7 @@ class Economic
 
             return \GuzzleHttp\json_decode($this->client->post($url, $this->headers)->getBody()->getContents());
         } catch (ClientException $exception) {
-            $this->handleRequestException($exception);
+            throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
         } catch (ServerException $exception) {
             throw new EconomicServerException();
         } catch (ConnectException $exception) {
@@ -101,14 +131,14 @@ class Economic
         }
     }
 
-    public function update($url, \stdClass $body)
+    public function update($url, $body)
     {
         try {
             $this->headers['body'] = \GuzzleHttp\json_encode($body);
 
             return \GuzzleHttp\json_decode($this->client->put($url, $this->headers)->getBody()->getContents());
         } catch (ClientException $exception) {
-            $this->handleRequestException($exception);
+            throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
         } catch (ServerException $exception) {
             throw new EconomicServerException();
         } catch (ConnectException $exception) {
@@ -121,23 +151,12 @@ class Economic
         try {
             return $this->client->delete($url, $this->headers);
         } catch (ClientException $exception) {
-            $this->handleRequestException($exception);
+            throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
         } catch (ServerException $exception) {
             throw new EconomicServerException();
         } catch (ConnectException $exception) {
             throw new EconomicConnectionException();
         }
-    }
-
-    public function setObject($object, $methods)
-    {
-        foreach ($object as $key => $value) {
-            if (method_exists($methods, 'set'.ucfirst($key))) {
-                $methods->{'set'.ucfirst($key)}($value);
-            }
-        }
-
-        return $this;
     }
 
     public function setClass($name, $property, $object = null)
@@ -280,6 +299,10 @@ class Economic
             if (is_object($item)) {
                 $this->cleanObject($item);
             }
+
+            if (is_array($item)) {
+                $this->cleanArray($item);
+            }
         }
     }
 
@@ -292,28 +315,5 @@ class Economic
         if (is_null($value)) {
             unset($obj->{$property});
         }
-    }
-
-    protected function handleRequestException($exception)
-    {
-        $body = json_decode($exception->getResponse()->getBody()->getContents());
-
-        $message = $body->message;
-
-        if (isset($body->errors) && is_array($body->errors)) {
-            foreach ($body->errors as $error) {
-                $message .= ' '.$error;
-            }
-        }
-
-        if (isset($body->errors)) {
-            foreach ($body->errors as $key => $value) {
-                foreach ($value->errors as $error) {
-                    $message .= ' '.$error->errorMessage;
-                }
-            }
-        }
-
-        throw new EconomicRequestException($message, $exception->getResponse()->getStatusCode());
     }
 }
