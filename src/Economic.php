@@ -63,35 +63,29 @@ class Economic
     public function collection($url, $model, $skipPages = 0, $pageSize = 20, $recursive = true)
     {
         try {
-            $data =  \GuzzleHttp\json_decode($this->client->get($url.'?skippages='.$skipPages.'&pagesize='.$pageSize, $this->headers)->getBody()->getContents());
+            $data = \GuzzleHttp\json_decode($this->client->get($url.'?skippages='.$skipPages.'&pagesize='.$pageSize, $this->headers)->getBody()->getContents());
 
             if ($recursive && isset($data->pagination->nextPage)) {
                 $collection = $this->collection($url, $model, $recursive, $skipPages + 1);
                 $data->collection = array_merge($data->collection, $collection);
             }
 
-            $data->collection = array_map(function ($item) use ($model){
+            $data->collection = array_map(function ($item) use ($model) {
                 return $model::parse($this, $item);
             }, $data->collection);
 
             return $data->collection;
-
         } catch (ClientException $exception) {
-
             throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
-
         } catch (ServerException $exception) {
-
             throw new EconomicServerException();
-
         } catch (ConnectException $exception) {
-
             throw new EconomicConnectionException();
         }
     }
 
-    public function get($url) {
-
+    public function get($url)
+    {
         try {
             return \GuzzleHttp\json_decode($this->client->get($url, $this->headers)->getBody()->getContents());
         } catch (ClientException $exception) {
