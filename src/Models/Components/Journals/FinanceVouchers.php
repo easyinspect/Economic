@@ -3,14 +3,14 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 11-12-2017
- * Time: 11:06
+ * Time: 11:06.
  */
 
 namespace Economic\Models\Components\Journals;
 
 use Economic\Models\Components\Account;
-use Economic\Models\Components\Currency;
 use Economic\Models\Interfaces\Entries;
+use Economic\Models\Components\Currency;
 use Economic\Models\Components\ContraAccount;
 
 class FinanceVouchers implements Entries
@@ -33,8 +33,7 @@ class FinanceVouchers implements Entries
             'amount' => $amount,
             'contraAccount' => new ContraAccount($accountNumber),
             'currency' => new Currency($currency),
-            'date' => $date
+            'date' => $date,
         ];
     }
-
 }
