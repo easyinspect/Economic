@@ -41,7 +41,7 @@ class BillingContact
         $this->api = $api;
     }
 
-    public static function parse($api, $object)
+    public static function transform($api, $object)
     {
         $billingContacts = new self($api);
 
@@ -60,12 +60,12 @@ class BillingContact
 
     public function all(int $customerNumber)
     {
-        return $this->api->collection('/customers/'.$customerNumber.'/contacts', $this);
+        return $this->api->collection('/customers/'.$customerNumber.'/contacts?', $this);
     }
 
     public function get(int $customerContactNumber, int $customerNumber)
     {
-        return self::parse($this->api, $this->api->get('/customers/'.$customerNumber.'/contacts/'.$customerContactNumber));
+        return self::transform($this->api, $this->api->get('/customers/'.$customerNumber.'/contacts/'.$customerContactNumber));
     }
 
     public function create(int $customerNumber)
@@ -87,8 +87,7 @@ class BillingContact
             throw $validator->getException($this);
         }
 
-        $contact = $this->api->create('/customers/'.$customerNumber.'/contacts', $data);
-        return self::parse($this->api, $contact);
+        return self::transform($this->api, $this->api->create('/customers/'.$customerNumber.'/contacts', $data));
     }
 
     public function update()
@@ -106,8 +105,7 @@ class BillingContact
 
         $this->api->cleanObject($data);
 
-        $contact = $this->api->update('/customers/'.$this->getCustomerNumber().'/contacts/'.$this->getCustomerContactNumber(), $data);
-        return self::parse($this->api, $contact);
+        return self::transform($this->api, $this->api->update('/customers/'.$this->getCustomerNumber().'/contacts/'.$this->getCustomerContactNumber(), $data));
     }
 
     public function delete()

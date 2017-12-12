@@ -9,6 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Filter;
 
 class Currency
 {
@@ -29,7 +30,7 @@ class Currency
         $this->api = $api;
     }
 
-    public static function parse($api, $object)
+    public static function transform($api, $object)
     {
         $currency = new self($api);
 
@@ -41,17 +42,21 @@ class Currency
         return $currency;
     }
 
-    public function all()
+    public function all(Filter $filter = null)
     {
-        return $this->api->collection('/currencies', $this);
+        if (isset($filter)) {
+            return $this->api->collection('/currencies?'.$filter->filter().'&', $this);
+        } else {
+            return $this->api->collection('/currencies?', $this);
+        }
 
     }
 
     public function get(string $code)
     {
-        return self::parse($this->api, $this->api->get('/currencies/'.$code));
-
+        return self::transform($this->api, $this->api->get('/currencies/'.$code));
     }
+
 
     /**
      * @return string

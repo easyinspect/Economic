@@ -9,6 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Filter;
 
 class Layout
 {
@@ -29,7 +30,7 @@ class Layout
         $this->api = $api;
     }
 
-    public static function parse($api, $object)
+    public static function transform($api, $object)
     {
         $layout = new self($api);
 
@@ -40,14 +41,18 @@ class Layout
         return $layout;
     }
 
-    public function all()
+    public function all(Filter $filter = null)
     {
-        return $this->api->collection('/layouts', $this);
+        if (isset($filter)) {
+            return $this->api->collection('/layouts?'.$filter->filter().'&', $this);
+        } else {
+            return $this->api->collection('/layouts?', $this);
+        }
     }
 
     public function get($id)
     {
-        return self::parse($this->api, $this->api->get('/layouts/'.$id));
+        return self::transform($this->api, $this->api->get('/layouts/'.$id));
     }
 
     /**

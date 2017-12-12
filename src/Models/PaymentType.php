@@ -9,6 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Filter;
 
 class PaymentType
 {
@@ -27,7 +28,7 @@ class PaymentType
         $this->api = $api;
     }
 
-    public static function parse($api, $object)
+    public static function transform($api, $object)
     {
         $paymentType = new self($api);
 
@@ -38,14 +39,22 @@ class PaymentType
         return $paymentType;
     }
 
-    public function all()
+    public function all(Filter $filter = null)
     {
-        return $this->api->collection('/payment-types', $this);
+        if (isset($filter)) {
+            return $this->api->collection('/payment-types?'.$filter->filter().'&', $this);
+        } else {
+            return $this->api->collection('/payment-types?', $this);
+        }
     }
 
+    /**
+     * @param int $id
+     * @return PaymentType
+     */
     public function get($id)
     {
-        return self::parse($this->api, $this->api->get('/payment-types/'.$id));
+        return self::transform($this->api, $this->api->get('/payment-types/'.$id));
     }
 
     /**

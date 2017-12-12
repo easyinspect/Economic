@@ -90,7 +90,7 @@ class Customer
         $this->api = $api;
     }
 
-    public static function parse($api, $object) : self
+    public static function transform($api, $object) : self
     {
         $customer = new self($api);
 
@@ -129,7 +129,7 @@ class Customer
 
     public function get($id)
     {
-        return self::parse($this->api, $this->api->get('/customers/'.$id));
+        return self::transform($this->api, $this->api->get('/customers/'.$id));
     }
 
     public function delete()
@@ -171,8 +171,7 @@ class Customer
             throw $validator->getException($this);
         }
 
-        $customer = $this->api->create('/customers', $data);
-        return self::parse($this->api, $customer);
+        return self::transform($this->api, $this->api->create('/customers', $data));
     }
 
     public function update()
@@ -203,18 +202,17 @@ class Customer
 
         $this->api->cleanObject($data);
 
-        $customer = $this->api->update('/customers/'.$this->getCustomerNumber(), $data);
-        return self::parse($this->api, $customer);
+        return self::transform($this->api, $this->api->update('/customers/'.$this->getCustomerNumber(), $data));
     }
 
     public function draftInvoices()
     {
-        return $this->api->collection('/customers/'.$this->getCustomerNumber().'/invoices/drafts', new DraftInvoice($this->api));
+        return $this->api->collection('/customers/'.$this->getCustomerNumber().'/invoices/drafts?', new DraftInvoice($this->api));
     }
 
     public function bookedInvoices()
     {
-        return $this->api->collection('/customers/'.$this->getCustomerNumber().'/invoices/booked', new Invoice($this->api));
+        return $this->api->collection('/customers/'.$this->getCustomerNumber().'/invoices/booked?', new Invoice($this->api));
     }
 
     // Getters & Setters

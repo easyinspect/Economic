@@ -9,6 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Filter;
 use Economic\Models\Components\AccountingYear;
 use Economic\Models\Components\Entries;
 use Economic\Models\Components\Settings;
@@ -16,6 +17,8 @@ use Economic\Models\Components\Templates;
 
 class Journal
 {
+    /** @var int $journalNumber */
+    private $journalNumber;
     /** @var AccountingYear $accountingYear */
     private $accountingYear;
     /** @var Entries $entries */
@@ -28,8 +31,6 @@ class Journal
     private $settings;
     /** @var string $vouchers */
     private $vouchers;
-    /** @var int $journalNumber */
-    private $journalNumber;
     /** @var int $voucherNumber */
     private $voucherNumber;
     /** @var string $attachment */
@@ -44,7 +45,7 @@ class Journal
         $this->api = $api;
     }
 
-    public static function parse($api, $object)
+    public static function transform($api, $object)
     {
         if (is_array($object)) {
 
@@ -79,21 +80,25 @@ class Journal
         return $journal;
     }
 
-    public function collection() {
-        return $this->api->collection('/journals-experimental', $this);
+    public function all(Filter $filter = null) {
+
+        if (isset($filter)) {
+            return $this->api->collection('/journals-experimental?'.$filter->filter().'&', $this);
+        } else {
+            return $this->api->collection('/journals-experimental?', $this);
+        }
     }
 
     public function get($journalNumber)
     {
-        return self::parse($this->api, $this->api->get('/journals-experimental/'.$journalNumber));
+        return self::transform($this->api, $this->api->get('/journals-experimental/'.$journalNumber));
     }
 
     public function create($journalNumber) {
 
         $this->api->cleanObject($this->getEntries());
 
-        $voucher = $this->api->create('/journals-experimental/'.$journalNumber.'/vouchers', $this->getEntries());
-        return self::parse($this->api, $voucher);
+        return self::transform($this->api, $this->api->create('/journals-experimental/'.$journalNumber.'/vouchers', $this->getEntries()));
     }
 
     // Getters & Setters

@@ -9,6 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Filter;
 use Economic\Models\Components\Unit;
 use Economic\Models\Components\Invoices;
 use Economic\Models\Components\Inventory;
@@ -60,7 +61,7 @@ class Product
         $this->api = $api;
     }
 
-    public static function parse($api, $object)
+    public static function transform($api, $object)
     {
         $product = new self($api);
 
@@ -84,14 +85,19 @@ class Product
         return $product;
     }
 
-    public function all()
+    public function all(Filter $filter = null)
     {
-        return $this->api->collection('/products', $this);
+        if (isset($filter)) {
+            return $this->api->collection('/products?'.$filter->filter().'&', $this);
+        } else {
+            return $this->api->collection('/products?', $this);
+
+        }
     }
 
     public function get($id)
     {
-        return self::parse($this->api, $this->api->get('/products/'.$id));
+        return self::transform($this->api, $this->api->get('/products/'.$id));
     }
 
     public function delete()
@@ -126,8 +132,7 @@ class Product
             throw $validator->getException($this);
         }
 
-        $product = $this->api->create('/products', $data);
-        return self::parse($this->api, $product);
+        return self::transform($this->api, $this->api->create('/products', $data));
     }
 
     public function update()
@@ -150,8 +155,7 @@ class Product
 
         $this->api->cleanObject($data);
 
-        $product = $this->api->update('/products/'.$this->getProductNumber(), $data);
-        return self::parse($this->api, $product);
+        return self::transform($this->api, $this->api->update('/products/'.$this->getProductNumber(), $data));
     }
 
     // Getters & Setters

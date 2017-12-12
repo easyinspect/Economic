@@ -23,6 +23,11 @@ class CustomerCollection
 
     public function all(Filter $filter = null)
     {
-        return $this->api->collection('/customers', new Customer($this->api));
+        if (isset($filter)) {
+            return $this->api->collection('/customers?'.$filter->filter().'&', new Customer($this->api));
+        } else {
+            return $this->api->collection('/customers?', new Customer($this->api));
+        }
+
     }
 }

@@ -16,13 +16,32 @@ class EconomicRequestException extends \Exception
     {
         $this->message = \GuzzleHttp\json_decode($message);
 
-        if (isset($this->message->errors) && is_array($this->message->errors)) {
+        if (isset($this->message->errors)) {
+
             foreach ($this->message->errors as $error) {
-                $message = $error;
+
+                if (!isset($error->errors)) {
+                    $message = $error;
+                }
+
+                if (isset($error->errors)) {
+                    foreach ($error->errors as $errorMessage) {
+                        $message = $errorMessage->errorMessage . ' / ' . $errorMessage->developerHint;
+                    }
+                }
+
+                if (isset($error->entries)) {
+                    foreach ($error->entries->items as $item) {
+                        var_dump($item);
+                    }
+                }
+
             }
+
         } else {
             $message = $this->message->message;
         }
+
 
         parent::__construct($message, $code, $previous);
     }

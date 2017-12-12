@@ -66,7 +66,7 @@ class Invoice
         $this->api = $api;
     }
 
-    public static function parse($api, $object)
+    public static function transform($api, $object)
     {
         $invoice = new self($api);
 
@@ -94,12 +94,16 @@ class Invoice
 
     public function all(Filter $filter = null)
     {
-        return $this->api->collection('/invoices/booked', $this);
+        if (isset($filter)) {
+            return $this->api->collection('/invoices/booked?'.$filter->filter().'&', $this);
+        } else {
+            return $this->api->collection('/invoices/booked?', $this);
+        }
     }
 
     public function get($id)
     {
-        return self::parse($this->api, $this->api->get('/invoices/booked/'.$id));
+        return self::transform($this->api, $this->api->get('/invoices/booked/'.$id));
     }
 
     public function downloadPdf()

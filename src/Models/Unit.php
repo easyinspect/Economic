@@ -9,6 +9,7 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Filter;
 use Economic\Validations\UnitValidator;
 
 class Unit
@@ -28,7 +29,7 @@ class Unit
         $this->api = $api;
     }
 
-    public static function parse($api, $object)
+    public static function transform($api, $object)
     {
         $unit = new self($api);
 
@@ -39,20 +40,23 @@ class Unit
         return $unit;
     }
 
-    public function all()
+    public function all(Filter $filter = null)
     {
-        return $this->api->collection('/units', $this);
+        if (isset($filter)) {
+            return $this->api->collection('/units?'.$filter->filter().'&', $this);
+        } else {
+            return $this->api->collection('/units?', $this);
+        }
     }
 
     public function get($id)
     {
-        return self::parse($this->api, $this->api->get('/units/'.$id));
+        return self::transform($this->api, $this->api->get('/units/'.$id));
     }
 
     public function delete()
     {
         $this->api->delete('/units/'.$this->getUnitNumber());
-
         return $this;
     }
 
@@ -64,24 +68,21 @@ class Unit
         ];
 
         $this->api->cleanObject($data);
-
-        $unit = $this->api->update('/units/'.$this->getUnitNumber(), $data);
-        return self::parse($this->api, $unit);
+        return self::transform($this->api, $this->api->update('/units/'.$this->getUnitNumber(), $data));
     }
 
     public function create()
     {
-        $data = [
+        $data = (object) [
             'name' => $this->getName(),
         ];
 
         $validator = UnitValidator::getValidator();
         if (!$validator->validate($this)) {
-            $validator->getException($this);
+             throw $validator->getException($this);
         }
 
-        $unit = $this->api->create('/units', $data);
-        return self::parse($this->api, $unit);
+        return self::transform($this->api, $this->api->create('/units', $data));
     }
 
     // Getters & Setters
