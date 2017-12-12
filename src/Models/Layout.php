@@ -10,7 +10,7 @@ namespace Economic\Models;
 
 use Economic\Economic;
 
-class Layouts
+class Layout
 {
     /** @var int $layoutNumber */
     private $layoutNumber;
@@ -40,27 +40,14 @@ class Layouts
         return $layout;
     }
 
-    public function all($pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all()
     {
-        $layouts = $this->api->retrieve('/layouts?skippages='.$skipPages.'&pagesize='.$pageSize);
-
-        if ($recursive && isset($layouts->pagination->nextPage)) {
-            $collection = $this->all($pageSize, $skipPages + 1);
-            $layouts->collection = array_merge($layouts->collection, $collection);
-        }
-
-        $layouts->collection = array_map(function ($item) {
-            return self::parse($this->api, $item);
-        }, $layouts->collection);
-
-        return $layouts->collection;
+        return $this->api->collection('/layouts', $this);
     }
 
     public function get($id)
     {
-        $layout = $this->api->retrieve('/layouts/'.$id);
-
-        return $layout;
+        return self::parse($this->api, $this->api->get('/layouts/'.$id));
     }
 
     /**

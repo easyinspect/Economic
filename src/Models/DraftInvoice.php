@@ -19,8 +19,9 @@ use Economic\Models\Components\Customer;
 use Economic\Models\Components\Recipient;
 use Economic\Models\Components\References;
 use Economic\Models\Components\PaymentTerms;
+use Economic\Validations\DraftInvoiceValidator;
 
-class DraftInvoices
+class DraftInvoice
 {
     /** @var int $draftInvoiceNumber */
     private $draftInvoiceNumber;
@@ -141,6 +142,11 @@ class DraftInvoices
 
         $this->api->cleanObject($data);
 
+        $validator = DraftInvoiceValidator::getValidator();
+        if (!$validator->validate($this)) {
+            throw $validator->getException($this);
+        }
+
         $invoice = $this->api->create('/invoices/drafts', $data);
 
         return self::parse($this->api, $invoice);
@@ -177,7 +183,7 @@ class DraftInvoices
         return self::parse($this->api, $invoice);
     }
 
-    public function bookInvoice() : Invoices
+    public function bookInvoice() : Invoice
     {
         $data = [
            'draftInvoice' => [
@@ -187,7 +193,7 @@ class DraftInvoices
 
         $bookedInvoice = $this->api->create('/invoices/booked', $data);
 
-        $newInvoice = Invoices::parse($this->api, $bookedInvoice);
+        $newInvoice = Invoice::parse($this->api, $bookedInvoice);
 
         return $newInvoice;
     }

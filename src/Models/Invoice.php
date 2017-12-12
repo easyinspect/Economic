@@ -20,7 +20,7 @@ use Economic\Models\Components\SalesPerson;
 use Economic\Models\Components\PaymentTerms;
 use Economic\Models\Components\VendorReference;
 
-class Invoices
+class Invoice
 {
     /** @var string $currency */
     private $currency;

@@ -9,8 +9,9 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Validations\UnitValidator;
 
-class Units
+class Unit
 {
     /** @var int $unitNumber */
     private $unitNumber;
@@ -38,28 +39,14 @@ class Units
         return $unit;
     }
 
-    public function all($pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all()
     {
-        $units = $this->api->retrieve('/units?skippages='.$skipPages.'&pagesize='.$pageSize.'');
-
-        if ($recursive && isset($units->pagination->nextPage)) {
-            $collection = $this->all($pageSize, $skipPages + 1);
-            $units->collection = array_merge($units->collection, $collection);
-        }
-
-        $units->collection = array_map(function ($item) {
-            return self::parse($this->api, $item);
-        }, $units->collection);
-
-        return $units->collection;
+        return $this->api->collection('/units', $this);
     }
 
     public function get($id)
     {
-        $unit = $this->api->retrieve('/units/'.$id);
-        $this->api->setObject($unit, $this);
-
-        return $this;
+        return self::parse($this->api, $this->api->get('/units/'.$id));
     }
 
     public function delete()
@@ -79,9 +66,7 @@ class Units
         $this->api->cleanObject($data);
 
         $unit = $this->api->update('/units/'.$this->getUnitNumber(), $data);
-        $this->api->setObject($unit, $this);
-
-        return $this;
+        return self::parse($this->api, $unit);
     }
 
     public function create()
@@ -90,10 +75,13 @@ class Units
             'name' => $this->getName(),
         ];
 
-        $unit = $this->api->create('/units', $data);
-        $this->api->setObject($unit, $this);
+        $validator = UnitValidator::getValidator();
+        if (!$validator->validate($this)) {
+            $validator->getException($this);
+        }
 
-        return $this;
+        $unit = $this->api->create('/units', $data);
+        return self::parse($this->api, $unit);
     }
 
     // Getters & Setters

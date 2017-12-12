@@ -10,7 +10,7 @@ namespace Economic\Models;
 
 use Economic\Economic;
 
-class PaymentTypes
+class PaymentType
 {
     /** @var string $name */
     private $name;
@@ -38,27 +38,14 @@ class PaymentTypes
         return $paymentType;
     }
 
-    public function all($pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all()
     {
-        $paymentTypes = $this->api->retrieve('/payment-types?skippages='.$skipPages.'&pagesize='.$pageSize.'');
-
-        if ($recursive && isset($paymentTypes->pagination->nextPage)) {
-            $collection = $this->all($pageSize, $skipPages + 1);
-            $paymentTypes->collection = array_merge($paymentTypes->collection, $collection);
-        }
-
-        $paymentTypes->collection = array_map(function ($item) {
-            return self::parse($this->api, $item);
-        }, $paymentTypes->collection);
-
-        return $paymentTypes->collection;
+        return $this->api->collection('/payment-types', $this);
     }
 
     public function get($id)
     {
-        $paymentType = $this->api->retrieve('/payment-types/'.$id);
-
-        return $paymentType;
+        return self::parse($this->api, $this->api->get('/payment-types/'.$id));
     }
 
     /**

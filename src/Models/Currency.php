@@ -41,28 +41,16 @@ class Currency
         return $currency;
     }
 
-    public function all($pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all()
     {
-        $currencies = $this->api->retrieve('/currencies?skippages='.$skipPages.'&pagesize='.$pageSize.'');
+        return $this->api->collection('/currencies', $this);
 
-        if ($recursive && isset($currencies->pagination->nextPage)) {
-            $collection = $this->all($pageSize, $skipPages + 1);
-            $currencies->collection = array_merge($currencies->collection, $collection);
-        }
-
-        $currencies->collection = array_map(function ($item) {
-            return self::parse($this->api, $item);
-        }, $currencies->collection);
-
-        return $currencies->collection;
     }
 
     public function get(string $code)
     {
-        $currency = $this->api->retrieve('/currencies/'.$code);
-        $this->api->setObject($currency, $this);
+        return self::parse($this->api, $this->api->get('/currencies/'.$code));
 
-        return $this;
     }
 
     /**

@@ -9,16 +9,16 @@
 namespace Economic;
 
 use GuzzleHttp\Client;
-use Economic\Models\Units;
-use Economic\Models\Layouts;
+use Economic\Models\Unit;
+use Economic\Models\Layout;
 use Economic\Models\Currency;
 use Economic\Models\Customer;
-use Economic\Models\Invoices;
-use Economic\Models\Journals;
-use Economic\Models\Products;
-use Economic\Models\PaymentTypes;
-use Economic\Models\DraftInvoices;
-use Economic\Models\BillingContacts;
+use Economic\Models\Invoice;
+use Economic\Models\Product;
+use Economic\Models\Journal;
+use Economic\Models\PaymentType;
+use Economic\Models\DraftInvoice;
+use Economic\Models\BillingContact;
 use Economic\Models\CustomerCollection;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -201,27 +201,27 @@ class Economic
     }
 
     /**
-     * @return Units
+     * @return Unit
      */
-    public function units(): Units
+    public function units(): Unit
     {
-        return new Units($this);
+        return new Unit($this);
     }
 
     /**
-     * @return Products
+     * @return Product
      */
-    public function products(): Products
+    public function products(): Product
     {
-        return new Products($this);
+        return new Product($this);
     }
 
     /**
-     * @return PaymentTypes
+     * @return PaymentType
      */
-    public function paymentTypes(): PaymentTypes
+    public function paymentTypes(): PaymentType
     {
-        return new PaymentTypes($this);
+        return new PaymentType($this);
     }
 
     /**
@@ -233,43 +233,43 @@ class Economic
     }
 
     /**
-     * @return Layouts
+     * @return Layout
      */
-    public function layouts(): Layouts
+    public function layouts(): Layout
     {
-        return new Layouts($this);
+        return new Layout($this);
     }
 
     /**
-     * @return draftInvoices
+     * @return draftInvoice
      */
-    public function draftInvoices(): DraftInvoices
+    public function draftInvoices(): DraftInvoice
     {
-        return new DraftInvoices($this);
+        return new DraftInvoice($this);
     }
 
     /**
-     * @return Invoices
+     * @return Invoice
      */
-    public function invoices(): Invoices
+    public function invoices(): Invoice
     {
-        return new Invoices($this);
+        return new Invoice($this);
     }
 
     /**
-     * @return Journals
+     * @return Journal
      */
-    public function journals(): Journals
+    public function journals(): Journal
     {
-        return new Journals($this);
+        return new Journal($this);
     }
 
     /**
-     * @return BillingContacts
+     * @return BillingContact
      */
-    public function billingContacts(): BillingContacts
+    public function billingContacts(): BillingContact
     {
-        return new BillingContacts($this);
+        return new BillingContact($this);
     }
 
     public function cleanObject($obj)

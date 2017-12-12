@@ -10,8 +10,9 @@ namespace Economic\Models;
 
 use Economic\Economic;
 use Economic\Models\Components\Customer;
+use Economic\Validations\BillingContactValidator;
 
-class BillingContacts
+class BillingContact
 {
     /** @var int $customerContactNumber */
     private $customerContactNumber;
@@ -57,28 +58,14 @@ class BillingContacts
         return $billingContacts;
     }
 
-    public function all(int $customerNumber, $pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all(int $customerNumber)
     {
-        $contacts = $this->api->retrieve('/customers/'.$customerNumber.'/contacts?skippages='.$skipPages.'&pagesize='.$pageSize.'');
-
-        if ($recursive && isset($contacts->pagination->nextPage)) {
-            $collection = $this->all($customerNumber, $pageSize, $skipPages + 1);
-            $contacts->collection = array_merge($contacts->collection, $collection);
-        }
-
-        $contacts->collection = array_map(function ($item) {
-            return self::parse($this->api, $item);
-        }, $contacts->collection);
-
-        return $contacts->collection;
+        return $this->api->collection('/customers/'.$customerNumber.'/contacts', $this);
     }
 
     public function get(int $customerContactNumber, int $customerNumber)
     {
-        $contact = $this->api->retrieve('/customers/'.$customerNumber.'/contacts/'.$customerContactNumber);
-        $this->api->setObject($contact, $this);
-
-        return $this;
+        return self::parse($this->api, $this->api->get('/customers/'.$customerNumber.'/contacts/'.$customerContactNumber));
     }
 
     public function create(int $customerNumber)
@@ -95,10 +82,13 @@ class BillingContacts
 
         $this->api->cleanObject($data);
 
-        $contact = $this->api->create('/customers/'.$customerNumber.'/contacts', $data);
-        $this->api->setObject($contact, $this);
+        $validator = BillingContactValidator::getValidator();
+        if (!$validator->validate($this)) {
+            throw $validator->getException($this);
+        }
 
-        return $this;
+        $contact = $this->api->create('/customers/'.$customerNumber.'/contacts', $data);
+        return self::parse($this->api, $contact);
     }
 
     public function update()
@@ -117,9 +107,7 @@ class BillingContacts
         $this->api->cleanObject($data);
 
         $contact = $this->api->update('/customers/'.$this->getCustomerNumber().'/contacts/'.$this->getCustomerContactNumber(), $data);
-        $this->api->setObject($contact, $this);
-
-        return $this;
+        return self::parse($this->api, $contact);
     }
 
     public function delete()

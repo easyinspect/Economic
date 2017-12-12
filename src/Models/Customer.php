@@ -17,6 +17,7 @@ use Economic\Models\Components\PaymentTerms;
 use Economic\Models\Components\CustomerGroup;
 use Economic\Models\Components\CustomerContact;
 use Economic\Models\Components\DefaultDeliveryLocation;
+use Economic\Validations\CustomerValidator;
 
 class Customer
 {
@@ -128,9 +129,7 @@ class Customer
 
     public function get($id)
     {
-        $customer = $this->api->retrieve('/customers/'.$id);
-
-        return static::parse($this->api, $customer);
+        return self::parse($this->api, $this->api->get('/customers/'.$id));
     }
 
     public function delete()
@@ -167,10 +166,13 @@ class Customer
 
         $this->api->cleanObject($data);
 
-        $customer = $this->api->create('/customers', $data);
-        $this->api->setObject($customer, $this);
+        $validator = CustomerValidator::getValidator();
+        if (!$validator->validate($this)) {
+            throw $validator->getException($this);
+        }
 
-        return $this;
+        $customer = $this->api->create('/customers', $data);
+        return self::parse($this->api, $customer);
     }
 
     public function update()
@@ -202,37 +204,17 @@ class Customer
         $this->api->cleanObject($data);
 
         $customer = $this->api->update('/customers/'.$this->getCustomerNumber(), $data);
-        $this->api->setObject($customer, $this);
-
-        return $this;
+        return self::parse($this->api, $customer);
     }
 
-    public function draftInvoices($pageSize = 20, $skipPages = 0, $recursive = true)
+    public function draftInvoices()
     {
-        $invoices = $this->api->retrieve('/customers/'.$this->getCustomerNumber().'/invoices/drafts?skippages='.$skipPages.'&pagesize='.$pageSize);
-
-        if ($recursive && isset($invoices->pagination->nextPage)) {
-            $collection = $this->draftInvoices($pageSize, $skipPages + 1);
-            $invoices->collection = array_merge($invoices->collection, $collection);
-        }
-
-        $invoices->collection = array_map(function ($item) {
-            return DraftInvoices::parse($this->api, $item);
-        }, $invoices->collection);
-
-        return $invoices->collection;
+        return $this->api->collection('/customers/'.$this->getCustomerNumber().'/invoices/drafts', new DraftInvoice($this->api));
     }
 
-    public function bookedInvoices($pageSize = 20, $skipPages = 0, $recursive = true)
+    public function bookedInvoices()
     {
-        $invoices = $this->api->retrieve('/customers/'.$this->getCustomerNumber().'/invoices/booked?skippages='.$skipPages.'&pagesize='.$pageSize);
-
-        if ($recursive && isset($invoices->pagination->nextPage)) {
-            $collection = $this->bookedInvoices($pageSize, $skipPages + 1);
-            $invoices->collection = array_merge($invoices->collection, $collection);
-        }
-
-        return $invoices->collection;
+        return $this->api->collection('/customers/'.$this->getCustomerNumber().'/invoices/booked', new Invoice($this->api));
     }
 
     // Getters & Setters

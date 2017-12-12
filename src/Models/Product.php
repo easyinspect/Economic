@@ -14,8 +14,9 @@ use Economic\Models\Components\Invoices;
 use Economic\Models\Components\Inventory;
 use Economic\Models\Components\ProductGroup;
 use Economic\Models\Components\DepartmentalDistribution;
+use Economic\Validations\ProductValidator;
 
-class Products
+class Product
 {
     /** @var string $barCode */
     private $barCode;
@@ -83,28 +84,14 @@ class Products
         return $product;
     }
 
-    public function all($pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all()
     {
-        $products = $this->api->retrieve('/products?skippages='.$skipPages.'&pagesize='.$pageSize);
-
-        if ($recursive && isset($products->pagination->nextPage)) {
-            $collection = $this->all($pageSize, $skipPages + 1);
-            $products->collection = array_merge($products->collection, $collection);
-        }
-
-        $products->collection = array_map(function ($item) {
-            return self::parse($this->api, $item);
-        }, $products->collection);
-
-        return $products->collection;
+        return $this->api->collection('/products', $this);
     }
 
     public function get($id)
     {
-        $product = $this->api->retrieve('/products/'.$id);
-        $this->api->setObject($product, $this);
-
-        return $this;
+        return self::parse($this->api, $this->api->get('/products/'.$id));
     }
 
     public function delete()
@@ -134,10 +121,13 @@ class Products
 
         $this->api->cleanObject($data);
 
-        $product = $this->api->create('/products', $data);
-        $this->api->setObject($product, $this);
+        $validator = ProductValidator::getValidator();
+        if (!$validator->validate($this)) {
+            throw $validator->getException($this);
+        }
 
-        return $this;
+        $product = $this->api->create('/products', $data);
+        return self::parse($this->api, $product);
     }
 
     public function update()
@@ -161,9 +151,7 @@ class Products
         $this->api->cleanObject($data);
 
         $product = $this->api->update('/products/'.$this->getProductNumber(), $data);
-        $this->api->setObject($product, $this);
-
-        return $this;
+        return self::parse($this->api, $product);
     }
 
     // Getters & Setters

@@ -21,23 +21,8 @@ class CustomerCollection
         $this->api = $api;
     }
 
-    public function all(Filter $filter = null, $pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all(Filter $filter = null)
     {
-        if (is_null($filter)) {
-            $customers = $this->api->retrieve('/customers?skippages='.$skipPages.'&pagesize='.$pageSize);
-        } else {
-            $customers = $this->api->retrieve('/customers?'.$filter->filter().'&pagesize='.$pageSize);
-        }
-
-        if ($recursive && isset($customers->pagination->nextPage)) {
-            $temp = $this->all($filter, $pageSize, $skipPages + 1);
-            $customers->collection = array_merge($customers->collection, $temp);
-        }
-
-        $customers->collection = array_map(function ($item) {
-            return Customer::parse($this->api, $item);
-        }, $customers->collection);
-
-        return $customers->collection;
+        return $this->api->collection('/customers', new Customer($this->api));
     }
 }
