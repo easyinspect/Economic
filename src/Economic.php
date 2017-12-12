@@ -75,17 +75,11 @@ class Economic
             }, $data->collection);
 
             return $data->collection;
-
         } catch (ClientException $exception) {
-
             throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
-
         } catch (ServerException $exception) {
-
             throw new EconomicServerException();
-
         } catch (ConnectException $exception) {
-
             throw new EconomicConnectionException();
         }
     }
@@ -93,19 +87,12 @@ class Economic
     public function get($url)
     {
         try {
-
             return \GuzzleHttp\json_decode($this->client->get($url, $this->headers)->getBody()->getContents());
-
         } catch (ClientException $exception) {
-
             throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
-
         } catch (ServerException $exception) {
-
             throw new EconomicServerException();
-
         } catch (ConnectException $exception) {
-
             throw new EconomicConnectionException();
         }
     }
@@ -113,19 +100,12 @@ class Economic
     public function download($url)
     {
         try {
-
             return $this->client->get($url, $this->headers)->getBody()->getContents();
-
         } catch (ClientException $exception) {
-
             throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
-
         } catch (ServerException $exception) {
-
             throw new EconomicServerException();
-
         } catch (ConnectException $exception) {
-
             throw new EconomicConnectionException();
         }
     }
@@ -133,21 +113,14 @@ class Economic
     public function create($url, $body)
     {
         try {
-
             $this->headers['body'] = json_encode($body);
 
             return \GuzzleHttp\json_decode($this->client->post($url, $this->headers)->getBody()->getContents());
-
         } catch (ClientException $exception) {
-
             throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
-
         } catch (ServerException $exception) {
-
             throw new EconomicServerException();
-
         } catch (ConnectException $exception) {
-
             throw new EconomicConnectionException();
         }
     }
@@ -155,21 +128,14 @@ class Economic
     public function update($url, $body)
     {
         try {
-
             $this->headers['body'] = \GuzzleHttp\json_encode($body);
 
             return \GuzzleHttp\json_decode($this->client->put($url, $this->headers)->getBody()->getContents());
-
         } catch (ClientException $exception) {
-
             throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
-
         } catch (ServerException $exception) {
-
             throw new EconomicServerException();
-
         } catch (ConnectException $exception) {
-
             throw new EconomicConnectionException();
         }
     }
@@ -177,19 +143,12 @@ class Economic
     public function delete($url)
     {
         try {
-
             return $this->client->delete($url, $this->headers);
-
         } catch (ClientException $exception) {
-
             throw new EconomicRequestException($exception->getResponse()->getBody()->getContents());
-
         } catch (ServerException $exception) {
-
             throw new EconomicServerException();
-
         } catch (ConnectException $exception) {
-
             throw new EconomicConnectionException();
         }
     }
@@ -325,14 +284,12 @@ class Economic
             }
 
             $this->filterData($obj, $key, $value);
-
         }
     }
 
     protected function cleanArray(array $arr)
     {
         foreach ($arr as $key => $item) {
-
             if (is_object($item)) {
                 $this->cleanObject($item);
             }
