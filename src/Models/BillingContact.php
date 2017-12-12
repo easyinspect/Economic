@@ -83,11 +83,12 @@ class BillingContact
         $this->api->cleanObject($data);
 
         $validator = BillingContactValidator::getValidator();
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
         $contact = $this->api->create('/customers/'.$customerNumber.'/contacts', $data);
+
         return self::parse($this->api, $contact);
     }
 
@@ -107,6 +108,7 @@ class BillingContact
         $this->api->cleanObject($data);
 
         $contact = $this->api->update('/customers/'.$this->getCustomerNumber().'/contacts/'.$this->getCustomerContactNumber(), $data);
+
         return self::parse($this->api, $contact);
     }
 
