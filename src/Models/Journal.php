@@ -48,9 +48,7 @@ class Journal
     public static function transform($api, $object)
     {
         if (is_array($object)) {
-
             $journal = array_map(function ($item) use ($api) {
-
                 $journal = new self($api);
 
                 $journal->setVoucherNumber($item->voucherNumber);
@@ -60,11 +58,8 @@ class Journal
                 $journal->setEntries($item->entries, $item->accountingYear->year);
 
                 return $journal;
-
             }, $object);
-
         } else {
-
             $journal = new self($api);
 
             $journal->setName($object->name);
@@ -74,7 +69,6 @@ class Journal
             $journal->setTemplates($object->templates);
             $journal->setEntries($object->entries);
             $journal->setSettings($object->setting ?? null);
-
         }
 
         return $journal;
@@ -94,8 +88,8 @@ class Journal
         return self::transform($this->api, $this->api->get('/journals-experimental/'.$journalNumber));
     }
 
-    public function create($journalNumber) {
-
+    public function create($journalNumber)
+    {
         $this->api->cleanObject($this->getEntries());
 
         return self::transform($this->api, $this->api->create('/journals-experimental/'.$journalNumber.'/vouchers', $this->getEntries()));
@@ -115,8 +109,8 @@ class Journal
      * @param string $name
      * @return $this
      */
-    public function setName(string $name = null) {
-
+    public function setName(string $name = null)
+    {
         $this->name = $name;
 
         return $this;
@@ -244,7 +238,6 @@ class Journal
         return $this;
     }
 
-
     /**
      * @return Templates
      */
@@ -261,7 +254,6 @@ class Journal
     {
         if (isset($template)) {
             $this->templates = new Templates($template->financeVoucher, $template->manualCustomerInvoice, $template->self);
-
         }
 
         return $this;
@@ -292,5 +284,4 @@ class Journal
 
         return $this;
     }
-
 }

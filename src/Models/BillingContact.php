@@ -83,7 +83,7 @@ class BillingContact
         $this->api->cleanObject($data);
 
         $validator = BillingContactValidator::getValidator();
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 

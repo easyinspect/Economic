@@ -49,7 +49,6 @@ class Currency
         } else {
             return $this->api->collection('/currencies?', $this);
         }
-
     }
 
     public function get(string $code)

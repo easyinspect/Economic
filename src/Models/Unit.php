@@ -67,7 +67,6 @@ class Unit
           'unitNumber' => $this->getUnitNumber(),
         ];
 
-        $this->api->cleanObject($data);
         return self::transform($this->api, $this->api->update('/units/'.$this->getUnitNumber(), $data));
     }
 
@@ -78,6 +77,7 @@ class Unit
         ];
 
         $validator = UnitValidator::getValidator();
+
         if (!$validator->validate($this)) {
              throw $validator->getException($this);
         }
