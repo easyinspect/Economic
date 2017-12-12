@@ -12,9 +12,9 @@ use Economic\Economic;
 use Economic\Models\Components\Unit;
 use Economic\Models\Components\Invoices;
 use Economic\Models\Components\Inventory;
+use Economic\Validations\ProductValidator;
 use Economic\Models\Components\ProductGroup;
 use Economic\Models\Components\DepartmentalDistribution;
-use Economic\Validations\ProductValidator;
 
 class Product
 {
@@ -122,11 +122,12 @@ class Product
         $this->api->cleanObject($data);
 
         $validator = ProductValidator::getValidator();
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
         $product = $this->api->create('/products', $data);
+
         return self::parse($this->api, $product);
     }
 
@@ -151,6 +152,7 @@ class Product
         $this->api->cleanObject($data);
 
         $product = $this->api->update('/products/'.$this->getProductNumber(), $data);
+
         return self::parse($this->api, $product);
     }
 

@@ -44,13 +44,11 @@ class Currency
     public function all()
     {
         return $this->api->collection('/currencies', $this);
-
     }
 
     public function get(string $code)
     {
         return self::parse($this->api, $this->api->get('/currencies/'.$code));
-
     }
 
     /**

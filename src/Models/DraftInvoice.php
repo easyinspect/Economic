@@ -143,7 +143,7 @@ class DraftInvoice
         $this->api->cleanObject($data);
 
         $validator = DraftInvoiceValidator::getValidator();
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
