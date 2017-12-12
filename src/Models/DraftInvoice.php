@@ -15,13 +15,13 @@ use Economic\Models\Components\Line;
 use Economic\Models\Components\Notes;
 use Economic\Models\Components\Layout;
 use Economic\Models\Components\Project;
-use Economic\Models\Components\Customer;
-use Economic\Models\Components\SalesPerson;
-use Economic\Models\Components\VendorReference;
 use Economic\Models\Components\VatZone;
+use Economic\Models\Components\Customer;
 use Economic\Models\Components\Recipient;
 use Economic\Models\Components\References;
+use Economic\Models\Components\SalesPerson;
 use Economic\Models\Components\PaymentTerms;
+use Economic\Models\Components\VendorReference;
 use Economic\Validations\DraftInvoiceValidator;
 
 class DraftInvoice
@@ -122,7 +122,6 @@ class DraftInvoice
         } else {
             return $this->api->collection('/invoices/drafts?', $this);
         }
-
     }
 
     public function get($id)

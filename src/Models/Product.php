@@ -8,8 +8,8 @@
 
 namespace Economic\Models;
 
-use Economic\Economic;
 use Economic\Filter;
+use Economic\Economic;
 use Economic\Models\Components\Unit;
 use Economic\Models\Components\Invoices;
 use Economic\Models\Components\Inventory;
@@ -91,7 +91,6 @@ class Product
             return $this->api->collection('/products?'.$filter->filter().'&', $this);
         } else {
             return $this->api->collection('/products?', $this);
-
         }
     }
 

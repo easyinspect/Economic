@@ -33,7 +33,7 @@ class FinanceVouchers implements Entries
             'amount' => $amount,
             'contraAccount' => new ContraAccount($accountNumber),
             'currency' => new Currency($currency),
-            'date' => $date
+            'date' => $date,
         ];
     }
 }

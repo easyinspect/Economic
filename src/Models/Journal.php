@@ -8,12 +8,12 @@
 
 namespace Economic\Models;
 
-use Economic\Economic;
 use Economic\Filter;
-use Economic\Models\Components\AccountingYear;
+use Economic\Economic;
 use Economic\Models\Components\Entries;
 use Economic\Models\Components\Settings;
 use Economic\Models\Components\Templates;
+use Economic\Models\Components\AccountingYear;
 
 class Journal
 {
@@ -74,8 +74,8 @@ class Journal
         return $journal;
     }
 
-    public function all(Filter $filter = null) {
-
+    public function all(Filter $filter = null)
+    {
         if (isset($filter)) {
             return $this->api->collection('/journals-experimental?'.$filter->filter().'&', $this);
         } else {

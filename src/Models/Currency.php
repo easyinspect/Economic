@@ -8,8 +8,8 @@
 
 namespace Economic\Models;
 
-use Economic\Economic;
 use Economic\Filter;
+use Economic\Economic;
 
 class Currency
 {
@@ -55,7 +55,6 @@ class Currency
     {
         return self::transform($this->api, $this->api->get('/currencies/'.$code));
     }
-
 
     /**
      * @return string
