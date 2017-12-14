@@ -9,12 +9,12 @@
 namespace Economic\Models;
 
 use Economic\Economic;
+use Economic\Models\Components\Company\User;
 use Economic\Models\Components\Company\Details;
 use Economic\Models\Components\Company\Settings;
-use Economic\Models\Components\Company\AgreementType;
-use Economic\Models\Components\Company\User;
-use Economic\Models\Components\Company\BankInformation;
 use Economic\Models\Components\Company\Application;
+use Economic\Models\Components\Company\AgreementType;
+use Economic\Models\Components\Company\BankInformation;
 
 class Company
 {
@@ -143,7 +143,6 @@ class Company
     public function setModules(array $modules)
     {
         if (is_array($modules)) {
-
             foreach ($modules as $module) {
                 $this->modules[] = $module;
             }
@@ -186,5 +185,4 @@ class Company
 
         return $this;
     }
-
 }
