@@ -10,7 +10,7 @@ namespace Economic\Models\Components;
 
 class Entries
 {
-    /** @var string $accountingYear */
+    /** @var AccountingYear $accountingYear */
     public $accountingYear;
     /** @var \Economic\Models\Interfaces\Entries $entries */
     public $entries;

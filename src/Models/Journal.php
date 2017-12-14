@@ -12,6 +12,7 @@ use Economic\Economic;
 use Economic\Filter;
 use Economic\Models\Components\AccountingYear;
 use Economic\Models\Components\Entries;
+use Economic\Models\Components\Journals\Voucher;
 use Economic\Models\Components\Settings;
 use Economic\Models\Components\Templates;
 
@@ -19,8 +20,6 @@ class Journal
 {
     /** @var int $journalNumber */
     private $journalNumber;
-    /** @var AccountingYear $accountingYear */
-    private $accountingYear;
     /** @var Entries $entries */
     private $entries;
     /** @var string $name */
@@ -31,10 +30,6 @@ class Journal
     private $settings;
     /** @var string $vouchers */
     private $vouchers;
-    /** @var int $voucherNumber */
-    private $voucherNumber;
-    /** @var string $attachment */
-    private $attachment;
     /** @var string $self */
     private $self;
     /** @var Economic $api */
@@ -45,31 +40,59 @@ class Journal
         $this->api = $api;
     }
 
+    public static function transformVoucher($api, $object) {
+
+
+        if (isset($object->collection)) {
+
+            $voucher = array_map(function ($item) use ($api) {
+
+                $voucher = new Voucher($api);
+
+                $voucher->setAccountingYear($item->accountingYear);
+                $voucher->setEntries($item->entries);
+                $voucher->setJournal($item->journal);
+                $voucher->setVoucherNumber($item->voucherNumber);
+                $voucher->setAttachment($item->attachment);
+                $voucher->setSelf($item->self);
+
+                return $voucher;
+
+            }, $object->collection);
+
+        } else {
+
+            $voucher = array_map(function ($item) use ($api) {
+
+                $voucher = new Voucher($api);
+
+                $voucher->setAccountingYear($item->accountingYear);
+                $voucher->setEntries($item->entries);
+                $voucher->setJournal($item->journal);
+                $voucher->setAttachment($item->attachment);
+                $voucher->setVoucherNumber($item->voucherNumber);
+                $voucher->setSelf($item->self);
+
+                return $voucher;
+
+            }, $object);
+        }
+
+        return $voucher;
+    }
+
     public static function transform($api, $object)
     {
-        if (is_array($object)) {
-            $journal = array_map(function ($item) use ($api) {
-                $journal = new self($api);
+        $journal = new self($api);
 
-                $journal->setVoucherNumber($item->voucherNumber);
-                $journal->setAttachment($item->attachment);
-                $journal->setSelf($item->self);
-                $journal->setAccountingYear($item->accountingYear);
-                $journal->setEntries($item->entries, $item->accountingYear->year);
+        $journal->setName($object->name);
+        $journal->setSelf($object->self);
+        $journal->setJournalNumber($object->journalNumber);
+        $journal->setVouchers($object->vouchers);
+        $journal->setTemplates($object->templates);
+        $journal->setEntries($object->entries);
+        $journal->setSettings($object->settings);
 
-                return $journal;
-            }, $object);
-        } else {
-            $journal = new self($api);
-
-            $journal->setName($object->name);
-            $journal->setSelf($object->self);
-            $journal->setJournalNumber($object->journalNumber);
-            $journal->setVouchers($object->vouchers);
-            $journal->setTemplates($object->templates);
-            $journal->setEntries($object->entries);
-            $journal->setSettings($object->setting ?? null);
-        }
 
         return $journal;
     }
@@ -88,11 +111,17 @@ class Journal
         return self::transform($this->api, $this->api->get('/journals-experimental/'.$journalNumber));
     }
 
+    public function vouchers()
+    {
+        return self::transformVoucher($this->api, $this->api->get('journals-experimental/'.$this->getJournalNumber().'/vouchers'));
+    }
+
     public function create($journalNumber)
     {
         $this->api->cleanObject($this->getEntries());
 
-        return self::transform($this->api, $this->api->create('/journals-experimental/'.$journalNumber.'/vouchers', $this->getEntries()));
+        return self::transformVoucher($this->api, $this->api->create('/journals-experimental/'.$journalNumber.'/vouchers', $this->getEntries()));
+
     }
 
     // Getters & Setters
@@ -173,55 +202,6 @@ class Journal
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getVoucherNumber() : ?int
-    {
-        return $this->voucherNumber;
-    }
-
-    /**
-     * @param int $voucherNumber
-     * @return $this
-     */
-    public function setVoucherNumber(int $voucherNumber = null)
-    {
-        $this->voucherNumber = $voucherNumber;
-
-        return $this;
-    }
-
-    /**
-     * @return AccountingYear
-     */
-    public function getAccountingYear() : ?AccountingYear
-    {
-        return $this->accountingYear;
-    }
-
-    public function getAccountingYearYear() : ?int
-    {
-        if (isset($this->accountingYear)) {
-            return $this->accountingYear->year;
-        }
-
-        return null;
-    }
-
-    /**
-     * @param AccountingYear $accountingYear
-     * @return $this
-     */
-    public function setAccountingYear($accountingYear = null)
-    {
-        if (isset($accountingYear)) {
-            $this->accountingYear = new AccountingYear($accountingYear->year, $accountingYear->self);
-        }
-
-        return $this;
-    }
-
     public function getEntries()
     {
         return $this->entries;
@@ -267,7 +247,7 @@ class Journal
     public function setSettings($settings = null)
     {
         if (isset($settings)) {
-            $this->settings = new Settings($settings->contraAccounts ?? null, $settings->entryTypeRestrictedTypeTo ?? null, $settings->voucherNumbers ?? null);
+            $this->settings = new Settings($settings->contraAccounts ?? null, $settings->entryTypeRestrictedTo ?? null, $settings->voucherNumbers ?? null);
         }
 
         return $this;

@@ -21,7 +21,7 @@ class Line
     /** @var Product $product */
     public $product;
 
-    public function __construct(string $productNumber, string $name, int $quantity, float $price, float $discountPercentage)
+    public function __construct(string $productNumber, string $name, int $quantity, float $price, float $discountPercentage = null)
     {
         $this->unitNetPrice = $price;
         $this->discountPercentage = $discountPercentage;

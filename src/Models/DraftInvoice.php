@@ -78,13 +78,23 @@ class DraftInvoice
     /** @var Economic $api */
     private $api;
 
+    /**
+     * @param Economic $api
+     */
     public function __construct(Economic $api)
     {
         $this->api = $api;
     }
 
-    public static function transform($api, $object)
+    /**
+     * @param Economic $api
+     * @param \stdClass $object
+     * @return self
+     */
+    public static function transform($api, $object) : self
     {
+        var_dump($object);
+
         $draftInvoices = new self($api);
 
         $draftInvoices->setDraftInvoiceNumber($object->draftInvoiceNumber);
@@ -107,7 +117,7 @@ class DraftInvoice
         $draftInvoices->setNotes($object->notes ?? null);
         $draftInvoices->setPdf($object->pdf);
         $draftInvoices->setProject($object->project ?? null);
-        $draftInvoices->setLines($object->lines);
+        $draftInvoices->setLines($object->lines ?? null);
         $draftInvoices->setRoundingAmount($object->roundingAmount);
         $draftInvoices->setSelf($object->self);
         $draftInvoices->setVatAmount($object->vatAmount);
@@ -115,6 +125,10 @@ class DraftInvoice
         return $draftInvoices;
     }
 
+    /**
+     * @param Filter $filter
+     * @return self
+     */
     public function all(Filter $filter = null)
     {
         if (isset($filter)) {
@@ -125,6 +139,10 @@ class DraftInvoice
 
     }
 
+    /**
+     * @param int $id
+     * @return self
+     */
     public function get($id)
     {
         return self::transform($this->api, $this->api->get('/invoices/drafts/'.$id));
@@ -187,6 +205,9 @@ class DraftInvoice
         return self::transform($this->api, $this->api->update('/invoices/drafts/'.$this->getDraftInvoiceNumber(), $data));
     }
 
+    /**
+     * @return Invoice
+     */
     public function bookInvoice() : Invoice
     {
         $data = [
@@ -197,6 +218,8 @@ class DraftInvoice
 
         return Invoice::transform($this->api, $this->api->create('/invoices/booked', $data));
     }
+
+    // Getters & Setters
 
     /**
      * @return Notes
@@ -987,11 +1010,24 @@ class DraftInvoice
      */
     public function setLines($lines = null)
     {
-        $this->lines = $lines;
+
+        if (isset($lines)) {
+            foreach ($lines as $line) {
+                $this->lines[] = new Line($line->product->productNumber, $line->description, $line->quantity, $line->unitNetPrice, $line->discountPercentage);
+            }
+        }
 
         return $this;
     }
 
+    /**
+     * @param string $productNumber
+     * @param string $name
+     * @param int $quantity
+     * @param float $price
+     * @param float $discountPercentage
+     * @return $this
+     */
     public function setInvoiceLine(string $productNumber, string $name, int $quantity, float $price, float $discountPercentage = 0)
     {
         $this->lines[] = new Line($productNumber, $name, $quantity, $price, $discountPercentage);
