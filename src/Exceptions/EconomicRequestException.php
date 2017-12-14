@@ -33,11 +33,10 @@ class EconomicRequestException extends \Exception
                         foreach ($item as $class) {
                             if (isset($class->errors)) {
                                 foreach ($class->errors as $errors) {
-                                    $message = $errors->errorMessage . ' / ' . $errors->developerHint;
+                                    $message = $errors->errorMessage.' / '.$errors->developerHint;
                                 }
                             }
                         }
-
                     }
                 }
             }

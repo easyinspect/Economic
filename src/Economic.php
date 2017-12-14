@@ -8,10 +8,10 @@
 
 namespace Economic;
 
-use Economic\Models\Company;
 use GuzzleHttp\Client;
 use Economic\Models\Unit;
 use Economic\Models\Layout;
+use Economic\Models\Company;
 use Economic\Models\Invoice;
 use Economic\Models\Journal;
 use Economic\Models\Product;

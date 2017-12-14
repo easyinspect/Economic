@@ -10,7 +10,6 @@ namespace Economic\Models\Components\Company;
 
 class Details
 {
-
     /** @var string $addressLine1 */
     public $addressLine1;
     /** @var string $addressLine2 */

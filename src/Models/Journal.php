@@ -11,10 +11,9 @@ namespace Economic\Models;
 use Economic\Filter;
 use Economic\Economic;
 use Economic\Models\Components\Entries;
-use Economic\Models\Components\Journals\Voucher;
 use Economic\Models\Components\Settings;
 use Economic\Models\Components\Templates;
-use Economic\Models\Components\AccountingYear;
+use Economic\Models\Components\Journals\Voucher;
 
 class Journal
 {
@@ -40,13 +39,10 @@ class Journal
         $this->api = $api;
     }
 
-    public static function transformVoucher($api, $object) {
-
-
+    public static function transformVoucher($api, $object)
+    {
         if (isset($object->collection)) {
-
             $voucher = array_map(function ($item) use ($api) {
-
                 $voucher = new Voucher($api);
 
                 $voucher->setAccountingYear($item->accountingYear);
@@ -57,13 +53,9 @@ class Journal
                 $voucher->setSelf($item->self);
 
                 return $voucher;
-
             }, $object->collection);
-
         } else {
-
             $voucher = array_map(function ($item) use ($api) {
-
                 $voucher = new Voucher($api);
 
                 $voucher->setAccountingYear($item->accountingYear);
@@ -74,7 +66,6 @@ class Journal
                 $voucher->setSelf($item->self);
 
                 return $voucher;
-
             }, $object);
         }
 
@@ -92,7 +83,6 @@ class Journal
         $journal->setTemplates($object->templates);
         $journal->setEntries($object->entries);
         $journal->setSettings($object->settings);
-
 
         return $journal;
     }
@@ -121,7 +111,6 @@ class Journal
         $this->api->cleanObject($this->getEntries());
 
         return self::transformVoucher($this->api, $this->api->create('/journals-experimental/'.$journalNumber.'/vouchers', $this->getEntries()));
-
     }
 
     // Getters & Setters
