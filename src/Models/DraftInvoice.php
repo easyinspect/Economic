@@ -1009,7 +1009,6 @@ class DraftInvoice
      */
     public function setLines($lines = null)
     {
-
         if (isset($lines)) {
             foreach ($lines as $line) {
                 $this->lines[] = new Line($line->product->productNumber, $line->description, $line->quantity, $line->unitNetPrice, $line->discountPercentage);
