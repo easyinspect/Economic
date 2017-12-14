@@ -8,6 +8,7 @@
 
 namespace Economic;
 
+use Economic\Models\Company;
 use GuzzleHttp\Client;
 use Economic\Models\Unit;
 use Economic\Models\Layout;
@@ -270,6 +271,14 @@ class Economic
     public function billingContacts(): BillingContact
     {
         return new BillingContact($this);
+    }
+
+    /**
+     * @return Company
+     */
+    public function company() : Company
+    {
+        return new Company($this);
     }
 
     public function cleanObject($obj)
