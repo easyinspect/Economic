@@ -8,8 +8,8 @@
 
 namespace Economic\Models;
 
-use Economic\Economic;
 use Economic\Filter;
+use Economic\Economic;
 
 class PaymentType
 {

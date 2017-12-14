@@ -8,8 +8,8 @@
 
 namespace Economic\Models;
 
-use Economic\Economic;
 use Economic\Filter;
+use Economic\Economic;
 use Economic\Validations\UnitValidator;
 
 class Unit
@@ -57,6 +57,7 @@ class Unit
     public function delete()
     {
         $this->api->delete('/units/'.$this->getUnitNumber());
+
         return $this;
     }
 
@@ -78,8 +79,8 @@ class Unit
 
         $validator = UnitValidator::getValidator();
 
-        if (!$validator->validate($this)) {
-             throw $validator->getException($this);
+        if (! $validator->validate($this)) {
+            throw $validator->getException($this);
         }
 
         return self::transform($this->api, $this->api->create('/units', $data));

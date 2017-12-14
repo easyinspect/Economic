@@ -28,6 +28,5 @@ class CustomerCollection
         } else {
             return $this->api->collection('/customers?', new Customer($this->api));
         }
-
     }
 }
