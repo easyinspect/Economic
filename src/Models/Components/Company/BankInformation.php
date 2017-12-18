@@ -10,7 +10,6 @@ namespace Economic\Models\Components\Company;
 
 class BankInformation
 {
-
     /** @var string $bankAccountNumber */
     public $bankAccountNumber;
     /** @var string $bankGiroNumber */

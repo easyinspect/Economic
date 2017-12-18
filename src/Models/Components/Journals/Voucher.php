@@ -9,9 +9,9 @@
 namespace Economic\Models\Components\Journals;
 
 use Economic\Economic;
-use Economic\Models\Components\AccountingYear;
 use Economic\Models\Components\Journal;
 use Economic\Models\Interfaces\Entries;
+use Economic\Models\Components\AccountingYear;
 
 class Voucher
 {
@@ -38,7 +38,6 @@ class Voucher
 
     public function setAccountingYear($accountingYear)
     {
-
         $this->accountingYear = new AccountingYear($accountingYear->year, $accountingYear->self);
 
         return $this;
