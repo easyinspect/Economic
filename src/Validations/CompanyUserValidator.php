@@ -8,8 +8,8 @@
 
 namespace Economic\Validations;
 
-use Economic\Exceptions\EconomicValidationException;
 use Economic\Models\Company;
+use Economic\Exceptions\EconomicValidationException;
 
 class CompanyUserValidator
 {
