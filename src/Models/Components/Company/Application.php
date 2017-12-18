@@ -23,7 +23,7 @@ class Application
     /** @var string $self */
     public $self;
 
-    public function __construct(int $appNumber, string $appPublicToken, string $created, string $name, array $requiredRoles, string $self)
+    public function __construct(int $appNumber, string $appPublicToken, string $created, string $name, $requiredRoles, string $self)
     {
         $this->appNumber = $appNumber;
         $this->appPublicToken = $appPublicToken;

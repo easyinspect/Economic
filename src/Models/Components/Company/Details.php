@@ -36,7 +36,7 @@ class Details
     /** @var string $zip */
     public $zip;
 
-    public function __construct(string $addressLine1, string $addressLine2, string $attention, string $city, string $companyIdentificationNumber, string $country, string $email, string $name, string $phoneNumber, string $vatNumber, string $website, string $zip)
+    public function __construct(string $addressLine1 = null, string $addressLine2 = null, string $attention = null, string $city = null, string $companyIdentificationNumber = null, string $country = null, string $email = null, string $name = null, string $phoneNumber = null, string $vatNumber = null, string $website = null, string $zip = null)
     {
         $this->addressLine1 = $addressLine1;
         $this->addressLine2 = $addressLine2;

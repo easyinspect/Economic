@@ -15,7 +15,7 @@ class Settings
     /** @var string $internationalLedger */
     public $internationalLedger;
 
-    public function __construct(string $baseCurrency, string $internationalLedger)
+    public function __construct(string $baseCurrency, string $internationalLedger = null)
     {
         $this->baseCurrency = $baseCurrency;
         $this->internationalLedger = $internationalLedger;

@@ -24,7 +24,7 @@ class BankInformation
     /** @var string $pbsFiSupplierNumber */
     public $pbsFiSupplierNumber;
 
-    public function __construct(string $bankAccountNumber, string $bankGiroNumber, string $bankName, string $bankSortCode, string $pbsCustomerGroupNumber, string $pbsFiSupplierNumber)
+    public function __construct(string $bankAccountNumber = null, string $bankGiroNumber = null, string $bankName = null, string $bankSortCode = null, string $pbsCustomerGroupNumber = null, string $pbsFiSupplierNumber = null)
     {
         $this->bankAccountNumber = $bankAccountNumber;
         $this->bankGiroNumber = $bankGiroNumber;

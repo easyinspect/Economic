@@ -21,11 +21,11 @@ class User
     /** @var string $name */
     public $name;
 
-    public function __construct(int $agreementNumber, string $email, $language, string $loginId, string $name)
+    public function __construct(int $agreementNumber = null, string $email = null, $language = null, string $loginId = null, string $name = null)
     {
         $this->agreementNumber = $agreementNumber;
         $this->email = $email;
-        $this->language = new Language($language->languageNumber, $language->name, $language->self);
+        $this->language = new Language($language->languageNumber ?? null, $language->culture ?? null, $language->name ?? null, $language->self ?? null);
         $this->loginId = $loginId;
         $this->name = $name;
     }
