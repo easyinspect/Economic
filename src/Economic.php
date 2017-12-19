@@ -19,6 +19,7 @@ use Economic\Models\Products;
 use Economic\Models\PaymentTypes;
 use Economic\Models\DraftInvoices;
 use Economic\Models\BillingContacts;
+use Economic\Models\PaymentTerm;
 use Economic\Models\CustomerCollection;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -257,6 +258,11 @@ class Economic
     public function billingContacts(): BillingContacts
     {
         return new BillingContacts($this);
+    }
+
+    public function paymentTerms() : PaymentTerm
+    {
+        return new PaymentTerm($this);
     }
 
     public function cleanObject($obj)

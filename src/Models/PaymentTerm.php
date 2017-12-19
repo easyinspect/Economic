@@ -30,7 +30,7 @@ class PaymentTerm
     private $name;
     /** @var int $paymentTermsNumber */
     private $paymentTermsNumber;
-    /** @var $paymentTermsType */
+    /** @var string $paymentTermsType */
     private $paymentTermsType;
     /** @var int $percentageForPrepaidAmount */
     private $percentageForPrepaidAmount;
@@ -61,16 +61,16 @@ class PaymentTerm
     {
         $paymentTerm = new self($api);
 
-        $paymentTerm->setContraAccountForPrepaidAmount($object->contraAccountForPrepaidAmount);
-        $paymentTerm->setContraAccountForRemainderAmount($object->contraAccountForRemainderAccount);
-        $paymentTerm->setCreditCardCompany($object->creditCardCompany);
-        $paymentTerm->setDaysOfCredit($object->daysOfCredit);
-        $paymentTerm->setDescription($object->description);
+        $paymentTerm->setContraAccountForPrepaidAmount($object->contraAccountForPrepaidAmount ?? null);
+        $paymentTerm->setContraAccountForRemainderAmount($object->contraAccountForRemainderAccount ?? null);
+        $paymentTerm->setCreditCardCompany($object->creditCardCompany ?? null);
+        $paymentTerm->setDaysOfCredit($object->daysOfCredit ?? null);
+        $paymentTerm->setDescription($object->description ?? null);
         $paymentTerm->setName($object->name);
-        $paymentTerm->setPaymentTermsNumber($object->paymentTermsNumber);
+        $paymentTerm->setPaymentTermsNumber($object->paymentTermsNumber ?? null);
         $paymentTerm->setPaymentTermsType($object->paymentTermsType);
-        $paymentTerm->setPercentageForPrepaidAmount($object->percentageForPrepaidAmount);
-        $paymentTerm->setPercentageForRemainderAmount($object->percentageForRemainderAmount);
+        $paymentTerm->setPercentageForPrepaidAmount($object->percentageForPrepaidAmount ?? null);
+        $paymentTerm->setPercentageForRemainderAmount($object->percentageForRemainderAmount ?? null);
         $paymentTerm->setSelf($object->self);
 
         return $paymentTerm;
@@ -119,13 +119,42 @@ class PaymentTerm
         ];
 
         $this->api->cleanObject($data);
+
+        $validator = \PaymentTermValidator::getValidator();
+        if (!$validator->validate($this)) {
+            throw $validator->getException($this);
+        }
+
+        return self::transform($this->api, $this->api->create('/payment-terms', $data));
     }
 
     /**
      * Updates a PaymentTerm
      * @return PaymentTerm
      */
-    public function update(){}
+    public function update()
+    {
+        $data = (object) [
+            'contraAccountForPrepaidAmount' => $this->getContraAccountForPrepaidAmount(),
+            'contraAccountForRemainderAmount' => $this->getContraAccountForRemainderAmount(),
+            'creditCardCompany' => $this->getCreditCardCompany(),
+            'daysOfCredit' => $this->getDaysOfCredit(),
+            'description' => $this->getDescription(),
+            'name' => $this->getName(),
+            'paymentTermsType' => $this->getPaymentTermsType(),
+            'percentageForPrepaidAmount' => $this->getPercentageForPrepaidAmount(),
+            'percentageForRemainderAmount' => $this->getPercentageForRemainderAmount()
+        ];
+
+        $this->api->cleanObject($data);
+
+        $validator = \PaymentTermValidator::getValidator();
+        if (!$validator->validate($this)) {
+            throw $validator->getException($this);
+        }
+
+        return self::transform($this->api, $this->api->update('/payment-terms/'.$this->getPaymentTermsNumber(), $data));
+    }
 
     /**
      * Deletes a PaymentTerm
@@ -149,7 +178,7 @@ class PaymentTerm
      * @param int $paymentTermsNumber
      * @return PaymentTerm
      */
-    public function setPaymentTermsNumber(int $paymentTermsNumber)
+    public function setPaymentTermsNumber(int $paymentTermsNumber = null)
     {
         $this->paymentTermsNumber = $paymentTermsNumber;
 
@@ -237,7 +266,7 @@ class PaymentTerm
      * @param int $daysOfCredit
      * @return PaymentTerm
      */
-    public function setDaysOfCredit(int $daysOfCredit)
+    public function setDaysOfCredit(int $daysOfCredit = null)
     {
         $this->daysOfCredit = $daysOfCredit;
 
@@ -256,7 +285,7 @@ class PaymentTerm
      * @param string $description
      * @return PaymentTerm
      */
-    public function setDescription(string $description)
+    public function setDescription(string $description = null)
     {
         $this->description = $description;
 
@@ -313,7 +342,7 @@ class PaymentTerm
      * @param int $percentageForPrepaidAmount
      * @return PaymentTerm
      */
-    public function setPercentageForPrepaidAmount(int $percentageForPrepaidAmount)
+    public function setPercentageForPrepaidAmount(int $percentageForPrepaidAmount = null)
     {
         $this->percentageForPrepaidAmount = $percentageForPrepaidAmount;
 
@@ -332,7 +361,7 @@ class PaymentTerm
      * @param int $percentageForRemainderAmount
      * @return PaymentTerm
      */
-    public function setPercentageForRemainderAmount(int $percentageForRemainderAmount)
+    public function setPercentageForRemainderAmount(int $percentageForRemainderAmount = null)
     {
         $this->percentageForRemainderAmount = $percentageForRemainderAmount;
 
