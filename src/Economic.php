@@ -16,6 +16,7 @@ use Economic\Models\Customer;
 use Economic\Models\Invoices;
 use Economic\Models\Journals;
 use Economic\Models\Products;
+use Economic\Models\PaymentTerm;
 use Economic\Models\PaymentTypes;
 use Economic\Models\DraftInvoices;
 use Economic\Models\BillingContacts;
@@ -257,6 +258,11 @@ class Economic
     public function billingContacts(): BillingContacts
     {
         return new BillingContacts($this);
+    }
+
+    public function paymentTerms() : PaymentTerm
+    {
+        return new PaymentTerm($this);
     }
 
     public function cleanObject($obj)
