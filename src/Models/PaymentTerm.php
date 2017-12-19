@@ -8,11 +8,11 @@
 
 namespace Economic\Models;
 
-use Economic\Economic;
 use Economic\Filter;
+use Economic\Economic;
+use Economic\Models\Components\CreditCardCompany;
 use Economic\Models\Components\ContraAccountForPrepaidAmount;
 use Economic\Models\Components\ContraAccountForRemainderAmount;
-use Economic\Models\Components\CreditCardCompany;
 
 class PaymentTerm
 {
@@ -43,7 +43,7 @@ class PaymentTerm
     private $api;
 
     /**
-     * PaymentTerms constructor
+     * PaymentTerms constructor.
      * @param Economic $api
      */
     public function __construct(Economic $api)
@@ -52,7 +52,7 @@ class PaymentTerm
     }
 
     /**
-     * Transform stdClass object into PaymentTerms
+     * Transform stdClass object into PaymentTerms.
      * @param \stdClass $object
      * @param Economic $api
      * @return PaymentTerm
@@ -77,7 +77,7 @@ class PaymentTerm
     }
 
     /**
-     * Retrieves collection of PaymentTerms
+     * Retrieves collection of PaymentTerms.
      * @param Filter $filter
      * @return PaymentTerm
      */
@@ -91,7 +91,7 @@ class PaymentTerm
     }
 
     /**
-     * Retrieves one single PaymentTerm
+     * Retrieves one single PaymentTerm.
      * @param int $id
      * @return PaymentTerm
      */
@@ -101,7 +101,7 @@ class PaymentTerm
     }
 
     /**
-     * Creates a PaymentTerm
+     * Creates a PaymentTerm.
      * @return PaymentTerm
      */
     public function create()
@@ -115,20 +115,22 @@ class PaymentTerm
             'name' => $this->getName(),
             'paymentTermsType' => $this->getPaymentTermsType(),
             'percentageForPrepaidAmount' => $this->getPercentageForPrepaidAmount(),
-            'percentageForRemainderAmount' => $this->getPercentageForRemainderAmount()
+            'percentageForRemainderAmount' => $this->getPercentageForRemainderAmount(),
         ];
 
         $this->api->cleanObject($data);
     }
 
     /**
-     * Updates a PaymentTerm
+     * Updates a PaymentTerm.
      * @return PaymentTerm
      */
-    public function update(){}
+    public function update()
+    {
+    }
 
     /**
-     * Deletes a PaymentTerm
+     * Deletes a PaymentTerm.
      */
     public function delete()
     {
