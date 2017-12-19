@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: mbs
  * Date: 19-12-2017
- * Time: 10:21
+ * Time: 10:21.
  */
-
-use Economic\Exceptions\EconomicValidationException;
 use Economic\Models\PaymentTerm;
+use Economic\Exceptions\EconomicValidationException;
 
 class PaymentTermValidator
 {

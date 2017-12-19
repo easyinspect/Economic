@@ -121,7 +121,7 @@ class PaymentTerm
         $this->api->cleanObject($data);
 
         $validator = \PaymentTermValidator::getValidator();
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
@@ -143,13 +143,13 @@ class PaymentTerm
             'name' => $this->getName(),
             'paymentTermsType' => $this->getPaymentTermsType(),
             'percentageForPrepaidAmount' => $this->getPercentageForPrepaidAmount(),
-            'percentageForRemainderAmount' => $this->getPercentageForRemainderAmount()
+            'percentageForRemainderAmount' => $this->getPercentageForRemainderAmount(),
         ];
 
         $this->api->cleanObject($data);
 
         $validator = \PaymentTermValidator::getValidator();
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
