@@ -8,16 +8,16 @@
 
 namespace Economic\Models\Components;
 
-class AccountingYear
+class Journal
 {
-    /** @var string $year */
-    public $year;
+    /** @var int $journalNumber */
+    public $journalNumber;
     /** @var string $self */
     public $self;
 
-    public function __construct(string $year = null, string $self = null)
+    public function __construct(int $journalNumber = null, string $self = null)
     {
-        $this->year = $year;
+        $this->journalNumber = $journalNumber;
         $this->self = $self;
     }
 }

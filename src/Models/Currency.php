@@ -8,6 +8,7 @@
 
 namespace Economic\Models;
 
+use Economic\Filter;
 use Economic\Economic;
 
 class Currency
@@ -29,7 +30,7 @@ class Currency
         $this->api = $api;
     }
 
-    public static function parse($api, $object)
+    public static function transform($api, $object)
     {
         $currency = new self($api);
 
@@ -41,28 +42,18 @@ class Currency
         return $currency;
     }
 
-    public function all($pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all(Filter $filter = null)
     {
-        $currencies = $this->api->retrieve('/currencies?skippages='.$skipPages.'&pagesize='.$pageSize.'');
-
-        if ($recursive && isset($currencies->pagination->nextPage)) {
-            $collection = $this->all($pageSize, $skipPages + 1);
-            $currencies->collection = array_merge($currencies->collection, $collection);
+        if (isset($filter)) {
+            return $this->api->collection('/currencies?'.$filter->filter().'&', $this);
+        } else {
+            return $this->api->collection('/currencies?', $this);
         }
-
-        $currencies->collection = array_map(function ($item) {
-            return self::parse($this->api, $item);
-        }, $currencies->collection);
-
-        return $currencies->collection;
     }
 
     public function get(string $code)
     {
-        $currency = $this->api->retrieve('/currencies/'.$code);
-        $this->api->setObject($currency, $this);
-
-        return $this;
+        return self::transform($this->api, $this->api->get('/currencies/'.$code));
     }
 
     /**

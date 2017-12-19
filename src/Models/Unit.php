@@ -8,9 +8,11 @@
 
 namespace Economic\Models;
 
+use Economic\Filter;
 use Economic\Economic;
+use Economic\Validations\UnitValidator;
 
-class Units
+class Unit
 {
     /** @var int $unitNumber */
     private $unitNumber;
@@ -27,7 +29,7 @@ class Units
         $this->api = $api;
     }
 
-    public static function parse($api, $object)
+    public static function transform($api, $object)
     {
         $unit = new self($api);
 
@@ -38,28 +40,18 @@ class Units
         return $unit;
     }
 
-    public function all($pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all(Filter $filter = null)
     {
-        $units = $this->api->retrieve('/units?skippages='.$skipPages.'&pagesize='.$pageSize.'');
-
-        if ($recursive && isset($units->pagination->nextPage)) {
-            $collection = $this->all($pageSize, $skipPages + 1);
-            $units->collection = array_merge($units->collection, $collection);
+        if (isset($filter)) {
+            return $this->api->collection('/units?'.$filter->filter().'&', $this);
+        } else {
+            return $this->api->collection('/units?', $this);
         }
-
-        $units->collection = array_map(function ($item) {
-            return self::parse($this->api, $item);
-        }, $units->collection);
-
-        return $units->collection;
     }
 
     public function get($id)
     {
-        $unit = $this->api->retrieve('/units/'.$id);
-        $this->api->setObject($unit, $this);
-
-        return $this;
+        return self::transform($this->api, $this->api->get('/units/'.$id));
     }
 
     public function delete()
@@ -76,24 +68,22 @@ class Units
           'unitNumber' => $this->getUnitNumber(),
         ];
 
-        $this->api->cleanObject($data);
-
-        $unit = $this->api->update('/units/'.$this->getUnitNumber(), $data);
-        $this->api->setObject($unit, $this);
-
-        return $this;
+        return self::transform($this->api, $this->api->update('/units/'.$this->getUnitNumber(), $data));
     }
 
     public function create()
     {
-        $data = [
+        $data = (object) [
             'name' => $this->getName(),
         ];
 
-        $unit = $this->api->create('/units', $data);
-        $this->api->setObject($unit, $this);
+        $validator = UnitValidator::getValidator();
 
-        return $this;
+        if (! $validator->validate($this)) {
+            throw $validator->getException($this);
+        }
+
+        return self::transform($this->api, $this->api->create('/units', $data));
     }
 
     // Getters & Setters

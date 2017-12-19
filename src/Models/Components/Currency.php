@@ -8,16 +8,16 @@
 
 namespace Economic\Models\Components;
 
-class AccountingYear
+class Currency
 {
-    /** @var string $year */
-    public $year;
+    /** @var string $code */
+    public $code;
     /** @var string $self */
     public $self;
 
-    public function __construct(string $year = null, string $self = null)
+    public function __construct(string $code = null, string $self = null)
     {
-        $this->year = $year;
+        $this->code = $code;
         $this->self = $self;
     }
 }
