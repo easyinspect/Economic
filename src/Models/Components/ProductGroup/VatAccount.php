@@ -8,7 +8,6 @@
 
 namespace Economic\Models\Components\ProductGroup;
 
-
 class VatAccount
 {
     /** @var string $vatCode */

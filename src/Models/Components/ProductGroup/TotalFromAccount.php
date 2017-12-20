@@ -8,7 +8,6 @@
 
 namespace Economic\Models\Components\ProductGroup;
 
-
 class TotalFromAccount
 {
     /** @var int $accountNumber */

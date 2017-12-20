@@ -8,8 +8,8 @@
 
 namespace Economic\Models;
 
-use Economic\Economic;
 use Economic\Filter;
+use Economic\Economic;
 use Economic\Models\Components\ProductGroup\Accrual;
 
 class ProductGroup
@@ -33,7 +33,7 @@ class ProductGroup
     private $economic;
 
     /**
-     * ProductGroup constructor
+     * ProductGroup constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -42,7 +42,7 @@ class ProductGroup
     }
 
     /**
-     * Transforms stdClass object into ProductGroup
+     * Transforms stdClass object into ProductGroup.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return ProductGroup
@@ -63,7 +63,7 @@ class ProductGroup
     }
 
     /**
-     * Retrieves a collection of ProductGroups
+     * Retrieves a collection of ProductGroups.
      * @param Filter $filter
      * @return ProductGroup
      */
@@ -77,7 +77,7 @@ class ProductGroup
     }
 
     /**
-     * Retrieves single ProductGroup by productGroupNumber
+     * Retrieves single ProductGroup by productGroupNumber.
      * @param int $productGroupNumber
      * @return ProductGroup
      */
@@ -87,7 +87,7 @@ class ProductGroup
     }
 
     /**
-     * Retrieves a collection of sales accounts that belongs to the given ProductGroup
+     * Retrieves a collection of sales accounts that belongs to the given ProductGroup.
      * @return Accrual
      */
     public function salesAccounts()
@@ -96,7 +96,7 @@ class ProductGroup
     }
 
     /**
-     * Retrieves a collection of products that belongs to the given ProductGroup
+     * Retrieves a collection of products that belongs to the given ProductGroup.
      * @return Product
      */
     public function products()

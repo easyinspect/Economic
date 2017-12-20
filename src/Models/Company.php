@@ -10,15 +10,15 @@ namespace Economic\Models;
 
 use Economic\Economic;
 use Economic\Models\Components\Company\User;
+use Economic\Validations\CompanyUserValidator;
 use Economic\Models\Components\Company\Details;
 use Economic\Models\Components\Company\Language;
 use Economic\Models\Components\Company\Settings;
+use Economic\Validations\CompanyDetailsValidator;
 use Economic\Models\Components\Company\Application;
 use Economic\Models\Components\Company\AgreementType;
 use Economic\Models\Components\Company\BankInformation;
 use Economic\Validations\CompanyBankInformationValidator;
-use Economic\Validations\CompanyDetailsValidator;
-use Economic\Validations\CompanyUserValidator;
 
 class Company
 {
@@ -55,7 +55,7 @@ class Company
     private $economic;
 
     /**
-     * Company constructor
+     * Company constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -64,7 +64,7 @@ class Company
     }
 
     /**
-     * Transform stdClass into User
+     * Transform stdClass into User.
      * @param \stdClass $stdClass
      * @return User
      */
@@ -74,7 +74,7 @@ class Company
     }
 
     /**
-     * Transform stdClass into Details
+     * Transform stdClass into Details.
      * @param \stdClass $stdClass
      * @return Details
      */
@@ -96,7 +96,7 @@ class Company
     }
 
     /**
-     * Transform stdClass into BankInformation
+     * Transform stdClass into BankInformation.
      * @param \stdClass $stdClass
      * @return BankInformation
      */
@@ -112,7 +112,7 @@ class Company
     }
 
     /**
-     * Transform stdClass into Company
+     * Transform stdClass into Company.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return Company
@@ -140,7 +140,7 @@ class Company
     }
 
     /**
-     * Retrieves Company
+     * Retrieves Company.
      * @return Company
      */
     public function get()
@@ -149,7 +149,7 @@ class Company
     }
 
     /**
-     * Updates Company User
+     * Updates Company User.
      * @return User
      */
     public function updateUser()
@@ -159,14 +159,13 @@ class Company
             'email' => $this->getUserEmail(),
             'language' => $this->getUserLanguage(),
             'loginId' => $this->getUserLoginId(),
-            'name' => $this->getUserUserName()
+            'name' => $this->getUserUserName(),
         ];
 
         $this->economic->cleanObject($data);
 
-
         $validator = CompanyUserValidator::getValidator();
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
@@ -174,7 +173,7 @@ class Company
     }
 
     /**
-     * Updates Company BankInformation
+     * Updates Company BankInformation.
      * @return BankInformation
      */
     public function updateBankInformation()
@@ -185,13 +184,13 @@ class Company
             'bankName' => $this->getBankInformationBankName(),
             'bankSortCode' => $this->getBankInformationBankSortCode(),
             'pbsCustomerGroupNumber' => $this->getBankInformationPbsCustomerGroupNumber(),
-            'pbsFiSupplierNumber' => $this->getBankInformationPbsFiSupplierNumber()
+            'pbsFiSupplierNumber' => $this->getBankInformationPbsFiSupplierNumber(),
         ];
 
         $this->economic->cleanObject($data);
 
         $validator = CompanyBankInformationValidator::getValidator();
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
@@ -199,7 +198,7 @@ class Company
     }
 
     /**
-     * Updates Company Details
+     * Updates Company Details.
      * @return Details
      */
     public function update()
@@ -216,18 +215,17 @@ class Company
             'phoneNumber' => $this->getCompanyPhoneNumber(),
             'vatNumber' => $this->getCompanyVatNumber(),
             'website' => $this->getCompanyWebsite(),
-            'zip' => $this->getCompanyZip()
+            'zip' => $this->getCompanyZip(),
         ];
 
         $this->economic->cleanObject($data);
 
         $validator = CompanyDetailsValidator::getValidator();
-        if (!$validator->validate($this)) {
+        if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
         return self::company($this->economic->update('/self/company', $data));
-
     }
 
     /**
@@ -352,14 +350,14 @@ class Company
         }
 
         return null;
-     }
+    }
 
     /**
      * @param string $bankGiroNumber
      * @return Company
      */
-     public function setBankInformationBankGiroNumber(string $bankGiroNumber)
-     {
+    public function setBankInformationBankGiroNumber(string $bankGiroNumber)
+    {
         if (isset($this->bankInformation)) {
             $this->bankInformation->bankGiroNumber = $bankGiroNumber;
         } else {
@@ -368,119 +366,119 @@ class Company
         }
 
         return $this;
-     }
+    }
 
     /**
      * @return string
      */
-     public function getBankInformationBankName() : ?string
-     {
-         if (isset($this->bankInformation->bankName)) {
-             return $this->bankInformation->bankName;
-         }
+    public function getBankInformationBankName() : ?string
+    {
+        if (isset($this->bankInformation->bankName)) {
+            return $this->bankInformation->bankName;
+        }
 
-         return null;
-     }
+        return null;
+    }
 
     /**
      * @param string $bankName
      * @return Company
      */
-     public function setBankInformationBankName(string $bankName)
-     {
-         if (isset($this->bankInformation)) {
-             $this->bankInformation->bankName = $bankName;
-         } else {
-             $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'bankName', $this);
-             $this->bankInformation->bankName = $bankName;
-         }
+    public function setBankInformationBankName(string $bankName)
+    {
+        if (isset($this->bankInformation)) {
+            $this->bankInformation->bankName = $bankName;
+        } else {
+            $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'bankName', $this);
+            $this->bankInformation->bankName = $bankName;
+        }
 
-         return $this;
-     }
+        return $this;
+    }
 
     /**
      * @return string
      */
-     public function getBankInformationBankSortCode() : ?string
-     {
-         if (isset($this->bankInformation->bankSortCode)) {
-             return $this->bankInformation->bankSortCode;
-         }
+    public function getBankInformationBankSortCode() : ?string
+    {
+        if (isset($this->bankInformation->bankSortCode)) {
+            return $this->bankInformation->bankSortCode;
+        }
 
-         return null;
-     }
+        return null;
+    }
 
     /**
      * @param string $bankSortCode
      * @return Company
      */
-     public function setBankInformationBankSortCode(string $bankSortCode)
-     {
-         if (isset($this->bankInformation)) {
-             $this->bankInformation->bankSortCode = $bankSortCode;
-         } else {
-             $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'bankSortCode', $this);
-             $this->bankInformation->bankSortCode = $bankSortCode;
-         }
+    public function setBankInformationBankSortCode(string $bankSortCode)
+    {
+        if (isset($this->bankInformation)) {
+            $this->bankInformation->bankSortCode = $bankSortCode;
+        } else {
+            $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'bankSortCode', $this);
+            $this->bankInformation->bankSortCode = $bankSortCode;
+        }
 
-         return $this;
-     }
+        return $this;
+    }
 
     /**
      * @return string
      */
-     public function getBankInformationPbsCustomerGroupNumber() : ?string
-     {
-         if (isset($this->bankInformation->pbsCustomerGroupNumber)) {
-             return $this->bankInformation->pbsCustomerGroupNumber;
-         }
+    public function getBankInformationPbsCustomerGroupNumber() : ?string
+    {
+        if (isset($this->bankInformation->pbsCustomerGroupNumber)) {
+            return $this->bankInformation->pbsCustomerGroupNumber;
+        }
 
-         return null;
-     }
+        return null;
+    }
 
     /**
      * @param string $pbsCustomerGroupNumber
      * @return Company
      */
-     public function setBankInformationPbsCustomerGroupNumber(string $pbsCustomerGroupNumber)
-     {
-         if (isset($this->bankInformation)) {
-             $this->bankInformation->pbsCustomerGroupNumber = $pbsCustomerGroupNumber;
-         } else {
-             $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'pbsCustomerGroupNumber', $this);
-             $this->bankInformation->pbsCustomerGroupNumber = $pbsCustomerGroupNumber;
-         }
+    public function setBankInformationPbsCustomerGroupNumber(string $pbsCustomerGroupNumber)
+    {
+        if (isset($this->bankInformation)) {
+            $this->bankInformation->pbsCustomerGroupNumber = $pbsCustomerGroupNumber;
+        } else {
+            $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'pbsCustomerGroupNumber', $this);
+            $this->bankInformation->pbsCustomerGroupNumber = $pbsCustomerGroupNumber;
+        }
 
-         return $this;
-     }
+        return $this;
+    }
 
     /**
      * @return string
      */
-     public function getBankInformationPbsFiSupplierNumber() : ?string
-     {
-         if (isset($this->bankInformation->pbsFiSupplierNumber)) {
-             return $this->bankInformation->pbsFiSupplierNumber;
-         }
+    public function getBankInformationPbsFiSupplierNumber() : ?string
+    {
+        if (isset($this->bankInformation->pbsFiSupplierNumber)) {
+            return $this->bankInformation->pbsFiSupplierNumber;
+        }
 
-         return null;
-     }
+        return null;
+    }
 
     /**
      * @param string $pbsFiSupplierNumber
      * @return Company
      */
-     public function setBankInformationPbsFiSupplierNumber(string $pbsFiSupplierNumber)
-     {
-         if (isset($this->bankInformation)) {
-             $this->bankInformation->pbsFiSupplierNumber = $pbsFiSupplierNumber;
-         } else {
-             $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'pbsFiSupplierNumber', $this);
-             $this->bankInformation->pbsFiSupplierNumber = $pbsFiSupplierNumber;
-         }
+    public function setBankInformationPbsFiSupplierNumber(string $pbsFiSupplierNumber)
+    {
+        if (isset($this->bankInformation)) {
+            $this->bankInformation->pbsFiSupplierNumber = $pbsFiSupplierNumber;
+        } else {
+            $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'pbsFiSupplierNumber', $this);
+            $this->bankInformation->pbsFiSupplierNumber = $pbsFiSupplierNumber;
+        }
 
-         return $this;
-     }
+        return $this;
+    }
 
     /**
      * @return bool

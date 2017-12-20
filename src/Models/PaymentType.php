@@ -24,7 +24,7 @@ class PaymentType
     private $economic;
 
     /**
-     * PaymentType constructor
+     * PaymentType constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -33,7 +33,7 @@ class PaymentType
     }
 
     /**
-     * Transform stdClas object into PaymentType
+     * Transform stdClas object into PaymentType.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return PaymentType
@@ -50,7 +50,7 @@ class PaymentType
     }
 
     /**
-     * Retrieves a collection of PaymentType(s)
+     * Retrieves a collection of PaymentType(s).
      * @param Filter $filter
      * @return PaymentType
      */
@@ -64,7 +64,7 @@ class PaymentType
     }
 
     /**
-     * Retrieves a single PaymentType by its ID
+     * Retrieves a single PaymentType by its ID.
      * @param int $id
      * @return PaymentType
      */

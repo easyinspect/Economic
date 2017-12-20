@@ -8,7 +8,6 @@
 
 namespace Economic;
 
-use Economic\Models\ProductGroup;
 use GuzzleHttp\Client;
 use Economic\Models\Unit;
 use Economic\Models\Layout;
@@ -21,6 +20,7 @@ use Economic\Models\Customer;
 use Economic\Models\PaymentTerm;
 use Economic\Models\PaymentType;
 use Economic\Models\DraftInvoice;
+use Economic\Models\ProductGroup;
 use Economic\Models\BillingContact;
 use Economic\Models\CustomerCollection;
 use GuzzleHttp\Exception\ClientException;
@@ -338,18 +338,14 @@ class Economic
         }
     }
 
-    public function clean($data) {
-
+    public function clean($data)
+    {
         if (is_array($data)) {
-
             foreach ($data as $property) {
-
                 if (is_object($property)) {
                     return $property;
                 }
-
             }
-
         }
     }
 }
