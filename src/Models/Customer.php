@@ -82,63 +82,84 @@ class Customer
     /** @var string $self */
     private $self;
 
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
-    public function __construct(Economic $api)
+    /**
+     * Customer constructor
+     * @param Economic $economic
+     */
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
-    public static function transform($api, $object) : self
+    /**
+     * Transform stdClass object into Customer
+     * @param Economic $economic
+     * @param \stdClass $stdClass
+     * @return Customer
+     */
+    public static function transform(Economic $economic, \stdClass $stdClass)
     {
-        $customer = new self($api);
+        $customer = new self($economic);
 
-        $customer->setCustomerNumber($object->customerNumber);
-        $customer->setCurrency($object->currency);
-        $customer->setPaymentTerms($object->paymentTerms);
-        $customer->setCustomerGroup($object->customerGroup);
-        $customer->setAddress($object->address ?? null);
-        $customer->setBalance($object->balance);
-        $customer->setDueAmount($object->dueAmount);
-        $customer->setCity($object->city ?? null);
-        $customer->setCountry($object->country ?? null);
-        $customer->setEmail($object->email ?? null);
-        $customer->setName($object->name);
-        $customer->setZip($object->zip ?? null);
-        $customer->setTelephoneAndFaxNumber($object->telephoneAndFaxNumber ?? null);
-        $customer->setWebsite($object->website ?? null);
-        $customer->setVatZone($object->vatZone);
-        $customer->setLastUpdated($object->lastUpdated);
-        $customer->setBarred($object->barred ?? null);
-        $customer->setCorporateIdentificationNumber($object->corporateIdentificationNumber ?? null);
-        $customer->setCreditLimit($object->creditLimit ?? null);
-        $customer->setEan($object->ean ?? null);
-        $customer->setPublicEntryNumber($object->publicEntryNumber ?? null);
-        $customer->setSalesPerson($object->salesPerson ?? null);
-        $customer->setContacts($object->contacts);
-        $customer->setInvoices($object->invoices);
-        $customer->setDefaultDeliveryLocation($object->defaultDeliveryLocation ?? null);
-        $customer->setDeliveryLocations($object->deliveryLocations);
-        $customer->setTotals($object->totals);
-        $customer->setVatNumber($object->vatNumber ?? null);
-        $customer->setSelf($object->self);
+        $customer->setCustomerNumber($stdClass->customerNumber);
+        $customer->setCurrency($stdClass->currency);
+        $customer->setPaymentTerms($stdClass->paymentTerms);
+        $customer->setCustomerGroup($stdClass->customerGroup);
+        $customer->setAddress($stdClass->address ?? null);
+        $customer->setBalance($stdClass->balance);
+        $customer->setDueAmount($stdClass->dueAmount);
+        $customer->setCity($stdClass->city ?? null);
+        $customer->setCountry($stdClass->country ?? null);
+        $customer->setEmail($stdClass->email ?? null);
+        $customer->setName($stdClass->name);
+        $customer->setZip($stdClass->zip ?? null);
+        $customer->setTelephoneAndFaxNumber($stdClass->telephoneAndFaxNumber ?? null);
+        $customer->setWebsite($stdClass->website ?? null);
+        $customer->setVatZone($stdClass->vatZone);
+        $customer->setLastUpdated($stdClass->lastUpdated);
+        $customer->setBarred($stdClass->barred ?? null);
+        $customer->setCorporateIdentificationNumber($stdClass->corporateIdentificationNumber ?? null);
+        $customer->setCreditLimit($stdClass->creditLimit ?? null);
+        $customer->setEan($stdClass->ean ?? null);
+        $customer->setPublicEntryNumber($stdClass->publicEntryNumber ?? null);
+        $customer->setSalesPerson($stdClass->salesPerson ?? null);
+        $customer->setContacts($stdClass->contacts);
+        $customer->setInvoices($stdClass->invoices);
+        $customer->setDefaultDeliveryLocation($stdClass->defaultDeliveryLocation ?? null);
+        $customer->setDeliveryLocations($stdClass->deliveryLocations);
+        $customer->setTotals($stdClass->totals);
+        $customer->setVatNumber($stdClass->vatNumber ?? null);
+        $customer->setSelf($stdClass->self);
 
         return $customer;
     }
 
-    public function get($id)
+    /**
+     * Retrieves a single Customer by its ID
+     * @param int $id
+     * @return Customer
+     */
+    public function get(int $id)
     {
-        return self::transform($this->api, $this->api->get('/customers/'.$id));
+        return self::transform($this->economic, $this->economic->get('/customers/'.$id));
     }
 
+    /**
+     * Deletes a Customer
+     * Requires the get(id) method in order to perform this.
+     */
     public function delete()
     {
-        $this->api->delete('/customers/'.$this->getCustomerNumber());
-
-        return $this;
+        return $this->economic->delete('/customers/'.$this->getCustomerNumber());
     }
 
+    /**
+     * Creates a Customer
+     * @return Customer
+     */
     public function create()
     {
         $data = (object) [
@@ -164,16 +185,20 @@ class Customer
             'vatNumber' => $this->getVatNumber(),
         ];
 
-        $this->api->cleanObject($data);
+        $this->economic->cleanObject($data);
 
         $validator = CustomerValidator::getValidator();
         if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
-        return self::transform($this->api, $this->api->create('/customers', $data));
+        return self::transform($this->economic, $this->economic->create('/customers', $data));
     }
 
+    /**
+     * Updates a Customer
+     * @return Customer
+     */
     public function update()
     {
         $data = (object) [
@@ -200,19 +225,27 @@ class Customer
             'zip' => $this->getZip(),
         ];
 
-        $this->api->cleanObject($data);
+        $this->economic->cleanObject($data);
 
-        return self::transform($this->api, $this->api->update('/customers/'.$this->getCustomerNumber(), $data));
+        return self::transform($this->economic, $this->economic->update('/customers/'.$this->getCustomerNumber(), $data));
     }
 
+    /**
+     * Retrieves a collection of draft Invoices
+     * @return DraftInvoice
+     */
     public function draftInvoices()
     {
-        return $this->api->collection('/customers/'.$this->getCustomerNumber().'/invoices/drafts?', new DraftInvoice($this->api));
+        return $this->economic->collection('/customers/'.$this->getCustomerNumber().'/invoices/drafts?', new DraftInvoice($this->economic));
     }
 
+    /**
+     * Retrieves a collection of booked Invoices
+     * @return Invoice
+     */
     public function bookedInvoices()
     {
-        return $this->api->collection('/customers/'.$this->getCustomerNumber().'/invoices/booked?', new Invoice($this->api));
+        return $this->economic->collection('/customers/'.$this->getCustomerNumber().'/invoices/booked?', new Invoice($this->economic));
     }
 
     // Getters & Setters
@@ -259,7 +292,7 @@ class Customer
         if (isset($this->customerContact)) {
             $this->customerContact->customerContactNumber = $customerContactNumber;
         } else {
-            $this->customerContact = $this->api->setClass('CustomerContact', 'customerContactNumber');
+            $this->customerContact = $this->economic->setClass('CustomerContact', 'customerContactNumber');
             $this->customerContact->customerContactNumber = $customerContactNumber;
         }
 
@@ -435,7 +468,7 @@ class Customer
         if (isset($this->paymentTerms)) {
             $this->paymentTerms->paymentTermsNumber = $paymentTermsNumber;
         } else {
-            $this->paymentTerms = $this->api->setClass('PaymentTerms', 'paymentTermsNumber');
+            $this->paymentTerms = $this->economic->setClass('PaymentTerms', 'paymentTermsNumber');
             $this->paymentTerms->paymentTermsNumber = $paymentTermsNumber;
         }
 
@@ -478,7 +511,7 @@ class Customer
         if (isset($this->customerGroup)) {
             $this->customerGroup->customerGroupNumber = $customerGroupNumber;
         } else {
-            $this->customerGroup = $this->api->setClass('CustomerGroup', 'customerGroupNumber');
+            $this->customerGroup = $this->economic->setClass('CustomerGroup', 'customerGroupNumber');
             $this->customerGroup->customerGroupNumber = $customerGroupNumber;
         }
 
@@ -691,7 +724,7 @@ class Customer
         if (isset($this->vatZone)) {
             $this->vatZone->vatZoneNumber = $vatZoneNumber;
         } else {
-            $this->vatZone = $this->api->setClass('VatZone', 'vatZoneNumber');
+            $this->vatZone = $this->economic->setClass('VatZone', 'vatZoneNumber');
             $this->vatZone->vatZoneNumber = $vatZoneNumber;
         }
 
@@ -857,7 +890,7 @@ class Customer
         if (isset($this->salesPerson)) {
             $this->salesPerson->employeeNumber = $employeeNumber;
         } else {
-            $this->salesPerson = $this->api->setClass('SalesPerson', 'employeeNumber');
+            $this->salesPerson = $this->economic->setClass('SalesPerson', 'employeeNumber');
             $this->salesPerson->employeeNumber = $employeeNumber;
         }
 

@@ -28,12 +28,26 @@ class Voucher
     /** @var string $self */
     private $self;
 
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
-    public function __construct(Economic $api)
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
+    }
+
+    public static function transform(Economic $economic, \stdClass $stdClass)
+    {
+        $voucher = new self($economic);
+
+        $voucher->setAccountingYear($stdClass->accountingYear);
+        $voucher->setEntries($stdClass->entries);
+        $voucher->setJournal($stdClass->journal);
+        $voucher->setVoucherNumber($stdClass->voucherNumber);
+        $voucher->setAttachment($stdClass->attachment);
+        $voucher->setSelf($stdClass->self);
+
+        return $voucher;
     }
 
     public function setAccountingYear($accountingYear)

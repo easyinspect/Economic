@@ -2,13 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: mbs
- * Date: 28-09-2017
- * Time: 10:12.
+ * Date: 26-09-2017
+ * Time: 11:44.
  */
 
-namespace Economic\Models\Components;
+namespace Economic\Models\Components\ProductGroup;
 
-class ContraAccountForPrepaidAmount
+
+class TotalFromAccount
 {
     /** @var int $accountNumber */
     public $accountNumber;

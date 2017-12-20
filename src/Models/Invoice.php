@@ -58,57 +58,82 @@ class Invoice
     private $bookedInvoiceNumber;
     /** @var int $vatAmount */
     private $vatAmount;
-    /** @var Economic $api */
-    private $api;
 
-    public function __construct(Economic $api)
+    /** @var Economic $economic */
+    private $economic;
+
+    /**
+     * Invoice constructor
+     * @param Economic $economic
+     */
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
-    public static function transform($api, $object)
+    /**
+     * Transforms stdClass object into Invoice
+     * @param Economic $economic
+     * @param \stdClass $stdClass
+     * @return Invoice
+     */
+    public static function transform(Economic $economic, \stdClass $stdClass)
     {
-        $invoice = new self($api);
+        $invoice = new self($economic);
 
-        $invoice->setCustomer($object->customer);
-        $invoice->setCurrency($object->currency);
-        $invoice->setDate($object->date);
-        $invoice->setDueDate($object->dueDate);
-        $invoice->setGrossAmount($object->grossAmount);
-        $invoice->setLayout($object->layout);
-        $invoice->setNetAmount($object->netAmount);
-        $invoice->setNetAmountInBaseCurrency($object->netAmountInBaseCurrency);
-        $invoice->setPaymentTerms($object->paymentTerms);
-        $invoice->setPdf($object->pdf);
-        $invoice->setRecipient($object->recipient);
-        $invoice->setReferences($object->references);
-        $invoice->setRemainder($object->remainder);
-        $invoice->setRemainderInBaseCurrency($object->remainderInBaseCurrency);
-        $invoice->setRoundingAmount($object->roundingAmount);
-        $invoice->setSelf($object->self);
-        $invoice->setVatAmount($object->vatAmount);
-        $invoice->setBookedInvoiceNumber($object->bookedInvoiceNumber);
+        $invoice->setCustomer($stdClass->customer);
+        $invoice->setCurrency($stdClass->currency);
+        $invoice->setDate($stdClass->date);
+        $invoice->setDueDate($stdClass->dueDate);
+        $invoice->setGrossAmount($stdClass->grossAmount);
+        $invoice->setLayout($stdClass->layout);
+        $invoice->setNetAmount($stdClass->netAmount);
+        $invoice->setNetAmountInBaseCurrency($stdClass->netAmountInBaseCurrency);
+        $invoice->setPaymentTerms($stdClass->paymentTerms);
+        $invoice->setPdf($stdClass->pdf);
+        $invoice->setRecipient($stdClass->recipient);
+        $invoice->setReferences($stdClass->references);
+        $invoice->setRemainder($stdClass->remainder);
+        $invoice->setRemainderInBaseCurrency($stdClass->remainderInBaseCurrency);
+        $invoice->setRoundingAmount($stdClass->roundingAmount);
+        $invoice->setSelf($stdClass->self);
+        $invoice->setVatAmount($stdClass->vatAmount);
+        $invoice->setBookedInvoiceNumber($stdClass->bookedInvoiceNumber);
 
         return $invoice;
     }
 
+    /**
+     * Retrieves a collection of booked Invoices
+     * @param Filter $filter
+     * @return Invoice
+     */
     public function all(Filter $filter = null)
     {
         if (isset($filter)) {
-            return $this->api->collection('/invoices/booked?'.$filter->filter().'&', $this);
+            return $this->economic->collection('/invoices/booked?'.$filter->filter().'&', $this);
         } else {
-            return $this->api->collection('/invoices/booked?', $this);
+            return $this->economic->collection('/invoices/booked?', $this);
         }
     }
 
-    public function get($id)
+    /**
+     * Retrieve a single booked Invoice by its ID
+     * @param int $id
+     * @return Invoice
+     */
+    public function get(int $id)
     {
-        return self::transform($this->api, $this->api->get('/invoices/booked/'.$id));
+        return self::transform($this->economic, $this->economic->get('/invoices/booked/'.$id));
     }
 
+    /**
+     * Download PDF file of the given booked Invoice number
+     * Requires get(id) method in order for this work.
+     */
     public function downloadPdf()
     {
-        return $this->api->download('/invoices/booked/'.$this->getBookedInvoiceNumber().'/pdf');
+        return $this->economic->download('/invoices/booked/'.$this->getBookedInvoiceNumber().'/pdf');
     }
 
     // Getters & Setters

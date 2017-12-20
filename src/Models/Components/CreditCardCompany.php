@@ -11,9 +11,9 @@ namespace Economic\Models\Components;
 class CreditCardCompany
 {
     /** @var int $accountNumber */
-    private $customerNumber;
+    public $customerNumber;
     /** @var string $self */
-    private $self;
+    public $self;
 
     public function __construct(int $customerNumber = null, string $self = null)
     {

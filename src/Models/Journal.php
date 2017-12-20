@@ -31,86 +31,98 @@ class Journal
     private $vouchers;
     /** @var string $self */
     private $self;
-    /** @var Economic $api */
-    private $api;
 
-    public function __construct(Economic $api)
+    /** @var Economic $economic */
+    private $economic;
+
+    /**
+     * Journal constructor
+     * @param Economic $economic
+     */
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
-    public static function transformVoucher($api, $object)
+    /**
+     * Transform stdClass object into Journal
+     * @param Economic $economic
+     * @param \stdClass $stdClass
+     * @return Journal
+     */
+    public static function transform(Economic $economic, \stdClass $stdClass)
     {
-        if (isset($object->collection)) {
-            $voucher = array_map(function ($item) use ($api) {
-                $voucher = new Voucher($api);
+        $journal = new self($economic);
 
-                $voucher->setAccountingYear($item->accountingYear);
-                $voucher->setEntries($item->entries);
-                $voucher->setJournal($item->journal);
-                $voucher->setVoucherNumber($item->voucherNumber);
-                $voucher->setAttachment($item->attachment);
-                $voucher->setSelf($item->self);
-
-                return $voucher;
-            }, $object->collection);
-        } else {
-            $voucher = array_map(function ($item) use ($api) {
-                $voucher = new Voucher($api);
-
-                $voucher->setAccountingYear($item->accountingYear);
-                $voucher->setEntries($item->entries);
-                $voucher->setJournal($item->journal);
-                $voucher->setAttachment($item->attachment);
-                $voucher->setVoucherNumber($item->voucherNumber);
-                $voucher->setSelf($item->self);
-
-                return $voucher;
-            }, $object);
-        }
-
-        return $voucher;
-    }
-
-    public static function transform($api, $object)
-    {
-        $journal = new self($api);
-
-        $journal->setName($object->name);
-        $journal->setSelf($object->self);
-        $journal->setJournalNumber($object->journalNumber);
-        $journal->setVouchers($object->vouchers);
-        $journal->setTemplates($object->templates);
-        $journal->setEntries($object->entries);
-        $journal->setSettings($object->settings);
+        $journal->setName($stdClass->name);
+        $journal->setSelf($stdClass->self);
+        $journal->setJournalNumber($stdClass->journalNumber);
+        $journal->setVouchers($stdClass->vouchers);
+        $journal->setTemplates($stdClass->templates);
+        $journal->setEntries($stdClass->entries);
+        $journal->setSettings($stdClass->settings);
 
         return $journal;
     }
 
+    /**
+     * Retrieves a collection of Journals
+     * @param Filter $filter
+     * @return Journal
+     */
     public function all(Filter $filter = null)
     {
         if (isset($filter)) {
-            return $this->api->collection('/journals-experimental?'.$filter->filter().'&', $this);
+            return $this->economic->collection('/journals-experimental?'.$filter->filter().'&', $this);
         } else {
-            return $this->api->collection('/journals-experimental?', $this);
+            return $this->economic->collection('/journals-experimental?', $this);
         }
     }
 
-    public function get($journalNumber)
+    /**
+     * Retrieves a single Journal by its ID
+     * @param int $journalNumber
+     * @return Journal
+     */
+    public function get(int $journalNumber)
     {
-        return self::transform($this->api, $this->api->get('/journals-experimental/'.$journalNumber));
+        return self::transform($this->economic, $this->economic->get('/journals-experimental/'.$journalNumber));
     }
 
+    /**
+     * Retrieves a collection of all vouchers that belongs to the given Journal
+     * @return Voucher
+     */
     public function vouchers()
     {
-        return self::transformVoucher($this->api, $this->api->get('journals-experimental/'.$this->getJournalNumber().'/vouchers'));
+        return $this->economic->collection('/journals-experimental/'.$this->getJournalNumber().'/vouchers?', new Voucher($this->economic));
     }
 
-    public function create($journalNumber)
+    /**
+     * Creates a Journal voucher
+     * @param int $journalNumber
+     * @return Voucher
+     */
+    public function create(int $journalNumber)
     {
-        $this->api->cleanObject($this->getEntries());
+        $this->economic->cleanObject($this->getEntries());
 
-        return self::transformVoucher($this->api, $this->api->create('/journals-experimental/'.$journalNumber.'/vouchers', $this->getEntries()));
+        $voucher = array_map(function ($item) {
+
+            $voucher = new Voucher($this->economic);
+
+            $voucher->setAccountingYear($item->accountingYear);
+            $voucher->setJournal($item->journal);
+            $voucher->setVoucherNumber($item->voucherNumber);
+            $voucher->setAttachment($item->attachment);
+            $voucher->setEntries($item->entries);
+            $voucher->setSelf($item->self);
+
+            return $voucher;
+
+        }, $this->economic->create('/journals-experimental/'.$journalNumber.'/vouchers', $this->getEntries()));
+
+        return $voucher;
     }
 
     // Getters & Setters
@@ -228,28 +240,23 @@ class Journal
         return $this;
     }
 
+    /**
+     * @return Settings
+     */
     public function getSettings() : ?Settings
     {
         return $this->settings;
     }
 
+    /**
+     * @param \stdClass $settings
+     * @return Journal
+     */
     public function setSettings($settings = null)
     {
         if (isset($settings)) {
             $this->settings = new Settings($settings->contraAccounts ?? null, $settings->entryTypeRestrictedTo ?? null, $settings->voucherNumbers ?? null);
         }
-
-        return $this;
-    }
-
-    public function getAttachment() : ?string
-    {
-        return $this->attachment;
-    }
-
-    public function setAttachment(string $attachment)
-    {
-        $this->attachment = $attachment;
 
         return $this;
     }

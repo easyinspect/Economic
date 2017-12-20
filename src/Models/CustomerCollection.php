@@ -13,20 +13,29 @@ use Economic\Economic;
 
 class CustomerCollection
 {
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
-    public function __construct(Economic $api)
+    /**
+     * CustomerCollection constructor
+     * @param Economic $economic
+     */
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
+    /**
+     * Retrieves a collection of Customers
+     * @param Filter $filter
+     * @return Customer
+     */
     public function all(Filter $filter = null)
     {
         if (isset($filter)) {
-            return $this->api->collection('/customers?'.$filter->filter().'&', new Customer($this->api));
+            return $this->economic->collection('/customers?'.$filter->filter().'&', new Customer($this->economic));
         } else {
-            return $this->api->collection('/customers?', new Customer($this->api));
+            return $this->economic->collection('/customers?', new Customer($this->economic));
         }
     }
 }

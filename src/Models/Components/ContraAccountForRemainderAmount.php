@@ -11,9 +11,9 @@ namespace Economic\Models\Components;
 class ContraAccountForRemainderAmount
 {
     /** @var int $accountNumber */
-    private $accountNumber;
+    public $accountNumber;
     /** @var string $self */
-    private $self;
+    public $self;
 
     public function __construct(int $accountNumber = null, string $self = null)
     {

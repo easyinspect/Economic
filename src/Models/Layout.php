@@ -22,37 +22,57 @@ class Layout
     /** @var bool $deleted */
     private $deleted;
 
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
-    public function __construct(Economic $api)
+    /**
+     * Layout constructor
+     * @param Economic $economic
+     */
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
-    public static function transform($api, $object)
+    /**
+     * Transforms stdClass object into Layout
+     * @param Economic $economic
+     * @param \stdClass $stdClass
+     * @return Layout
+     */
+    public static function transform(Economic $economic, \stdClass $stdClass)
     {
-        $layout = new self($api);
+        $layout = new self($economic);
 
-        $layout->setLayoutNumber($object->layoutNumber)
-                ->setName($object->name)
-                ->setSelf($object->self);
+        $layout->setName($stdClass->name);
+        $layout->setLayoutNumber($stdClass->layoutNumber);
+        $layout->setSelf($stdClass->self);
 
         return $layout;
     }
 
+    /**
+     * Retrieves a collection of Layout(s)
+     * @param Filter $filter
+     * @return Layout
+     */
     public function all(Filter $filter = null)
     {
         if (isset($filter)) {
-            return $this->api->collection('/layouts?'.$filter->filter().'&', $this);
+            return $this->economic->collection('/layouts?'.$filter->filter().'&', $this);
         } else {
-            return $this->api->collection('/layouts?', $this);
+            return $this->economic->collection('/layouts?', $this);
         }
     }
 
-    public function get($id)
+    /**
+     * Retrieve a single Layout by its ID
+     * @param int $id
+     * @return Layout
+     */
+    public function get(int $id)
     {
-        return self::transform($this->api, $this->api->get('/layouts/'.$id));
+        return self::transform($this->economic, $this->economic->get('/layouts/'.$id));
     }
 
     /**

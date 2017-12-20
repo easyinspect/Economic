@@ -8,6 +8,7 @@
 
 namespace Economic;
 
+use Economic\Models\ProductGroup;
 use GuzzleHttp\Client;
 use Economic\Models\Unit;
 use Economic\Models\Layout;
@@ -68,7 +69,7 @@ class Economic
             $data = \GuzzleHttp\json_decode($this->client->get($url.'skippages='.$skipPages.'&pagesize='.$pageSize, $this->headers)->getBody()->getContents());
 
             if ($recursive && isset($data->pagination->nextPage)) {
-                $collection = $this->collection($url, $model, $recursive, $skipPages + 1);
+                $collection = $this->collection($url, $model, $skipPages + 1, $pageSize, $recursive);
                 $data->collection = array_merge($data->collection, $collection);
             }
 
@@ -282,9 +283,20 @@ class Economic
         return new Company($this);
     }
 
+    /**
+     * @return PaymentTerm
+     */
     public function paymentTerms() : PaymentTerm
     {
         return new PaymentTerm($this);
+    }
+
+    /**
+     * @return ProductGroup
+     */
+    public function productGroups() : ProductGroup
+    {
+        return new ProductGroup($this);
     }
 
     public function cleanObject($obj)
@@ -323,6 +335,21 @@ class Economic
 
         if (is_null($value)) {
             unset($obj->{$property});
+        }
+    }
+
+    public function clean($data) {
+
+        if (is_array($data)) {
+
+            foreach ($data as $property) {
+
+                if (is_object($property)) {
+                    return $property;
+                }
+
+            }
+
         }
     }
 }

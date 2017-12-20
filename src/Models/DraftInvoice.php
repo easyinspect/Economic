@@ -75,78 +75,84 @@ class DraftInvoice
     /** @var int $vatAmount */
     private $vatAmount;
 
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
     /**
-     * @param Economic $api
+     * DraftInvoice constructor
+     * @param Economic $economic
      */
-    public function __construct(Economic $api)
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
     /**
-     * @param Economic $api
-     * @param \stdClass $object
-     * @return self
+     * Transforms stdClass object into DraftInvoice
+     * @param Economic $economic
+     * @param \stdClass $stdClass
+     * @return DraftInvoice
      */
-    public static function transform($api, $object) : self
+    public static function transform(Economic $economic, \stdClass $stdClass)
     {
-        var_dump($object);
+        $draftInvoices = new self($economic);
 
-        $draftInvoices = new self($api);
-
-        $draftInvoices->setDraftInvoiceNumber($object->draftInvoiceNumber);
-        $draftInvoices->setCurrency($object->currency);
-        $draftInvoices->setCustomer($object->customer);
-        $draftInvoices->setDate($object->date);
-        $draftInvoices->setLayout($object->layout);
-        $draftInvoices->setPaymentTerms($object->paymentTerms);
-        $draftInvoices->setRecipient($object->recipient);
-        $draftInvoices->setReferences($object->references ?? null);
-        $draftInvoices->setCostPriceInBaseCurrency($object->costPriceInBaseCurrency);
-        $draftInvoices->setDueDate($object->dueDate);
-        $draftInvoices->setExchangeRate($object->exchangeRate);
-        $draftInvoices->setGrossAmount($object->grossAmount);
-        $draftInvoices->setGrossAmountInBaseCurrency($object->grossAmountInBaseCurrency ?? null);
-        $draftInvoices->setMarginInBaseCurrency($object->marginInBaseCurrency);
-        $draftInvoices->setMarginPercentage($object->marginPercentage);
-        $draftInvoices->setNetAmount($object->netAmount);
-        $draftInvoices->setNetAmountInBaseCurrency($object->netAmountInBaseCurrency);
-        $draftInvoices->setNotes($object->notes ?? null);
-        $draftInvoices->setPdf($object->pdf);
-        $draftInvoices->setProject($object->project ?? null);
-        $draftInvoices->setLines($object->lines ?? null);
-        $draftInvoices->setRoundingAmount($object->roundingAmount);
-        $draftInvoices->setSelf($object->self);
-        $draftInvoices->setVatAmount($object->vatAmount);
+        $draftInvoices->setDraftInvoiceNumber($stdClass->draftInvoiceNumber);
+        $draftInvoices->setCurrency($stdClass->currency);
+        $draftInvoices->setCustomer($stdClass->customer);
+        $draftInvoices->setDate($stdClass->date);
+        $draftInvoices->setLayout($stdClass->layout);
+        $draftInvoices->setPaymentTerms($stdClass->paymentTerms);
+        $draftInvoices->setRecipient($stdClass->recipient);
+        $draftInvoices->setReferences($stdClass->references ?? null);
+        $draftInvoices->setCostPriceInBaseCurrency($stdClass->costPriceInBaseCurrency);
+        $draftInvoices->setDueDate($stdClass->dueDate);
+        $draftInvoices->setExchangeRate($stdClass->exchangeRate);
+        $draftInvoices->setGrossAmount($stdClass->grossAmount);
+        $draftInvoices->setGrossAmountInBaseCurrency($stdClass->grossAmountInBaseCurrency ?? null);
+        $draftInvoices->setMarginInBaseCurrency($stdClass->marginInBaseCurrency);
+        $draftInvoices->setMarginPercentage($stdClass->marginPercentage);
+        $draftInvoices->setNetAmount($stdClass->netAmount);
+        $draftInvoices->setNetAmountInBaseCurrency($stdClass->netAmountInBaseCurrency);
+        $draftInvoices->setNotes($stdClass->notes ?? null);
+        $draftInvoices->setPdf($stdClass->pdf);
+        $draftInvoices->setProject($stdClass->project ?? null);
+        $draftInvoices->setLines($stdClass->lines ?? null);
+        $draftInvoices->setRoundingAmount($stdClass->roundingAmount);
+        $draftInvoices->setSelf($stdClass->self);
+        $draftInvoices->setVatAmount($stdClass->vatAmount);
 
         return $draftInvoices;
     }
 
     /**
+     * Retrieves a collection of DraftInvoice(s)
      * @param Filter $filter
-     * @return self
+     * @return DraftInvoice
      */
     public function all(Filter $filter = null)
     {
         if (isset($filter)) {
-            return $this->api->collection('/invoices/drafts?'.$filter->filter().'&', $this);
+            return $this->economic->collection('/invoices/drafts?'.$filter->filter().'&', $this);
         } else {
-            return $this->api->collection('/invoices/drafts?', $this);
+            return $this->economic->collection('/invoices/drafts?', $this);
         }
     }
 
     /**
+     * Retrieves a single DraftInvoice by its ID
      * @param int $id
-     * @return self
+     * @return DraftInvoice
      */
-    public function get($id)
+    public function get(int $id)
     {
-        return self::transform($this->api, $this->api->get('/invoices/drafts/'.$id));
+        return self::transform($this->economic, $this->economic->get('/invoices/drafts/'.$id));
     }
 
+    /**
+     * Creates a DraftInvoice
+     * @return DraftInvoice
+     */
     public function create()
     {
         $data = (object) [
@@ -165,16 +171,20 @@ class DraftInvoice
             'lines' => $this->getLines(),
         ];
 
-        $this->api->cleanObject($data);
+        $this->economic->cleanObject($data);
 
         $validator = DraftInvoiceValidator::getValidator();
         if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
-        return self::transform($this->api, $this->api->create('/invoices/drafts', $data));
+        return self::transform($this->economic, $this->economic->create('/invoices/drafts', $data));
     }
 
+    /**
+     * Updates a DraftInvoice
+     * @return DraftInvoice
+     */
     public function update()
     {
         $data = (object) [
@@ -199,12 +209,13 @@ class DraftInvoice
             'vatAmount' => $this->getVatAmount(),
         ];
 
-        $this->api->cleanObject($data);
+        $this->economic->cleanObject($data);
 
-        return self::transform($this->api, $this->api->update('/invoices/drafts/'.$this->getDraftInvoiceNumber(), $data));
+        return self::transform($this->economic, $this->economic->update('/invoices/drafts/'.$this->getDraftInvoiceNumber(), $data));
     }
 
     /**
+     * Books a DraftInvoice, and convert it to a regular Invoice.
      * @return Invoice
      */
     public function bookInvoice() : Invoice
@@ -213,9 +224,9 @@ class DraftInvoice
            'draftInvoice' => [
                'draftInvoiceNumber' => $this->getDraftInvoiceNumber(),
            ],
-       ];
+        ];
 
-        return Invoice::transform($this->api, $this->api->create('/invoices/booked', $data));
+        return Invoice::transform($this->economic, $this->economic->create('/invoices/booked', $data));
     }
 
     // Getters & Setters
@@ -262,7 +273,7 @@ class DraftInvoice
         if (isset($this->notes)) {
             $this->notes->heading = $heading;
         } else {
-            $this->notes = $this->api->setClass('Notes', 'heading');
+            $this->notes = $this->economic->setClass('Notes', 'heading');
             $this->notes->heading = $heading;
         }
 
@@ -290,7 +301,7 @@ class DraftInvoice
         if (isset($this->notes)) {
             $this->notes->textLine1 = $textLine1;
         } else {
-            $this->notes = $this->api->setClass('Notes', 'textLine1');
+            $this->notes = $this->economic->setClass('Notes', 'textLine1');
             $this->notes->textLine1 = $textLine1;
         }
 
@@ -318,7 +329,7 @@ class DraftInvoice
         if (isset($this->notes)) {
             $this->notes->textLine1 = $textLine2;
         } else {
-            $this->notes = $this->api->setClass('Notes', 'textLine2');
+            $this->notes = $this->economic->setClass('Notes', 'textLine2');
             $this->notes->textLine2 = $textLine2;
         }
 
@@ -386,7 +397,7 @@ class DraftInvoice
         if (isset($this->project)) {
             $this->project->projectNumber = $projectNumber;
         } else {
-            $this->project = $this->api->setClass('Project', 'projectNumber');
+            $this->project = $this->economic->setClass('Project', 'projectNumber');
             $this->project->projectNumber = $projectNumber;
         }
 
@@ -678,7 +689,7 @@ class DraftInvoice
         if (isset($this->customer)) {
             $this->customer->customerNumber = $customerNumber;
         } else {
-            $this->customer = $this->api->setClass('Customer', 'customerNumber');
+            $this->customer = $this->economic->setClass('Customer', 'customerNumber');
             $this->customer->customerNumber = $customerNumber;
         }
 
@@ -742,7 +753,7 @@ class DraftInvoice
         if (isset($this->layout)) {
             $this->layout->layoutNumber = $layoutNumber;
         } else {
-            $this->layout = $this->api->setClass('Layout', 'layoutNumber');
+            $this->layout = $this->economic->setClass('Layout', 'layoutNumber');
             $this->layout->layoutNumber = $layoutNumber;
         }
 
@@ -787,7 +798,7 @@ class DraftInvoice
         if (isset($this->paymentTerms)) {
             $this->paymentTerms->paymentTermsNumber = $paymentTermsNumber;
         } else {
-            $this->paymentTerms = $this->api->setClass('PaymentTerms', 'paymentTermsNumber');
+            $this->paymentTerms = $this->economic->setClass('PaymentTerms', 'paymentTermsNumber');
             $this->paymentTerms->paymentTermsNumber = $paymentTermsNumber;
         }
 
@@ -846,7 +857,7 @@ class DraftInvoice
         if (isset($this->recipient)) {
             $this->recipient->name = $name;
         } else {
-            $this->recipient = $this->api->setClass('Recipient', 'name');
+            $this->recipient = $this->economic->setClass('Recipient', 'name');
             $this->recipient->name = $name;
         }
 
@@ -874,7 +885,7 @@ class DraftInvoice
         if (isset($this->recipient->vatZone)) {
             $this->recipient->vatZone->vatZoneNumber = $vatZoneNumber;
         } else {
-            $this->recipient = $this->api->setClass('Recipient', 'vatZone', $this);
+            $this->recipient = $this->economic->setClass('Recipient', 'vatZone', $this);
             $this->recipient->vatZone->vatZoneNumber = $vatZoneNumber;
         }
 
@@ -945,7 +956,7 @@ class DraftInvoice
         if (isset($this->references->salesPerson)) {
             $this->references->salesPerson->employeeNumber = $employeeNumber;
         } else {
-            $this->references = $this->api->setClass('References', 'salesPerson', $this);
+            $this->references = $this->economic->setClass('References', 'salesPerson', $this);
             $this->references->salesPerson->employeeNumber = $employeeNumber;
         }
 
@@ -971,7 +982,7 @@ class DraftInvoice
         if (isset($this->references->vendorReference)) {
             $this->references->vendorReference->employeeNumber = $employeeNumber;
         } else {
-            $this->references = $this->api->setClass('References', 'vendorReference', $this);
+            $this->references = $this->economic->setClass('References', 'vendorReference', $this);
             $this->references->vendorReference->employeeNumber = $employeeNumber;
         }
 

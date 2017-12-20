@@ -39,39 +39,39 @@ class PaymentTerm
     /** @var string $self */
     private $self;
 
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
     /**
      * PaymentTerms constructor.
-     * @param Economic $api
+     * @param Economic $economic
      */
-    public function __construct(Economic $api)
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
     /**
      * Transform stdClass object into PaymentTerms.
-     * @param \stdClass $object
-     * @param Economic $api
+     * @param \stdClass $stdClass
+     * @param Economic $economic
      * @return PaymentTerm
      */
-    public static function transform($api, $object)
+    public static function transform(Economic $economic, \stdClass $stdClass)
     {
-        $paymentTerm = new self($api);
+        $paymentTerm = new self($economic);
 
-        $paymentTerm->setContraAccountForPrepaidAmount($object->contraAccountForPrepaidAmount ?? null);
-        $paymentTerm->setContraAccountForRemainderAmount($object->contraAccountForRemainderAccount ?? null);
-        $paymentTerm->setCreditCardCompany($object->creditCardCompany ?? null);
-        $paymentTerm->setDaysOfCredit($object->daysOfCredit ?? null);
-        $paymentTerm->setDescription($object->description ?? null);
-        $paymentTerm->setName($object->name);
-        $paymentTerm->setPaymentTermsNumber($object->paymentTermsNumber ?? null);
-        $paymentTerm->setPaymentTermsType($object->paymentTermsType);
-        $paymentTerm->setPercentageForPrepaidAmount($object->percentageForPrepaidAmount ?? null);
-        $paymentTerm->setPercentageForRemainderAmount($object->percentageForRemainderAmount ?? null);
-        $paymentTerm->setSelf($object->self);
+        $paymentTerm->setContraAccountForPrepaidAmount($stdClass->contraAccountForPrepaidAmount ?? null);
+        $paymentTerm->setContraAccountForRemainderAmount($stdClass->contraAccountForRemainderAccount ?? null);
+        $paymentTerm->setCreditCardCompany($stdClass->creditCardCompany ?? null);
+        $paymentTerm->setDaysOfCredit($stdClass->daysOfCredit ?? null);
+        $paymentTerm->setDescription($stdClass->description ?? null);
+        $paymentTerm->setName($stdClass->name);
+        $paymentTerm->setPaymentTermsNumber($stdClass->paymentTermsNumber ?? null);
+        $paymentTerm->setPaymentTermsType($stdClass->paymentTermsType);
+        $paymentTerm->setPercentageForPrepaidAmount($stdClass->percentageForPrepaidAmount ?? null);
+        $paymentTerm->setPercentageForRemainderAmount($stdClass->percentageForRemainderAmount ?? null);
+        $paymentTerm->setSelf($stdClass->self);
 
         return $paymentTerm;
     }
@@ -84,9 +84,9 @@ class PaymentTerm
     public function all(Filter $filter = null)
     {
         if (isset($filter)) {
-            return $this->api->collection('/payment-terms?'.$filter->filter().'&', $this);
+            return $this->economic->collection('/payment-terms?'.$filter->filter().'&', $this);
         } else {
-            return $this->api->collection('/payment-terms?', $this);
+            return $this->economic->collection('/payment-terms?', $this);
         }
     }
 
@@ -97,7 +97,7 @@ class PaymentTerm
      */
     public function get($id)
     {
-        return self::transform($this->api, $this->api->get('/payment-terms/'.$id));
+        return self::transform($this->economic, $this->economic->get('/payment-terms/'.$id));
     }
 
     /**
@@ -118,14 +118,14 @@ class PaymentTerm
             'percentageForRemainderAmount' => $this->getPercentageForRemainderAmount(),
         ];
 
-        $this->api->cleanObject($data);
+        $this->economic->cleanObject($data);
 
         $validator = \PaymentTermValidator::getValidator();
         if (!$validator->validate($this)) {
             throw $validator->getException($this);
         }
 
-        return self::transform($this->api, $this->api->create('/payment-terms', $data));
+        return self::transform($this->economic, $this->economic->create('/payment-terms', $data));
     }
 
     /**
@@ -146,22 +146,23 @@ class PaymentTerm
             'percentageForRemainderAmount' => $this->getPercentageForRemainderAmount()
         ];
 
-        $this->api->cleanObject($data);
+        $this->economic->cleanObject($data);
 
         $validator = \PaymentTermValidator::getValidator();
         if (!$validator->validate($this)) {
             throw $validator->getException($this);
         }
 
-        return self::transform($this->api, $this->api->update('/payment-terms/'.$this->getPaymentTermsNumber(), $data));
+        return self::transform($this->economic, $this->economic->update('/payment-terms/'.$this->getPaymentTermsNumber(), $data));
     }
 
     /**
      * Deletes a PaymentTerm.
+     * Requires PaymentTerm's get(id) method in order to perform this.
      */
     public function delete()
     {
-        return $this->api->delete('/payment-terms/'.$this->getPaymentTermsNumber());
+        return $this->economic->delete('/payment-terms/'.$this->getPaymentTermsNumber());
     }
 
     // Getters & Setters
@@ -209,6 +210,34 @@ class PaymentTerm
     }
 
     /**
+     * @return int
+     */
+    public function getContraAccountForPrepaidAmountAccountNumber() : ?int
+    {
+        if (isset($this->contraAccountForPrepaidAmount)) {
+            return $this->contraAccountForPrepaidAmount->accountNumber;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param int $accountNumber
+     * @return PaymentTerm
+     */
+    public function setContraAccountForPrepaidAmountAccountNumber(int $accountNumber)
+    {
+        if (isset($this->contraAccountForPrepaidAmount)) {
+            $this->contraAccountForPrepaidAmount->accountNumber = $accountNumber;
+        } else {
+            $this->contraAccountForPrepaidAmount = $this->economic->setClass('ContraAccountForPrepaidAmount', 'accountNumber');
+            $this->contraAccountForPrepaidAmount->accountNumber = $accountNumber;
+        }
+
+        return $this;
+    }
+
+    /**
      * @return ContraAccountForRemainderAmount
      */
     public function getContraAccountForRemainderAmount() : ?ContraAccountForRemainderAmount
@@ -232,6 +261,34 @@ class PaymentTerm
     }
 
     /**
+     * @return int
+     */
+    public function getContraAccountForRemainderAmountAccountNumber() : ?int
+    {
+        if (isset($this->contraAccountForRemainderAmount)) {
+            return $this->contraAccountForRemainderAmount->accountNumber;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param int $accountNumber
+     * @return PaymentTerm
+     */
+    public function setContraAccountForRemainderAmountAccountNumber(int $accountNumber)
+    {
+        if (isset($this->contraAccountForRemainderAmount)) {
+            $this->contraAccountForRemainderAmount->accountNumber = $accountNumber;
+        } else {
+            $this->contraAccountForRemainderAmount = $this->economic->setClass('ContraAccountForRemainderAmount', 'accountNumber');
+            $this->contraAccountForRemainderAmount->accountNumber = $accountNumber;
+        }
+
+        return $this;
+    }
+
+    /**
      * @return CreditCardCompany
      */
     public function getCreditCardCompany() : ?CreditCardCompany
@@ -249,6 +306,34 @@ class PaymentTerm
             $this->creditCardCompany = new CreditCardCompany(
                 $creditCardCompany->customerNumber,
                 $creditCardCompany->self);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCreditCardCompanyCustomerNumber() : ?int
+    {
+        if (isset($this->creditCardCompany)) {
+            return $this->creditCardCompany->customerNumber;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param int $customerNumber
+     * @return PaymentTerm
+     */
+    public function setCreditCardCompanyCustomerNumber(int $customerNumber)
+    {
+        if (isset($this->creditCardCompany)) {
+            $this->creditCardCompany->customerNumber = $customerNumber;
+        } else {
+            $this->creditCardCompany = $this->economic->setClass('CreditCardCompany', 'customerNumber');
+            $this->creditCardCompany->customerNumber = $customerNumber;
         }
 
         return $this;
