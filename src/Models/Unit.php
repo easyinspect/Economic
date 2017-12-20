@@ -25,7 +25,7 @@ class Unit
     private $economic;
 
     /**
-     * Unit constructor
+     * Unit constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -34,7 +34,7 @@ class Unit
     }
 
     /**
-     * Transform stdClass object into Unit
+     * Transform stdClass object into Unit.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return Unit
@@ -51,7 +51,7 @@ class Unit
     }
 
     /**
-     * Retrieves a collection of Units
+     * Retrieves a collection of Units.
      * @param Filter $filter
      * @return Unit
      */
@@ -65,7 +65,7 @@ class Unit
     }
 
     /**
-     * Retrieves a single Unit by ID
+     * Retrieves a single Unit by ID.
      * @param int $id
      * @return Unit
      */
@@ -84,7 +84,7 @@ class Unit
     }
 
     /**
-     * Updates a Unit by its unitNumber
+     * Updates a Unit by its unitNumber.
      * @return Unit
      */
     public function update()
@@ -98,7 +98,7 @@ class Unit
     }
 
     /**
-     * Creates a Unit
+     * Creates a Unit.
      * @return Unit
      */
     public function create()

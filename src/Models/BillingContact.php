@@ -37,7 +37,7 @@ class BillingContact
     private $economic;
 
     /**
-     * BillingContact constructor
+     * BillingContact constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -46,7 +46,7 @@ class BillingContact
     }
 
     /**
-     * Transform stdClass into BillingContact
+     * Transform stdClass into BillingContact.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return BillingContact
@@ -69,7 +69,7 @@ class BillingContact
     }
 
     /**
-     * Retrieves a collection of BillingContact(s)
+     * Retrieves a collection of BillingContact(s).
      * @param int $customerNumber
      * @return BillingContact
      */
@@ -79,7 +79,7 @@ class BillingContact
     }
 
     /**
-     * Retrieve a single BillingContact by customerNumber & customerContactNumber
+     * Retrieve a single BillingContact by customerNumber & customerContactNumber.
      * @param int $customerNumber
      * @param int $customerContactNumber
      * @return BillingContact
@@ -90,7 +90,7 @@ class BillingContact
     }
 
     /**
-     * Creates a BillingContact
+     * Creates a BillingContact.
      * @param int $customerNumber
      * @return BillingContact
      */
@@ -117,7 +117,7 @@ class BillingContact
     }
 
     /**
-     * Updates a BillingContact
+     * Updates a BillingContact.
      * @return BillingContact
      */
     public function update()

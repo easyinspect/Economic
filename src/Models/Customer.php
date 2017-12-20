@@ -86,7 +86,7 @@ class Customer
     private $economic;
 
     /**
-     * Customer constructor
+     * Customer constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -95,7 +95,7 @@ class Customer
     }
 
     /**
-     * Transform stdClass object into Customer
+     * Transform stdClass object into Customer.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return Customer
@@ -138,7 +138,7 @@ class Customer
     }
 
     /**
-     * Retrieves a single Customer by its ID
+     * Retrieves a single Customer by its ID.
      * @param int $id
      * @return Customer
      */
@@ -157,7 +157,7 @@ class Customer
     }
 
     /**
-     * Creates a Customer
+     * Creates a Customer.
      * @return Customer
      */
     public function create()
@@ -196,7 +196,7 @@ class Customer
     }
 
     /**
-     * Updates a Customer
+     * Updates a Customer.
      * @return Customer
      */
     public function update()
@@ -231,7 +231,7 @@ class Customer
     }
 
     /**
-     * Retrieves a collection of draft Invoices
+     * Retrieves a collection of draft Invoices.
      * @return DraftInvoice
      */
     public function draftInvoices()
@@ -240,7 +240,7 @@ class Customer
     }
 
     /**
-     * Retrieves a collection of booked Invoices
+     * Retrieves a collection of booked Invoices.
      * @return Invoice
      */
     public function bookedInvoices()
