@@ -79,7 +79,7 @@ class DraftInvoice
     private $economic;
 
     /**
-     * DraftInvoice constructor
+     * DraftInvoice constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -88,7 +88,7 @@ class DraftInvoice
     }
 
     /**
-     * Transforms stdClass object into DraftInvoice
+     * Transforms stdClass object into DraftInvoice.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return DraftInvoice
@@ -126,7 +126,7 @@ class DraftInvoice
     }
 
     /**
-     * Retrieves a collection of DraftInvoice(s)
+     * Retrieves a collection of DraftInvoice(s).
      * @param Filter $filter
      * @return DraftInvoice
      */
@@ -140,7 +140,7 @@ class DraftInvoice
     }
 
     /**
-     * Retrieves a single DraftInvoice by its ID
+     * Retrieves a single DraftInvoice by its ID.
      * @param int $id
      * @return DraftInvoice
      */
@@ -150,7 +150,7 @@ class DraftInvoice
     }
 
     /**
-     * Creates a DraftInvoice
+     * Creates a DraftInvoice.
      * @return DraftInvoice
      */
     public function create()
@@ -182,7 +182,7 @@ class DraftInvoice
     }
 
     /**
-     * Updates a DraftInvoice
+     * Updates a DraftInvoice.
      * @return DraftInvoice
      */
     public function update()

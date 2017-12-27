@@ -17,7 +17,7 @@ class CustomerCollection
     private $economic;
 
     /**
-     * CustomerCollection constructor
+     * CustomerCollection constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -26,7 +26,7 @@ class CustomerCollection
     }
 
     /**
-     * Retrieves a collection of Customers
+     * Retrieves a collection of Customers.
      * @param Filter $filter
      * @return Customer
      */

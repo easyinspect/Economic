@@ -36,7 +36,7 @@ class Journal
     private $economic;
 
     /**
-     * Journal constructor
+     * Journal constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -45,7 +45,7 @@ class Journal
     }
 
     /**
-     * Transform stdClass object into Journal
+     * Transform stdClass object into Journal.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return Journal
@@ -66,7 +66,7 @@ class Journal
     }
 
     /**
-     * Retrieves a collection of Journals
+     * Retrieves a collection of Journals.
      * @param Filter $filter
      * @return Journal
      */
@@ -80,7 +80,7 @@ class Journal
     }
 
     /**
-     * Retrieves a single Journal by its ID
+     * Retrieves a single Journal by its ID.
      * @param int $journalNumber
      * @return Journal
      */
@@ -90,7 +90,7 @@ class Journal
     }
 
     /**
-     * Retrieves a collection of all vouchers that belongs to the given Journal
+     * Retrieves a collection of all vouchers that belongs to the given Journal.
      * @return Voucher
      */
     public function vouchers()
@@ -99,7 +99,7 @@ class Journal
     }
 
     /**
-     * Creates a Journal voucher
+     * Creates a Journal voucher.
      * @param int $journalNumber
      * @return Voucher
      */
@@ -108,7 +108,6 @@ class Journal
         $this->economic->cleanObject($this->getEntries());
 
         $voucher = array_map(function ($item) {
-
             $voucher = new Voucher($this->economic);
 
             $voucher->setAccountingYear($item->accountingYear);
@@ -119,7 +118,6 @@ class Journal
             $voucher->setSelf($item->self);
 
             return $voucher;
-
         }, $this->economic->create('/journals-experimental/'.$journalNumber.'/vouchers', $this->getEntries()));
 
         return $voucher;

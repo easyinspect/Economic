@@ -63,7 +63,7 @@ class Invoice
     private $economic;
 
     /**
-     * Invoice constructor
+     * Invoice constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -72,7 +72,7 @@ class Invoice
     }
 
     /**
-     * Transforms stdClass object into Invoice
+     * Transforms stdClass object into Invoice.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return Invoice
@@ -104,7 +104,7 @@ class Invoice
     }
 
     /**
-     * Retrieves a collection of booked Invoices
+     * Retrieves a collection of booked Invoices.
      * @param Filter $filter
      * @return Invoice
      */
@@ -118,7 +118,7 @@ class Invoice
     }
 
     /**
-     * Retrieve a single booked Invoice by its ID
+     * Retrieve a single booked Invoice by its ID.
      * @param int $id
      * @return Invoice
      */

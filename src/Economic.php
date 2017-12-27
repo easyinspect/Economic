@@ -347,18 +347,14 @@ class Economic
         }
     }
 
-    public function clean($data) {
-
+    public function clean($data)
+    {
         if (is_array($data)) {
-
             foreach ($data as $property) {
-
                 if (is_object($property)) {
                     return $property;
                 }
-
             }
-
         }
     }
 }

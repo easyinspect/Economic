@@ -57,7 +57,7 @@ class Product
     private $economic;
 
     /**
-     * Product constructor
+     * Product constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -66,7 +66,7 @@ class Product
     }
 
     /**
-     * Transform stdClass object into Product
+     * Transform stdClass object into Product.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return Product
@@ -95,7 +95,7 @@ class Product
     }
 
     /**
-     * Retrieves a collection of Products
+     * Retrieves a collection of Products.
      * @param Filter $filter
      * @return Product
      */
@@ -109,7 +109,7 @@ class Product
     }
 
     /**
-     * Retrieves a single Product by its ID
+     * Retrieves a single Product by its ID.
      * @param int $id
      * @return Product
      */
@@ -128,7 +128,7 @@ class Product
     }
 
     /**
-     * Creates a Product
+     * Creates a Product.
      * @return Product
      */
     public function create()
@@ -160,7 +160,7 @@ class Product
     }
 
     /**
-     * Updates a Product
+     * Updates a Product.
      * @return Product
      */
     public function update()

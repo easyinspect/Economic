@@ -26,7 +26,7 @@ class Currency
     private $economic;
 
     /**
-     * Currency constructor
+     * Currency constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -35,7 +35,7 @@ class Currency
     }
 
     /**
-     * Transform stdClass object into Currency
+     * Transform stdClass object into Currency.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return Currency
@@ -53,7 +53,7 @@ class Currency
     }
 
     /**
-     * Retrieves a collection of Currencies
+     * Retrieves a collection of Currencies.
      * @param Filter $filter
      * @return Currency
      */
@@ -67,7 +67,7 @@ class Currency
     }
 
     /**
-     * Retrieves a single Currency by its code
+     * Retrieves a single Currency by its code.
      * @param string $code
      * @return Currency
      */

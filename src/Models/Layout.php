@@ -26,7 +26,7 @@ class Layout
     private $economic;
 
     /**
-     * Layout constructor
+     * Layout constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -35,7 +35,7 @@ class Layout
     }
 
     /**
-     * Transforms stdClass object into Layout
+     * Transforms stdClass object into Layout.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return Layout
@@ -53,7 +53,7 @@ class Layout
     }
 
     /**
-     * Retrieves a collection of Layout(s)
+     * Retrieves a collection of Layout(s).
      * @param Filter $filter
      * @return Layout
      */
@@ -67,7 +67,7 @@ class Layout
     }
 
     /**
-     * Retrieve a single Layout by its ID
+     * Retrieve a single Layout by its ID.
      * @param int $id
      * @return Layout
      */
