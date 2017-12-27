@@ -33,7 +33,7 @@ class ProductGroup
         $this->name = $name;
         $this->products = $products;
         $this->salesAccounts = $salesAccounts;
-        $this->inventoryEnabled =
+        $this->inventoryEnabled = $inventoryEnabled;
         $this->accrual = new Accrual(
             $accrual->accountingYears ?? null,
             $accrual->accountNumber ?? null,

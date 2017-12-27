@@ -128,7 +128,7 @@ class Unit
 
     /**
      * @param string $name
-     * @return $this
+     * @return Unit
      */
     public function setName(string $name)
     {
@@ -147,7 +147,7 @@ class Unit
 
     /**
      * @param int $unitNumber
-     * @return $this
+     * @return Unit
      */
     public function setUnitNumber(int $unitNumber)
     {
@@ -166,7 +166,7 @@ class Unit
 
     /**
      * @param string $self
-     * @return $this
+     * @return Unit
      */
     public function setSelf(string $self)
     {

@@ -46,6 +46,7 @@ class Layout
 
         $layout->setName($stdClass->name);
         $layout->setLayoutNumber($stdClass->layoutNumber);
+        $layout->setDeleted($stdClass->deleted ?? null);
         $layout->setSelf($stdClass->self);
 
         return $layout;
@@ -144,7 +145,7 @@ class Layout
      * @param bool $deleted
      * @return $this
      */
-    public function setDeleted(bool $deleted)
+    public function setDeleted(bool $deleted = null)
     {
         $this->deleted = $deleted;
 

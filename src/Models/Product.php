@@ -197,10 +197,10 @@ class Product
     }
 
     /**
-     * @param Invoices $invoices
-     * @return $this
+     * @param \stdClass $invoices
+     * @return Product
      */
-    public function setInvoices($invoices = null)
+    public function setInvoices(\stdClass $invoices = null)
     {
         if (isset($invoices)) {
             $this->invoices = new Invoices($invoices->booked, $invoices->drafts);
@@ -219,7 +219,7 @@ class Product
 
     /**
      * @param DepartmentalDistribution $departmentalDistribution
-     * @return $this
+     * @return Product
      */
     public function setDepartmentalDistribution($departmentalDistribution = null)
     {
@@ -244,7 +244,7 @@ class Product
 
     /**
      * @param int $departmentalDistributionNumber
-     * @return $this
+     * @return Product
      */
     public function setDepartmentalDistributionNumber(int $departmentalDistributionNumber)
     {
@@ -272,7 +272,7 @@ class Product
 
     /**
      * @param string $distributionType
-     * @return $this
+     * @return Product
      */
     public function setDepartmentalDistributionType(string $distributionType)
     {
@@ -295,10 +295,10 @@ class Product
     }
 
     /**
-     * @param Inventory $inventory
-     * @return $this
+     * @param \stdClass $inventory
+     * @return Product
      */
-    public function setInventory($inventory = null)
+    public function setInventory(\stdClass $inventory = null)
     {
         if (isset($inventory)) {
             $this->inventory = new Inventory($inventory->available, $inventory->grossWeight, $inventory->inStock, $inventory->netWeight, $inventory->orderedByCustomers, $inventory->orderedFromSuppliers, $inventory->packageVolume, $inventory->recommendedPrice);
@@ -316,10 +316,10 @@ class Product
     }
 
     /**
-     * @param Unit $unit
-     * @return $this
+     * @param \stdClass $unit
+     * @return Product
      */
-    public function setUnit($unit = null)
+    public function setUnit(\stdClass $unit = null)
     {
         if (isset($unit)) {
             $this->unit = new Unit($unit->unitNumber, $unit->name, $unit->self);
@@ -342,7 +342,7 @@ class Product
 
     /**
      * @param string $name
-     * @return $this
+     * @return Product
      */
     public function setUnitName(string $name)
     {
@@ -370,7 +370,7 @@ class Product
 
     /**
      * @param int $unitNumber
-     * @return $this
+     * @return Product
      */
     public function setUnitNumber(int $unitNumber)
     {
@@ -394,7 +394,7 @@ class Product
 
     /**
      * @param string $barCode
-     * @return $this;
+     * @return Product
      */
     public function setBarCode(?string $barCode)
     {
@@ -413,7 +413,7 @@ class Product
 
     /**
      * @param bool $barred
-     * @return $this;
+     * @return Product
      */
     public function setBarred(bool $barred)
     {
@@ -432,7 +432,7 @@ class Product
 
     /**
      * @param float $costPrice
-     * @return $this;
+     * @return Product
      */
     public function setCostPrice(?float $costPrice)
     {
@@ -451,7 +451,7 @@ class Product
 
     /**
      * @param string $description
-     * @return $this;
+     * @return Product
      */
     public function setDescription(?string $description)
     {
@@ -470,7 +470,7 @@ class Product
 
     /**
      * @param string $lastUpdated
-     * @return $this;
+     * @return Product
      */
     public function setLastUpdated(string $lastUpdated)
     {
@@ -489,7 +489,7 @@ class Product
 
     /**
      * @param string $name
-     * @return $this;
+     * @return Product
      */
     public function setName(string $name)
     {
@@ -507,13 +507,13 @@ class Product
     }
 
     /**
-     * @param ProductGroup $productGroup
-     * @return $this
+     * @param \stdClass $productGroup
+     * @return Product
      */
-    public function setProductGroup($productGroup = null)
+    public function setProductGroup(\stdClass $productGroup = null)
     {
         if (isset($productGroup)) {
-            $this->productGroup = new ProductGroup($productGroup->productGroupNumber, $productGroup->name, $productGroup->products, $productGroup->salesAccounts, $productGroup->self);
+            $this->productGroup = new ProductGroup($productGroup->productGroupNumber, $productGroup->name, $productGroup->products, $productGroup->salesAccounts, $productGroup->self, $productGroup->inventoryEnabled ?? null, $productGroup->accrual ?? null);
         }
 
         return $this;
@@ -531,7 +531,7 @@ class Product
 
     /**
      * @param int $productGroupNumber
-     * @return $this
+     * @return Product
      */
     public function setProductGroupNumber(int $productGroupNumber)
     {
@@ -545,6 +545,9 @@ class Product
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getProductGroupName() : ?string
     {
         if (isset($this->productGroup)) {
@@ -554,6 +557,10 @@ class Product
         return null;
     }
 
+    /**
+     * @param string $name
+     * @return Product
+     */
     public function setProductGroupName(string $name)
     {
         if (isset($this->productGroup)) {
@@ -576,7 +583,7 @@ class Product
 
     /**
      * @param string $productNumber
-     * @return $this;
+     * @return Product
      */
     public function setProductNumber(string $productNumber)
     {
@@ -595,7 +602,7 @@ class Product
 
     /**
      * @param float $salesPrice
-     * @return $this;
+     * @return Product
      */
     public function setSalesPrice(float $salesPrice)
     {
@@ -614,7 +621,7 @@ class Product
 
     /**
      * @param float $recommendedPrice
-     * @return $this;
+     * @return Product
      */
     public function setRecommendedPrice(float $recommendedPrice)
     {
@@ -633,7 +640,7 @@ class Product
 
     /**
      * @param string $self
-     * @return $this
+     * @return Product
      */
     public function setSelf(?string $self)
     {

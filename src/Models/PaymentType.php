@@ -83,7 +83,7 @@ class PaymentType
 
     /**
      * @param string $name
-     * @return $this
+     * @return PaymentType
      */
     public function setName(string $name)
     {
@@ -102,7 +102,7 @@ class PaymentType
 
     /**
      * @param int $paymentTypeNumber
-     * @return $this
+     * @return PaymentType
      */
     public function setPaymentTypeNumber(int $paymentTypeNumber)
     {
@@ -121,7 +121,7 @@ class PaymentType
 
     /**
      * @param string $self
-     * @return $this
+     * @return PaymentType
      */
     public function setSelf(string $self)
     {

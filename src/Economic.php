@@ -8,6 +8,7 @@
 
 namespace Economic;
 
+use Economic\Models\CustomerGroup;
 use Economic\Models\ProductGroup;
 use GuzzleHttp\Client;
 use Economic\Models\Unit;
@@ -297,6 +298,14 @@ class Economic
     public function productGroups() : ProductGroup
     {
         return new ProductGroup($this);
+    }
+
+    /**
+     * @return CustomerGroup
+     */
+    public function customerGroups() : CustomerGroup
+    {
+        return new CustomerGroup($this);
     }
 
     public function cleanObject($obj)
