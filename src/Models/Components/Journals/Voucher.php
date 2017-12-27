@@ -32,7 +32,7 @@ class Voucher
     private $economic;
 
     /**
-     * Voucher constructor
+     * Voucher constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -41,7 +41,7 @@ class Voucher
     }
 
     /**
-     * Transform stdClass object into Voucher
+     * Transform stdClass object into Voucher.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return Voucher
