@@ -8,9 +8,10 @@
 
 namespace Economic\Models;
 
+use Economic\Filter;
 use Economic\Economic;
 
-class PaymentTypes
+class PaymentType
 {
     /** @var string $name */
     private $name;
@@ -27,7 +28,7 @@ class PaymentTypes
         $this->api = $api;
     }
 
-    public static function parse($api, $object)
+    public static function transform($api, $object)
     {
         $paymentType = new self($api);
 
@@ -38,27 +39,22 @@ class PaymentTypes
         return $paymentType;
     }
 
-    public function all($pageSize = 20, $skipPages = 0, $recursive = true)
+    public function all(Filter $filter = null)
     {
-        $paymentTypes = $this->api->retrieve('/payment-types?skippages='.$skipPages.'&pagesize='.$pageSize.'');
-
-        if ($recursive && isset($paymentTypes->pagination->nextPage)) {
-            $collection = $this->all($pageSize, $skipPages + 1);
-            $paymentTypes->collection = array_merge($paymentTypes->collection, $collection);
+        if (isset($filter)) {
+            return $this->api->collection('/payment-types?'.$filter->filter().'&', $this);
+        } else {
+            return $this->api->collection('/payment-types?', $this);
         }
-
-        $paymentTypes->collection = array_map(function ($item) {
-            return self::parse($this->api, $item);
-        }, $paymentTypes->collection);
-
-        return $paymentTypes->collection;
     }
 
+    /**
+     * @param int $id
+     * @return PaymentType
+     */
     public function get($id)
     {
-        $paymentType = $this->api->retrieve('/payment-types/'.$id);
-
-        return $paymentType;
+        return self::transform($this->api, $this->api->get('/payment-types/'.$id));
     }
 
     /**
