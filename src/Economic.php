@@ -8,12 +8,6 @@
 
 namespace Economic;
 
-
-use Economic\Models\AccountingYears;
-use Economic\Models\AppRoles;
-use Economic\Models\CustomerGroup;
-use Economic\Models\Employee;
-use Economic\Models\ProductGroup;
 use GuzzleHttp\Client;
 use Economic\Models\Unit;
 use Economic\Models\Layout;
@@ -21,12 +15,17 @@ use Economic\Models\Company;
 use Economic\Models\Invoice;
 use Economic\Models\Journal;
 use Economic\Models\Product;
+use Economic\Models\AppRoles;
 use Economic\Models\Currency;
 use Economic\Models\Customer;
+use Economic\Models\Employee;
 use Economic\Models\PaymentTerm;
 use Economic\Models\PaymentType;
 use Economic\Models\DraftInvoice;
+use Economic\Models\ProductGroup;
+use Economic\Models\CustomerGroup;
 use Economic\Models\BillingContact;
+use Economic\Models\AccountingYears;
 use Economic\Models\CustomerCollection;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;

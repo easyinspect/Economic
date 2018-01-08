@@ -10,8 +10,8 @@ namespace Economic\Models;
 
 use Economic\Filter;
 use Economic\Economic;
-use Economic\Models\Components\AccountingYear\Periods;
 use Economic\Models\Components\AccountingYear\Totals;
+use Economic\Models\Components\AccountingYear\Periods;
 use Economic\Models\Components\AccountingYear\Vouchers;
 
 class AccountingYears
