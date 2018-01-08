@@ -8,7 +8,6 @@
 
 namespace Economic\Models\Components\AccountingYear;
 
-
 class PaymentType
 {
     /** @var int $paymentTypeNumber */
@@ -16,9 +15,9 @@ class PaymentType
     /** @var string $self */
     public $self;
 
-   public function __construct(int $paymentTypeNumber = null, string $self = null)
-   {
+    public function __construct(int $paymentTypeNumber = null, string $self = null)
+    {
         $this->paymentTypeNumber = $paymentTypeNumber;
         $this->self = $self;
-   }
+    }
 }

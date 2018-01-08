@@ -8,8 +8,8 @@
 
 namespace Economic\Models\Components\AccountingYear;
 
-use Economic\Models\Components\DepartmentalDistribution;
 use Economic\Models\Components\ProductGroup\VatAccount;
+use Economic\Models\Components\DepartmentalDistribution;
 
 class Lines
 {

@@ -109,14 +109,11 @@ class AppRoles
      */
     public function setRequiredModules(array $requiredModules = null)
     {
-        if (!is_null($requiredModules)) {
-
+        if (! is_null($requiredModules)) {
             foreach ($requiredModules as $module) {
                 $this->requiredModules[] = new RequiredModules($module->moduleNumber, $module->self);
             }
-
         }
-
 
         return $this;
     }

@@ -52,8 +52,6 @@ class VatAccount
     {
         $vatAccount = new self($economic);
 
-
-
         return $vatAccount;
     }
 
@@ -101,7 +99,6 @@ class VatAccount
 
         return $this;
     }
-
 
     public function getBarred() : ?bool
     {

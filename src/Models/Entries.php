@@ -8,14 +8,13 @@
 
 namespace Economic\Models;
 
-use Economic\Filter;
 use Economic\Economic;
 use Economic\Models\Components\Account;
-use Economic\Models\Components\Customer;
-use Economic\Models\Components\DepartmentalDistribution;
-use Economic\Models\Components\ProductGroup\VatAccount;
 use Economic\Models\Components\Project;
+use Economic\Models\Components\Customer;
 use Economic\Models\Components\Supplier;
+use Economic\Models\Components\ProductGroup\VatAccount;
+use Economic\Models\Components\DepartmentalDistribution;
 
 class Entries
 {

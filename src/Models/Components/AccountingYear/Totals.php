@@ -36,7 +36,6 @@ class Totals
         $this->economic = $economic;
     }
 
-
     /**
      * Transform stdClass object into Totals.
      * @param Economic $economic
