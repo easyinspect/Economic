@@ -10,9 +10,8 @@ namespace Economic\Models;
 
 use Economic\Filter;
 use Economic\Economic;
-use Economic\Models\Components\CustomerGroup\Account;
 use Economic\Validations\CustomerGroupValidator;
-use Economic\Validations\UnitValidator;
+use Economic\Models\Components\CustomerGroup\Account;
 
 class CustomerGroup
 {
@@ -33,7 +32,7 @@ class CustomerGroup
     private $economic;
 
     /**
-     * CustomerGroup constructor
+     * CustomerGroup constructor.
      * @param Economic $economic
      */
     public function __construct(Economic $economic)
@@ -42,7 +41,7 @@ class CustomerGroup
     }
 
     /**
-     * Transform stdClass object into CustomerGroup
+     * Transform stdClass object into CustomerGroup.
      * @param Economic $economic
      * @param \stdClass $stdClass
      * @return CustomerGroup
@@ -62,7 +61,7 @@ class CustomerGroup
     }
 
     /**
-     * Retrieves a collection of CustomerGroups
+     * Retrieves a collection of CustomerGroups.
      * @param Filter $filter
      * @return CustomerGroup
      */
@@ -76,7 +75,7 @@ class CustomerGroup
     }
 
     /**
-     * Retrieves a single CustomerGroup by ID
+     * Retrieves a single CustomerGroup by ID.
      * @param int $id
      * @return CustomerGroup
      */
@@ -86,7 +85,7 @@ class CustomerGroup
     }
 
     /**
-     * Retrieves a collection of Customers that belongs to the given CustomerGroup
+     * Retrieves a collection of Customers that belongs to the given CustomerGroup.
      * @return CustomerGroup
      */
     public function customers()
@@ -104,7 +103,7 @@ class CustomerGroup
     }
 
     /**
-     * Updates a CustomerGroup by its ID
+     * Updates a CustomerGroup by its ID.
      * @return CustomerGroup
      */
     public function update()
@@ -113,14 +112,14 @@ class CustomerGroup
             'account' => $this->getAccount(),
             'customerGroupNumber' => $this->getCustomerGroupNumber(),
             'layout' => $this->getLayout(),
-            'name' => $this->getName()
+            'name' => $this->getName(),
         ];
 
         return self::transform($this->economic, $this->economic->update('/customer-groups/'.$this->getCustomerGroupNumber(), $data));
     }
 
     /**
-     * Creates a CustomerGroup
+     * Creates a CustomerGroup.
      * @return CustomerGroup
      */
     public function create()
@@ -129,7 +128,7 @@ class CustomerGroup
             'account' => $this->getAccount(),
             'customerGroupNumber' => $this->getCustomerGroupNumber(),
             'layout' => $this->getLayout(),
-            'name' => $this->getName()
+            'name' => $this->getName(),
         ];
 
         $validator = CustomerGroupValidator::getValidator();
@@ -288,5 +287,4 @@ class CustomerGroup
 
         return $this;
     }
-
 }
