@@ -116,6 +116,15 @@ class Unit
         return self::transform($this->economic, $this->economic->create('/units', $data));
     }
 
+    /**
+     * Retrieves a collection of Products that belongs to the given Unit.
+     * @return Product
+     */
+    public function products()
+    {
+        return $this->economic->collection('/units/'.$this->getUnitNumber().'/products?', new Product($this->economic));
+    }
+
     // Getters & Setters
 
     /**

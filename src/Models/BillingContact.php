@@ -140,7 +140,7 @@ class BillingContact
 
     /**
      * Deletes a BillingContact
-     * Required the get(id) method in order to perform this.
+     * Requires the get(id) method in order to perform this.
      */
     public function delete()
     {
@@ -153,7 +153,7 @@ class BillingContact
      * @param \stdClass $customer
      * @return BillingContact
      */
-    public function setCustomer($customer)
+    public function setCustomer(\stdClass $customer)
     {
         $this->customer = new Customer($customer->customerNumber, $customer->self);
 

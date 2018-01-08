@@ -8,7 +8,10 @@
 
 namespace Economic;
 
+use Economic\Models\AccountingYears;
+use Economic\Models\AppRoles;
 use Economic\Models\CustomerGroup;
+use Economic\Models\Employee;
 use Economic\Models\ProductGroup;
 use GuzzleHttp\Client;
 use Economic\Models\Unit;
@@ -306,6 +309,30 @@ class Economic
     public function customerGroups() : CustomerGroup
     {
         return new CustomerGroup($this);
+    }
+
+    /**
+     * @return AccountingYears
+     */
+    public function accountingYears() : AccountingYears
+    {
+        return new AccountingYears($this);
+    }
+
+    /**
+     * @return AppRoles
+     */
+    public function appRoles() : AppRoles
+    {
+        return new AppRoles($this);
+    }
+
+    /**
+     * @return Employee
+     */
+    public function employees() : Employee
+    {
+        return new Employee($this);
     }
 
     public function cleanObject($obj)
