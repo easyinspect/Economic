@@ -1,5 +1,7 @@
 # E-conomicPHPWrapper
-PHP Wrapper for E-conomic REST API
+PHP Wrapper for E-conomic REST API implementing a fluent interface pattern
+
+The Wrapper is made to be used with a E-conomic developer agreement where a end user can connect their agreement to your system through a token. Please tak a look at the connection guide to understand the mechanism behind obtaining the tokens at https://www.e-conomic.com/developer/connect
 
 This E-conomic PHP Wrapper supports following options:
 1. Customers - Create, Show, Update, Delete & Filter by filterable options.
@@ -12,9 +14,9 @@ This E-conomic PHP Wrapper supports following options:
 
 ## 1. Getting Started
 
-In order to work with this E-conomic wrapper you'll need to provide a AppSecretToken & AgreementGrantToken key - look at the following code to understand how you should begin. 
+In order to work with this E-conomic wrapper you'll need to provide a AppSecretToken & AgreementGrantToken key. The AppSecretToken is the one you obtain from your E-conomic developer account and the AgreementGrantToken is obtained from the customer. See Step 2A for manual or 2B for automatic retrival of the token at https://www.e-conomic.com/developer/connect
 
-Be sure to set the correct namespaces.
+Be sure to set the correct namespace of the E-conomic wrapper.
 
 ```
 $economic = new Economic(
@@ -60,6 +62,7 @@ There are two different customer objects, they are listed below.
     ```
     $customer = $economic
                 ->customer()
+                ->get('ID') // Retrieve existing customer
                 ->setName('Test Company')
                 ->setCustomerGroupNumber(2)
                 ->setVatZoneNumber(1)

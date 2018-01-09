@@ -164,6 +164,8 @@ class Company
 
         $this->economic->cleanObject($data);
 
+        $this->api->cleanObject($data);
+
         $validator = CompanyUserValidator::getValidator();
         if (! $validator->validate($this)) {
             throw $validator->getException($this);
