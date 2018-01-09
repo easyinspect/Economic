@@ -16,7 +16,7 @@ class ProductValidator
     public function validate(Product $billingContact)
     {
         return ! is_null($billingContact->getName())
-            && ! is_null($billingContact->getProductGroup())
+            && ! is_null($billingContact->getProductGroupNumber())
             && ! is_null($billingContact->getProductNumber());
     }
 
@@ -28,8 +28,8 @@ class ProductValidator
             $exception->addProperty('name');
         }
 
-        if (is_null($billingContact->getProductGroup())) {
-            $exception->addProperty('productGroup');
+        if (is_null($billingContact->getProductGroupNumber())) {
+            $exception->addProperty('productGroup.productGroupNumber');
         }
 
         if (is_null($billingContact->getProductNumber())) {

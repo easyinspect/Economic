@@ -28,14 +28,44 @@ class Voucher
     /** @var string $self */
     private $self;
 
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
-    public function __construct(Economic $api)
+    /**
+     * Voucher constructor.
+     * @param Economic $economic
+     */
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
+    /**
+     * Transform stdClass object into Voucher.
+     * @param Economic $economic
+     * @param \stdClass $stdClass
+     * @return Voucher
+     */
+    public static function transform(Economic $economic, \stdClass $stdClass)
+    {
+        $voucher = new self($economic);
+
+        $voucher->setAccountingYear($stdClass->accountingYear);
+        $voucher->setEntries($stdClass->entries);
+        $voucher->setJournal($stdClass->journal);
+        $voucher->setVoucherNumber($stdClass->voucherNumber);
+        $voucher->setAttachment($stdClass->attachment);
+        $voucher->setSelf($stdClass->self);
+
+        return $voucher;
+    }
+
+    // Getters & Setters
+
+    /**
+     * @param \stdClass $accountingYear
+     * @return Voucher
+     */
     public function setAccountingYear($accountingYear)
     {
         $this->accountingYear = new AccountingYear($accountingYear->year, $accountingYear->self);
@@ -43,6 +73,18 @@ class Voucher
         return $this;
     }
 
+    /**
+     * @return AccountingYear
+     */
+    public function getAccountingYear() : ?AccountingYear
+    {
+        return $this->accountingYear;
+    }
+
+    /**
+     * @param \stdClass $entries
+     * @return Voucher
+     */
     public function setEntries($entries)
     {
         $this->entries = $entries;
@@ -50,6 +92,18 @@ class Voucher
         return $this;
     }
 
+    /**
+     * @return Entries
+     */
+    public function getEntries() : ?Entries
+    {
+        return $this->entries;
+    }
+
+    /**
+     * @param \stdClass $journal
+     * @return Voucher
+     */
     public function setJournal($journal)
     {
         $this->journal = new Journal($journal->journalNumber, $journal->self);
@@ -57,6 +111,18 @@ class Voucher
         return $this;
     }
 
+    /**
+     * @return Journal
+     */
+    public function getJournal() : ?Journal
+    {
+        return $this->journal;
+    }
+
+    /**
+     * @param int $voucherNumber
+     * @return Voucher
+     */
     public function setVoucherNumber(int $voucherNumber)
     {
         $this->voucherNumber = $voucherNumber;
@@ -64,6 +130,18 @@ class Voucher
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getVoucherNumber() : ?int
+    {
+        return $this->voucherNumber;
+    }
+
+    /**
+     * @param string $attachment
+     * @return Voucher
+     */
     public function setAttachment(string $attachment)
     {
         $this->attachment = $attachment;
@@ -71,10 +149,30 @@ class Voucher
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getAttachment() : ?string
+    {
+        return $this->attachment;
+    }
+
+    /**
+     * @param string $self
+     * @return Voucher
+     */
     public function setSelf(string $self)
     {
         $this->self = $self;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSelf() : ?string
+    {
+        return $this->self;
     }
 }

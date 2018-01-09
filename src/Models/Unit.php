@@ -21,46 +21,72 @@ class Unit
     /** @var string $self */
     private $self;
 
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
-    public function __construct(Economic $api)
+    /**
+     * Unit constructor.
+     * @param Economic $economic
+     */
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
-    public static function transform($api, $object)
+    /**
+     * Transform stdClass object into Unit.
+     * @param Economic $economic
+     * @param \stdClass $stdClass
+     * @return Unit
+     */
+    public static function transform(Economic $economic, \stdClass $stdClass)
     {
-        $unit = new self($api);
+        $unit = new self($economic);
 
-        $unit->setName($object->name)
-            ->setUnitNumber($object->unitNumber)
-            ->setSelf($object->self);
+        $unit->setName($stdClass->name);
+        $unit->setUnitNumber($stdClass->unitNumber);
+        $unit->setSelf($stdClass->self);
 
         return $unit;
     }
 
+    /**
+     * Retrieves a collection of Units.
+     * @param Filter $filter
+     * @return Unit
+     */
     public function all(Filter $filter = null)
     {
         if (isset($filter)) {
-            return $this->api->collection('/units?'.$filter->filter().'&', $this);
+            return $this->economic->collection('/units?'.$filter->filter().'&', $this);
         } else {
-            return $this->api->collection('/units?', $this);
+            return $this->economic->collection('/units?', $this);
         }
     }
 
-    public function get($id)
+    /**
+     * Retrieves a single Unit by ID.
+     * @param int $id
+     * @return Unit
+     */
+    public function get(int $id)
     {
-        return self::transform($this->api, $this->api->get('/units/'.$id));
+        return self::transform($this->economic, $this->economic->get('/units/'.$id));
     }
 
+    /**
+     * Deletes a Unit
+     * Requires Unit's get(id) method in order to perform this.
+     */
     public function delete()
     {
-        $this->api->delete('/units/'.$this->getUnitNumber());
-
-        return $this;
+        return $this->economic->delete('/units/'.$this->getUnitNumber());
     }
 
+    /**
+     * Updates a Unit by its unitNumber.
+     * @return Unit
+     */
     public function update()
     {
         $data = (object) [
@@ -68,9 +94,13 @@ class Unit
           'unitNumber' => $this->getUnitNumber(),
         ];
 
-        return self::transform($this->api, $this->api->update('/units/'.$this->getUnitNumber(), $data));
+        return self::transform($this->economic, $this->economic->update('/units/'.$this->getUnitNumber(), $data));
     }
 
+    /**
+     * Creates a Unit.
+     * @return Unit
+     */
     public function create()
     {
         $data = (object) [
@@ -83,7 +113,16 @@ class Unit
             throw $validator->getException($this);
         }
 
-        return self::transform($this->api, $this->api->create('/units', $data));
+        return self::transform($this->economic, $this->economic->create('/units', $data));
+    }
+
+    /**
+     * Retrieves a collection of Products that belongs to the given Unit.
+     * @return Product
+     */
+    public function products()
+    {
+        return $this->economic->collection('/units/'.$this->getUnitNumber().'/products?', new Product($this->economic));
     }
 
     // Getters & Setters
@@ -98,7 +137,7 @@ class Unit
 
     /**
      * @param string $name
-     * @return $this
+     * @return Unit
      */
     public function setName(string $name)
     {
@@ -117,7 +156,7 @@ class Unit
 
     /**
      * @param int $unitNumber
-     * @return $this
+     * @return Unit
      */
     public function setUnitNumber(int $unitNumber)
     {
@@ -136,7 +175,7 @@ class Unit
 
     /**
      * @param string $self
-     * @return $this
+     * @return Unit
      */
     public function setSelf(string $self)
     {

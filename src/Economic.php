@@ -15,11 +15,17 @@ use Economic\Models\Company;
 use Economic\Models\Invoice;
 use Economic\Models\Journal;
 use Economic\Models\Product;
+use Economic\Models\AppRoles;
 use Economic\Models\Currency;
 use Economic\Models\Customer;
+use Economic\Models\Employee;
+use Economic\Models\PaymentTerm;
 use Economic\Models\PaymentType;
 use Economic\Models\DraftInvoice;
+use Economic\Models\ProductGroup;
+use Economic\Models\CustomerGroup;
 use Economic\Models\BillingContact;
+use Economic\Models\AccountingYears;
 use Economic\Models\CustomerCollection;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -67,7 +73,7 @@ class Economic
             $data = \GuzzleHttp\json_decode($this->client->get($url.'skippages='.$skipPages.'&pagesize='.$pageSize, $this->headers)->getBody()->getContents());
 
             if ($recursive && isset($data->pagination->nextPage)) {
-                $collection = $this->collection($url, $model, $recursive, $skipPages + 1);
+                $collection = $this->collection($url, $model, $skipPages + 1, $pageSize, $recursive);
                 $data->collection = array_merge($data->collection, $collection);
             }
 
@@ -281,6 +287,54 @@ class Economic
         return new Company($this);
     }
 
+    /**
+     * @return PaymentTerm
+     */
+    public function paymentTerms() : PaymentTerm
+    {
+        return new PaymentTerm($this);
+    }
+
+    /**
+     * @return ProductGroup
+     */
+    public function productGroups() : ProductGroup
+    {
+        return new ProductGroup($this);
+    }
+
+    /**
+     * @return CustomerGroup
+     */
+    public function customerGroups() : CustomerGroup
+    {
+        return new CustomerGroup($this);
+    }
+
+    /**
+     * @return AccountingYears
+     */
+    public function accountingYears() : AccountingYears
+    {
+        return new AccountingYears($this);
+    }
+
+    /**
+     * @return AppRoles
+     */
+    public function appRoles() : AppRoles
+    {
+        return new AppRoles($this);
+    }
+
+    /**
+     * @return Employee
+     */
+    public function employees() : Employee
+    {
+        return new Employee($this);
+    }
+
     public function cleanObject($obj)
     {
         foreach ($obj as $key => $value) {
@@ -317,6 +371,17 @@ class Economic
 
         if (is_null($value)) {
             unset($obj->{$property});
+        }
+    }
+
+    public function clean($data)
+    {
+        if (is_array($data)) {
+            foreach ($data as $property) {
+                if (is_object($property)) {
+                    return $property;
+                }
+            }
         }
     }
 }

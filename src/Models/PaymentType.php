@@ -20,41 +20,57 @@ class PaymentType
     /** @var string $self */
     private $self;
 
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
-    public function __construct(Economic $api)
+    /**
+     * PaymentType constructor.
+     * @param Economic $economic
+     */
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
-    public static function transform($api, $object)
+    /**
+     * Transform stdClas object into PaymentType.
+     * @param Economic $economic
+     * @param \stdClass $stdClass
+     * @return PaymentType
+     */
+    public static function transform(Economic $economic, \stdClass $stdClass)
     {
-        $paymentType = new self($api);
+        $paymentType = new self($economic);
 
-        $paymentType->setName($object->name)
-                    ->setPaymentTypeNumber($object->paymentTypeNumber)
-                    ->setSelf($object->self);
+        $paymentType->setName($stdClass->name);
+        $paymentType->setPaymentTypeNumber($stdClass->paymentTypeNumber);
+        $paymentType->setSelf($stdClass->self);
 
         return $paymentType;
     }
 
+    /**
+     * Retrieves a collection of PaymentType(s).
+     * @param Filter $filter
+     * @return PaymentType
+     */
     public function all(Filter $filter = null)
     {
         if (isset($filter)) {
-            return $this->api->collection('/payment-types?'.$filter->filter().'&', $this);
+            return $this->economic->collection('/payment-types?'.$filter->filter().'&', $this);
         } else {
-            return $this->api->collection('/payment-types?', $this);
+            return $this->economic->collection('/payment-types?', $this);
         }
     }
 
     /**
+     * Retrieves a single PaymentType by its ID.
      * @param int $id
      * @return PaymentType
      */
-    public function get($id)
+    public function get(int $id)
     {
-        return self::transform($this->api, $this->api->get('/payment-types/'.$id));
+        return self::transform($this->economic, $this->economic->get('/payment-types/'.$id));
     }
 
     /**
@@ -67,7 +83,7 @@ class PaymentType
 
     /**
      * @param string $name
-     * @return $this
+     * @return PaymentType
      */
     public function setName(string $name)
     {
@@ -86,7 +102,7 @@ class PaymentType
 
     /**
      * @param int $paymentTypeNumber
-     * @return $this
+     * @return PaymentType
      */
     public function setPaymentTypeNumber(int $paymentTypeNumber)
     {
@@ -105,7 +121,7 @@ class PaymentType
 
     /**
      * @param string $self
-     * @return $this
+     * @return PaymentType
      */
     public function setSelf(string $self)
     {

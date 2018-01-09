@@ -22,38 +22,58 @@ class Currency
     /** @var string $self */
     private $self;
 
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
-    public function __construct(Economic $api)
+    /**
+     * Currency constructor.
+     * @param Economic $economic
+     */
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
-    public static function transform($api, $object)
+    /**
+     * Transform stdClass object into Currency.
+     * @param Economic $economic
+     * @param \stdClass $stdClass
+     * @return Currency
+     */
+    public static function transform(Economic $economic, \stdClass $stdClass)
     {
-        $currency = new self($api);
+        $currency = new self($economic);
 
-        $currency->setCode($object->code)
-                ->setIsoNumber($object->isoNumber)
-                ->setName($object->name)
-                ->setSelf($object->self);
+        $currency->setName($stdClass->name);
+        $currency->setIsoNumber($stdClass->isoNumber);
+        $currency->setCode($stdClass->code);
+        $currency->setSelf($stdClass->self);
 
         return $currency;
     }
 
+    /**
+     * Retrieves a collection of Currencies.
+     * @param Filter $filter
+     * @return Currency
+     */
     public function all(Filter $filter = null)
     {
         if (isset($filter)) {
-            return $this->api->collection('/currencies?'.$filter->filter().'&', $this);
+            return $this->economic->collection('/currencies?'.$filter->filter().'&', $this);
         } else {
-            return $this->api->collection('/currencies?', $this);
+            return $this->economic->collection('/currencies?', $this);
         }
     }
 
+    /**
+     * Retrieves a single Currency by its code.
+     * @param string $code
+     * @return Currency
+     */
     public function get(string $code)
     {
-        return self::transform($this->api, $this->api->get('/currencies/'.$code));
+        return self::transform($this->economic, $this->economic->get('/currencies/'.$code));
     }
 
     /**

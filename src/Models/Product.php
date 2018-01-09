@@ -53,59 +53,84 @@ class Product
     /** @var string $self */
     private $self;
 
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
-    public function __construct(Economic $api)
+    /**
+     * Product constructor.
+     * @param Economic $economic
+     */
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
-    public static function transform($api, $object)
+    /**
+     * Transform stdClass object into Product.
+     * @param Economic $economic
+     * @param \stdClass $stdClass
+     * @return Product
+     */
+    public static function transform(Economic $economic, \stdClass $stdClass)
     {
-        $product = new self($api);
+        $product = new self($economic);
 
-        $product->setBarCode($object->barCode ?? null)
-                ->setBarred($object->barred)
-                ->setCostPrice($object->costPrice ?? null)
-                ->setSalesPrice($object->salesPrice)
-                ->setRecommendedPrice($object->recommendedPrice)
-                ->setDescription($object->description ?? null)
-                ->setLastUpdated($object->lastUpdated)
-                ->setName($object->name)
-                ->setProductGroup($object->productGroup)
-                ->setProductNumber($object->productNumber)
-                ->setUnit($object->unit ?? null)
-                ->setDepartmentalDistribution($object->departmentalDistribution ?? null)
-                ->setInventory($object->inventory ?? null)
-                ->setSelf($object->self)
-                ->setInventory($object->inventory ?? null)
-                ->setInvoices($object->invoices);
+        $product->setBarCode($stdClass->barCode ?? null);
+        $product->setBarred($stdClass->barred);
+        $product->setCostPrice($stdClass->costPrice ?? null);
+        $product->setSalesPrice($stdClass->salesPrice);
+        $product->setRecommendedPrice($stdClass->recommendedPrice);
+        $product->setDescription($stdClass->description ?? null);
+        $product->setLastUpdated($stdClass->lastUpdated);
+        $product->setName($stdClass->name);
+        $product->setProductGroup($stdClass->productGroup);
+        $product->setProductNumber($stdClass->productNumber);
+        $product->setUnit($stdClass->unit ?? null);
+        $product->setDepartmentalDistribution($stdClass->departmentalDistribution ?? null);
+        $product->setInventory($stdClass->inventory ?? null);
+        $product->setInvoices($stdClass->invoices);
+        $product->setSelf($stdClass->self);
 
         return $product;
     }
 
+    /**
+     * Retrieves a collection of Products.
+     * @param Filter $filter
+     * @return Product
+     */
     public function all(Filter $filter = null)
     {
         if (isset($filter)) {
-            return $this->api->collection('/products?'.$filter->filter().'&', $this);
+            return $this->economic->collection('/products?'.$filter->filter().'&', $this);
         } else {
-            return $this->api->collection('/products?', $this);
+            return $this->economic->collection('/products?', $this);
         }
     }
 
-    public function get($id)
+    /**
+     * Retrieves a single Product by its ID.
+     * @param int $id
+     * @return Product
+     */
+    public function get(int $id)
     {
-        return self::transform($this->api, $this->api->get('/products/'.$id));
+        return self::transform($this->economic, $this->economic->get('/products/'.$id));
     }
 
+    /**
+     * Deletes a Product
+     * Requires Product's get(id) method in order to perform this.
+     */
     public function delete()
     {
-        $this->api->delete('/products/'.$this->getProductNumber());
-
-        return $this;
+        return $this->economic->delete('/products/'.$this->getProductNumber());
     }
 
+    /**
+     * Creates a Product.
+     * @return Product
+     */
     public function create()
     {
         $data = (object) [
@@ -124,16 +149,20 @@ class Product
             'inventory' => $this->getInventory(),
         ];
 
-        $this->api->cleanObject($data);
+        $this->economic->cleanObject($data);
 
         $validator = ProductValidator::getValidator();
         if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
-        return self::transform($this->api, $this->api->create('/products', $data));
+        return self::transform($this->economic, $this->economic->create('/products', $data));
     }
 
+    /**
+     * Updates a Product.
+     * @return Product
+     */
     public function update()
     {
         $data = (object) [
@@ -152,9 +181,9 @@ class Product
             'inventory' => $this->getInventory(),
         ];
 
-        $this->api->cleanObject($data);
+        $this->economic->cleanObject($data);
 
-        return self::transform($this->api, $this->api->update('/products/'.$this->getProductNumber(), $data));
+        return self::transform($this->economic, $this->economic->update('/products/'.$this->getProductNumber(), $data));
     }
 
     // Getters & Setters
@@ -168,10 +197,10 @@ class Product
     }
 
     /**
-     * @param Invoices $invoices
-     * @return $this
+     * @param \stdClass $invoices
+     * @return Product
      */
-    public function setInvoices($invoices = null)
+    public function setInvoices(\stdClass $invoices = null)
     {
         if (isset($invoices)) {
             $this->invoices = new Invoices($invoices->booked, $invoices->drafts);
@@ -190,7 +219,7 @@ class Product
 
     /**
      * @param DepartmentalDistribution $departmentalDistribution
-     * @return $this
+     * @return Product
      */
     public function setDepartmentalDistribution($departmentalDistribution = null)
     {
@@ -215,14 +244,14 @@ class Product
 
     /**
      * @param int $departmentalDistributionNumber
-     * @return $this
+     * @return Product
      */
     public function setDepartmentalDistributionNumber(int $departmentalDistributionNumber)
     {
         if (isset($this->departmentalDistribution)) {
             $this->departmentalDistribution->departmentalDistributionNumber = $departmentalDistributionNumber;
         } else {
-            $this->departmentalDistribution = $this->api->setClass('DepartmentalDistribution', 'departmentalDistributionNumber');
+            $this->departmentalDistribution = $this->economic->setClass('DepartmentalDistribution', 'departmentalDistributionNumber');
             $this->departmentalDistribution->departmentalDistributionNumber = $departmentalDistributionNumber;
         }
 
@@ -243,14 +272,14 @@ class Product
 
     /**
      * @param string $distributionType
-     * @return $this
+     * @return Product
      */
     public function setDepartmentalDistributionType(string $distributionType)
     {
         if (isset($this->departmentalDistribution)) {
             $this->departmentalDistribution->distributionType = $distributionType;
         } else {
-            $this->departmentalDistribution = $this->api->setClass('DepartmentalDistribution', 'distributionType');
+            $this->departmentalDistribution = $this->economic->setClass('DepartmentalDistribution', 'distributionType');
             $this->departmentalDistribution->distributionType = $distributionType;
         }
 
@@ -266,10 +295,10 @@ class Product
     }
 
     /**
-     * @param Inventory $inventory
-     * @return $this
+     * @param \stdClass $inventory
+     * @return Product
      */
-    public function setInventory($inventory = null)
+    public function setInventory(\stdClass $inventory = null)
     {
         if (isset($inventory)) {
             $this->inventory = new Inventory($inventory->available, $inventory->grossWeight, $inventory->inStock, $inventory->netWeight, $inventory->orderedByCustomers, $inventory->orderedFromSuppliers, $inventory->packageVolume, $inventory->recommendedPrice);
@@ -287,10 +316,10 @@ class Product
     }
 
     /**
-     * @param Unit $unit
-     * @return $this
+     * @param \stdClass $unit
+     * @return Product
      */
-    public function setUnit($unit = null)
+    public function setUnit(\stdClass $unit = null)
     {
         if (isset($unit)) {
             $this->unit = new Unit($unit->unitNumber, $unit->name, $unit->self);
@@ -313,14 +342,14 @@ class Product
 
     /**
      * @param string $name
-     * @return $this
+     * @return Product
      */
     public function setUnitName(string $name)
     {
         if (isset($this->unit)) {
             $this->unit->name = $name;
         } else {
-            $this->unit = $this->api->setClass('Unit', 'name');
+            $this->unit = $this->economic->setClass('Unit', 'name');
             $this->unit->name = $name;
         }
 
@@ -341,14 +370,14 @@ class Product
 
     /**
      * @param int $unitNumber
-     * @return $this
+     * @return Product
      */
     public function setUnitNumber(int $unitNumber)
     {
         if (isset($this->unit)) {
             $this->unit->unitNumber = $unitNumber;
         } else {
-            $this->unit = $this->api->setClass('Unit', 'unitNumber');
+            $this->unit = $this->economic->setClass('Unit', 'unitNumber');
             $this->unit->unitNumber = $unitNumber;
         }
 
@@ -365,7 +394,7 @@ class Product
 
     /**
      * @param string $barCode
-     * @return $this;
+     * @return Product
      */
     public function setBarCode(?string $barCode)
     {
@@ -384,7 +413,7 @@ class Product
 
     /**
      * @param bool $barred
-     * @return $this;
+     * @return Product
      */
     public function setBarred(bool $barred)
     {
@@ -403,7 +432,7 @@ class Product
 
     /**
      * @param float $costPrice
-     * @return $this;
+     * @return Product
      */
     public function setCostPrice(?float $costPrice)
     {
@@ -422,7 +451,7 @@ class Product
 
     /**
      * @param string $description
-     * @return $this;
+     * @return Product
      */
     public function setDescription(?string $description)
     {
@@ -441,7 +470,7 @@ class Product
 
     /**
      * @param string $lastUpdated
-     * @return $this;
+     * @return Product
      */
     public function setLastUpdated(string $lastUpdated)
     {
@@ -460,7 +489,7 @@ class Product
 
     /**
      * @param string $name
-     * @return $this;
+     * @return Product
      */
     public function setName(string $name)
     {
@@ -478,13 +507,13 @@ class Product
     }
 
     /**
-     * @param ProductGroup $productGroup
-     * @return $this
+     * @param \stdClass $productGroup
+     * @return Product
      */
-    public function setProductGroup($productGroup = null)
+    public function setProductGroup(\stdClass $productGroup = null)
     {
         if (isset($productGroup)) {
-            $this->productGroup = new ProductGroup($productGroup->productGroupNumber, $productGroup->name, $productGroup->products, $productGroup->salesAccounts, $productGroup->self);
+            $this->productGroup = new ProductGroup($productGroup->productGroupNumber, $productGroup->name, $productGroup->products, $productGroup->salesAccounts, $productGroup->self, $productGroup->inventoryEnabled ?? null, $productGroup->accrual ?? null);
         }
 
         return $this;
@@ -502,20 +531,23 @@ class Product
 
     /**
      * @param int $productGroupNumber
-     * @return $this
+     * @return Product
      */
     public function setProductGroupNumber(int $productGroupNumber)
     {
         if (isset($this->productGroup)) {
             $this->productGroup->productGroupNumber = $productGroupNumber;
         } else {
-            $this->productGroup = $this->api->setClass('ProductGroup', 'productGroupNumber');
+            $this->productGroup = $this->economic->setClass('ProductGroup', 'productGroupNumber');
             $this->productGroup->productGroupNumber = $productGroupNumber;
         }
 
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getProductGroupName() : ?string
     {
         if (isset($this->productGroup)) {
@@ -525,12 +557,16 @@ class Product
         return null;
     }
 
+    /**
+     * @param string $name
+     * @return Product
+     */
     public function setProductGroupName(string $name)
     {
         if (isset($this->productGroup)) {
             $this->productGroup->name = $name;
         } else {
-            $this->productGroup = $this->api->setClass('ProductGroup', 'name');
+            $this->productGroup = $this->economic->setClass('ProductGroup', 'name');
             $this->productGroup->name = $name;
         }
 
@@ -547,7 +583,7 @@ class Product
 
     /**
      * @param string $productNumber
-     * @return $this;
+     * @return Product
      */
     public function setProductNumber(string $productNumber)
     {
@@ -566,7 +602,7 @@ class Product
 
     /**
      * @param float $salesPrice
-     * @return $this;
+     * @return Product
      */
     public function setSalesPrice(float $salesPrice)
     {
@@ -585,7 +621,7 @@ class Product
 
     /**
      * @param float $recommendedPrice
-     * @return $this;
+     * @return Product
      */
     public function setRecommendedPrice(float $recommendedPrice)
     {
@@ -604,7 +640,7 @@ class Product
 
     /**
      * @param string $self
-     * @return $this
+     * @return Product
      */
     public function setSelf(?string $self)
     {

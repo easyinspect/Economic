@@ -51,97 +51,107 @@ class Company
     /** @var string $self */
     private $self;
 
-    /** @var Economic $api */
-    private $api;
+    /** @var Economic $economic */
+    private $economic;
 
     /**
-     * @param Economic $api
+     * Company constructor.
+     * @param Economic $economic
      */
-    public function __construct(Economic $api)
+    public function __construct(Economic $economic)
     {
-        $this->api = $api;
+        $this->economic = $economic;
     }
 
     /**
-     * @param \stdClass $object
+     * Transform stdClass into User.
+     * @param \stdClass $stdClass
      * @return User
      */
-    public static function user($object)
+    public static function user(\stdClass $stdClass)
     {
-        return new User($object->agreementNumber, $object->email, $object->language, $object->loginId, $object->name);
+        return new User($stdClass->agreementNumber, $stdClass->email, $stdClass->language, $stdClass->loginId, $stdClass->name);
     }
 
     /**
-     * @param \stdClass $object
+     * Transform stdClass into Details.
+     * @param \stdClass $stdClass
      * @return Details
      */
-    public static function company($object)
+    public static function company(\stdClass $stdClass)
     {
         return new Details(
-            $object->addressLine1,
-            $object->addressLine2 ?? null,
-            $object->attention,
-            $object->city,
-            $object->companyIdentificationNumber ?? null,
-            $object->country ?? null,
-            $object->email,
-            $object->name,
-            $object->phoneNumber,
-            $object->vatNumber ?? null,
-            $object->website ?? null,
-            $object->zip);
+            $stdClass->addressLine1,
+            $stdClass->addressLine2 ?? null,
+            $stdClass->attention,
+            $stdClass->city,
+            $stdClass->companyIdentificationNumber ?? null,
+            $stdClass->country ?? null,
+            $stdClass->email,
+            $stdClass->name,
+            $stdClass->phoneNumber,
+            $stdClass->vatNumber ?? null,
+            $stdClass->website ?? null,
+            $stdClass->zip);
     }
 
     /**
-     * @param \stdClass $object
+     * Transform stdClass into BankInformation.
+     * @param \stdClass $stdClass
      * @return BankInformation
      */
-    public static function bankInformation($object)
+    public static function bankInformation(\stdClass $stdClass)
     {
         return new BankInformation(
-            $object->bankAccountNumber ?? null,
-            $object->bankGiroNumber ?? null,
-            $object->bankSortCode ?? null,
-            $object->pbsCustomerGroupNumber,
-            $object->pbsFiSupplierNumber ?? null
+            $stdClass->bankAccountNumber ?? null,
+            $stdClass->bankGiroNumber ?? null,
+            $stdClass->bankSortCode ?? null,
+            $stdClass->pbsCustomerGroupNumber,
+            $stdClass->pbsFiSupplierNumber ?? null
         );
     }
 
     /**
-     * @param Economic $api
-     * @param \stdClass $object
+     * Transform stdClass into Company.
+     * @param Economic $economic
+     * @param \stdClass $stdClass
      * @return Company
      */
-    public static function transform($api, $object)
+    public static function transform(Economic $economic, \stdClass $stdClass)
     {
-        $company = new self($api);
+        $company = new self($economic);
 
-        $company->setAgreementNumber($object->agreementNumber);
-        $company->setAgreementType($object->agreementType);
-        $company->setApplication($object->application);
-        $company->setBankInformation($object->bankInformation);
-        $company->setCanSendElectronicInvoice($object->canSendElectronicInvoice);
-        $company->setCanSendMobilePay($object->canSendMobilePay);
-        $company->setCompany($object->company);
-        $company->setCompanyAffiliation($object->companyAffiliation);
-        $company->setModules($object->modules);
-        $company->setSettings($object->settings);
-        $company->setSignUpDate($object->signupDate);
-        $company->setUser($object->user);
-        $company->setUserName($object->userName);
-        $company->setSelf($object->self);
+        $company->setAgreementNumber($stdClass->agreementNumber);
+        $company->setAgreementType($stdClass->agreementType);
+        $company->setApplication($stdClass->application);
+        $company->setBankInformation($stdClass->bankInformation);
+        $company->setCanSendElectronicInvoice($stdClass->canSendElectronicInvoice);
+        $company->setCanSendMobilePay($stdClass->canSendMobilePay);
+        $company->setCompany($stdClass->company);
+        $company->setCompanyAffiliation($stdClass->companyAffiliation);
+        $company->setModules($stdClass->modules);
+        $company->setSettings($stdClass->settings);
+        $company->setSignUpDate($stdClass->signupDate);
+        $company->setUser($stdClass->user);
+        $company->setUserName($stdClass->userName);
+        $company->setSelf($stdClass->self);
 
         return $company;
     }
 
     /**
+     * Retrieves Company.
      * @return Company
      */
     public function get()
     {
-        return self::transform($this->api, $this->api->get('/self'));
+        return self::transform($this->economic, $this->economic->get('/self'));
     }
 
+    /**
+     * Updates Company User.
+     * @return User
+     */
     public function updateUser()
     {
         $data = (object) [
@@ -152,6 +162,8 @@ class Company
             'name' => $this->getUserUserName(),
         ];
 
+        $this->economic->cleanObject($data);
+
         $this->api->cleanObject($data);
 
         $validator = CompanyUserValidator::getValidator();
@@ -159,9 +171,13 @@ class Company
             throw $validator->getException($this);
         }
 
-        return self::user($this->api->update('/self/user', $data));
+        return self::user($this->economic->update('/self/user', $data));
     }
 
+    /**
+     * Updates Company BankInformation.
+     * @return BankInformation
+     */
     public function updateBankInformation()
     {
         $data = (object) [
@@ -173,16 +189,20 @@ class Company
             'pbsFiSupplierNumber' => $this->getBankInformationPbsFiSupplierNumber(),
         ];
 
-        $this->api->cleanObject($data);
+        $this->economic->cleanObject($data);
 
         $validator = CompanyBankInformationValidator::getValidator();
         if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
-        return self::bankInformation($this->api->update('/self/company/bankinformation', $data));
+        return self::bankInformation($this->economic->update('/self/company/bankinformation', $data));
     }
 
+    /**
+     * Updates Company Details.
+     * @return Details
+     */
     public function update()
     {
         $data = (object) [
@@ -200,14 +220,14 @@ class Company
             'zip' => $this->getCompanyZip(),
         ];
 
-        $this->api->cleanObject($data);
+        $this->economic->cleanObject($data);
 
         $validator = CompanyDetailsValidator::getValidator();
         if (! $validator->validate($this)) {
             throw $validator->getException($this);
         }
 
-        return self::company($this->api->update('/self/company', $data));
+        return self::company($this->economic->update('/self/company', $data));
     }
 
     /**
@@ -315,7 +335,7 @@ class Company
         if (isset($this->bankInformation)) {
             $this->bankInformation->bankAccountNumber = $bankAccountNumber;
         } else {
-            $this->bankInformation = $this->api->setClass('Company\BankInformation', 'bankAccountNumber', $this);
+            $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'bankAccountNumber', $this);
             $this->bankInformation->bankAccountNumber = $bankAccountNumber;
         }
 
@@ -343,7 +363,7 @@ class Company
         if (isset($this->bankInformation)) {
             $this->bankInformation->bankGiroNumber = $bankGiroNumber;
         } else {
-            $this->bankInformation = $this->api->setClass('Company\BankInformation', 'bankGiroNumber', $this);
+            $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'bankGiroNumber', $this);
             $this->bankInformation->bankGiroNumber = $bankGiroNumber;
         }
 
@@ -371,7 +391,7 @@ class Company
         if (isset($this->bankInformation)) {
             $this->bankInformation->bankName = $bankName;
         } else {
-            $this->bankInformation = $this->api->setClass('Company\BankInformation', 'bankName', $this);
+            $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'bankName', $this);
             $this->bankInformation->bankName = $bankName;
         }
 
@@ -399,7 +419,7 @@ class Company
         if (isset($this->bankInformation)) {
             $this->bankInformation->bankSortCode = $bankSortCode;
         } else {
-            $this->bankInformation = $this->api->setClass('Company\BankInformation', 'bankSortCode', $this);
+            $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'bankSortCode', $this);
             $this->bankInformation->bankSortCode = $bankSortCode;
         }
 
@@ -427,7 +447,7 @@ class Company
         if (isset($this->bankInformation)) {
             $this->bankInformation->pbsCustomerGroupNumber = $pbsCustomerGroupNumber;
         } else {
-            $this->bankInformation = $this->api->setClass('Company\BankInformation', 'pbsCustomerGroupNumber', $this);
+            $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'pbsCustomerGroupNumber', $this);
             $this->bankInformation->pbsCustomerGroupNumber = $pbsCustomerGroupNumber;
         }
 
@@ -455,7 +475,7 @@ class Company
         if (isset($this->bankInformation)) {
             $this->bankInformation->pbsFiSupplierNumber = $pbsFiSupplierNumber;
         } else {
-            $this->bankInformation = $this->api->setClass('Company\BankInformation', 'pbsFiSupplierNumber', $this);
+            $this->bankInformation = $this->economic->setClass('Company\BankInformation', 'pbsFiSupplierNumber', $this);
             $this->bankInformation->pbsFiSupplierNumber = $pbsFiSupplierNumber;
         }
 
@@ -540,7 +560,7 @@ class Company
         if (isset($this->company)) {
             $this->company->addressLine1 = $addressLine1;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'addressLine1', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'addressLine1', $this);
             $this->company->addressLine1 = $addressLine1;
         }
 
@@ -568,7 +588,7 @@ class Company
         if (isset($this->company)) {
             $this->company->addressLine2 = $addressLine2;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'addressLine2', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'addressLine2', $this);
             $this->company->addressLine2 = $addressLine2;
         }
 
@@ -596,7 +616,7 @@ class Company
         if (isset($this->company)) {
             $this->company->attention = $attention;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'attention', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'attention', $this);
             $this->company->attention = $attention;
         }
 
@@ -624,7 +644,7 @@ class Company
         if (isset($this->company)) {
             $this->company->city = $city;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'city', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'city', $this);
             $this->company->city = $city;
         }
 
@@ -652,7 +672,7 @@ class Company
         if (isset($this->company)) {
             $this->company->companyIdentificationNumber = $companyIdentificationNumber;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'companyIdentificationNumber', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'companyIdentificationNumber', $this);
             $this->company->companyIdentificationNumber = $companyIdentificationNumber;
         }
 
@@ -680,7 +700,7 @@ class Company
         if (isset($this->company)) {
             $this->company->country = $country;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'country', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'country', $this);
             $this->company->country = $country;
         }
 
@@ -708,7 +728,7 @@ class Company
         if (isset($this->company)) {
             $this->company->email = $email;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'email', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'email', $this);
             $this->company->email = $email;
         }
 
@@ -736,7 +756,7 @@ class Company
         if (isset($this->company)) {
             $this->company->name = $name;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'name', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'name', $this);
             $this->company->name = $name;
         }
 
@@ -764,7 +784,7 @@ class Company
         if (isset($this->company)) {
             $this->company->phoneNumber = $phoneNumber;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'phoneNumber', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'phoneNumber', $this);
             $this->company->phoneNumber = $phoneNumber;
         }
 
@@ -792,7 +812,7 @@ class Company
         if (isset($this->company)) {
             $this->company->vatNumber = $vatNumber;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'vatNumber', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'vatNumber', $this);
             $this->company->vatNumber = $vatNumber;
         }
 
@@ -820,7 +840,7 @@ class Company
         if (isset($this->company)) {
             $this->company->website = $website;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'website', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'website', $this);
             $this->company->website = $website;
         }
 
@@ -848,7 +868,7 @@ class Company
         if (isset($this->company)) {
             $this->company->zip = $zip;
         } else {
-            $this->company = $this->api->setClass('Company\Details', 'zip', $this);
+            $this->company = $this->economic->setClass('Company\Details', 'zip', $this);
             $this->company->zip = $zip;
         }
 
@@ -964,7 +984,7 @@ class Company
         if (isset($this->user)) {
             $this->user->agreementNumber = $agreementNumber;
         } else {
-            $this->user = $this->api->setClass('Company\User', 'agreementNumber', $this);
+            $this->user = $this->economic->setClass('Company\User', 'agreementNumber', $this);
             $this->user->agreementNumber = $agreementNumber;
         }
 
@@ -992,7 +1012,7 @@ class Company
         if (isset($this->user)) {
             $this->user->email = $email;
         } else {
-            $this->user = $this->api->setClass('Company\User', 'email', $this);
+            $this->user = $this->economic->setClass('Company\User', 'email', $this);
             $this->user->email = $email;
         }
 
@@ -1020,7 +1040,7 @@ class Company
         if (isset($this->user)) {
             $this->user->loginId = $loginId;
         } else {
-            $this->user = $this->api->setClass('Company\User', 'loginId', $this);
+            $this->user = $this->economic->setClass('Company\User', 'loginId', $this);
             $this->user->loginId = $loginId;
         }
 
@@ -1060,7 +1080,7 @@ class Company
         if (isset($this->user->language)) {
             $this->user->language->culture = $culture;
         } else {
-            $this->user->language = $this->api->setClass('Company\Language', 'culture', $this);
+            $this->user->language = $this->economic->setClass('Company\Language', 'culture', $this);
             $this->user->language->culture = $culture;
         }
 
@@ -1088,7 +1108,7 @@ class Company
         if (isset($this->user->language)) {
             $this->user->language->languageNumber = $languageNumber;
         } else {
-            $this->user->language = $this->api->setClass('Company\Language', 'languageNumber', $this);
+            $this->user->language = $this->economic->setClass('Company\Language', 'languageNumber', $this);
             $this->user->language->languageNumber = $languageNumber;
         }
 
@@ -1116,7 +1136,7 @@ class Company
         if (isset($this->user->language)) {
             $this->user->language->name = $name;
         } else {
-            $this->user->language = $this->api->setClass('Company\Language', 'name', $this);
+            $this->user->language = $this->economic->setClass('Company\Language', 'name', $this);
             $this->user->language->name = $name;
         }
 
@@ -1144,7 +1164,7 @@ class Company
         if (isset($this->user)) {
             $this->user->name = $name;
         } else {
-            $this->user = $this->api->setClass('Company\User', 'name', $this);
+            $this->user = $this->economic->setClass('Company\User', 'name', $this);
             $this->user->name = $name;
         }
 
