@@ -8,6 +8,7 @@
 
 namespace Economic;
 
+use Economic\Models\AccountingYears;
 use GuzzleHttp\Client;
 use Economic\Models\Unit;
 use Economic\Models\Layout;
@@ -46,6 +47,10 @@ class Economic
     /** @var Client $client */
     private $client;
 
+    /**
+     * @param string $appSecretToken
+     * @param string $agreementGrantToken
+     */
     public function __construct($appSecretToken, $agreementGrantToken)
     {
         $this->appSecretToken = $appSecretToken;
@@ -61,13 +66,24 @@ class Economic
         ];
     }
 
-    public function collection($url, $model, $skipPages = 0, $pageSize = 20, $recursive = true)
+    /**
+     * @param string $url
+     * @param $model
+     * @param int $skipPages
+     * @param int $pageSize
+     * @param bool $recursive
+     * @throws EconomicRequestException
+     * @throws EconomicServerException
+     * @throws EconomicConnectionException
+     * @return array
+     */
+    public function collection(string $url, $model, int $skipPages = 0, int $pageSize = 20, bool $recursive = true) : array
     {
         try {
             $data = \GuzzleHttp\json_decode($this->client->get($url.'skippages='.$skipPages.'&pagesize='.$pageSize, $this->headers)->getBody()->getContents());
 
             if ($recursive && isset($data->pagination->nextPage)) {
-                $collection = $this->collection($url, $model, $recursive, $skipPages + 1);
+                $collection = $this->collection($url, $model, $skipPages + 1, $pageSize, $recursive);
                 $data->collection = array_merge($data->collection, $collection);
             }
 
@@ -85,7 +101,14 @@ class Economic
         }
     }
 
-    public function get($url)
+    /**
+     * @param string $url
+     * @throws EconomicRequestException
+     * @throws EconomicServerException
+     * @throws EconomicConnectionException
+     * @return mixed
+     */
+    public function get(string $url) : mixed
     {
         try {
             return \GuzzleHttp\json_decode($this->client->get($url, $this->headers)->getBody()->getContents());
@@ -98,7 +121,14 @@ class Economic
         }
     }
 
-    public function download($url)
+    /**
+     * @param string $url
+     * @throws EconomicRequestException
+     * @throws EconomicServerException
+     * @throws EconomicConnectionException
+     * @return mixed
+     */
+    public function download(string $url) : mixed
     {
         try {
             return $this->client->get($url, $this->headers)->getBody()->getContents();
@@ -111,7 +141,15 @@ class Economic
         }
     }
 
-    public function create($url, $body)
+    /**
+     * @param string $url
+     * @param \stdClass $body
+     * @throws EconomicRequestException
+     * @throws EconomicServerException
+     * @throws EconomicConnectionException
+     * @return mixed
+     */
+    public function create(string $url, \stdClass $body) : mixed
     {
         try {
             $this->headers['body'] = json_encode($body);
@@ -126,7 +164,15 @@ class Economic
         }
     }
 
-    public function update($url, $body)
+    /**
+     * @param string
+     * @param \stdClass $body
+     * @throws EconomicRequestException
+     * @throws EconomicServerException
+     * @throws EconomicConnectionException
+     * @return mixed
+     */
+    public function update(string $url, \stdClass $body) : mixed
     {
         try {
             $this->headers['body'] = \GuzzleHttp\json_encode($body);
@@ -141,7 +187,14 @@ class Economic
         }
     }
 
-    public function delete($url)
+    /**
+     * @param string
+     * @throws EconomicRequestException
+     * @throws EconomicServerException
+     * @throws EconomicConnectionException
+     * @return mixed
+     */
+    public function delete(string $url) : mixed
     {
         try {
             return $this->client->delete($url, $this->headers);
@@ -271,6 +324,11 @@ class Economic
     public function billingContacts(): BillingContact
     {
         return new BillingContact($this);
+    }
+
+    public function accountingYears() : AccountingYears
+    {
+
     }
 
     /**
