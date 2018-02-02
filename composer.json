@@ -2,7 +2,7 @@
     "name": "easyinspect/economic",
     "description": "Wrapper to call economic API.",
     "type": "library",
-    "license": "open source",
+    "license": "MIT",
     "authors": [
         {
             "name": "Mikkel Schou",
