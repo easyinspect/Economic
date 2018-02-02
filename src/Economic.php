@@ -8,7 +8,6 @@
 
 namespace Economic;
 
-use Economic\Models\AccountingYears;
 use GuzzleHttp\Client;
 use Economic\Models\Unit;
 use Economic\Models\Layout;
@@ -21,6 +20,7 @@ use Economic\Models\Customer;
 use Economic\Models\PaymentType;
 use Economic\Models\DraftInvoice;
 use Economic\Models\BillingContact;
+use Economic\Models\AccountingYears;
 use Economic\Models\CustomerCollection;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -328,7 +328,6 @@ class Economic
 
     public function accountingYears() : AccountingYears
     {
-
     }
 
     /**
