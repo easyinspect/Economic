@@ -11,6 +11,7 @@
 	{
             "name": "Hasse Ramlev Wilson",
             "email": "hasse@ramlev.dk"
+	}
     ],
    "require": {
         "php": ">=7.1",
