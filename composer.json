@@ -1,5 +1,5 @@
 {
-    "name": "easyinspect/economic",
+    "name": "ramlev/economic",
     "description": "Wrapper to call economic API.",
     "type": "library",
     "license": "open source",
@@ -7,6 +7,10 @@
         {
             "name": "Mikkel Schou",
             "email": "mbs@easyinspect.net"
+        },
+        {
+            "name": "Hasse Ramlev Wilson",
+            "email": "hasse@ramlev.dk"
         }
     ],
    "require": {

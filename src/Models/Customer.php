@@ -736,7 +736,7 @@ class Customer
     }
 
     /** @return bool */
-    public function getBarred() : ?boolean
+    public function getBarred() : ?bool
     {
         return $this->barred;
     }
@@ -745,7 +745,7 @@ class Customer
      * @param bool $barred
      * @return $this
      */
-    public function setBarred(?boolean $barred)
+    public function setBarred(?bool $barred)
     {
         $this->barred = $barred;
 
